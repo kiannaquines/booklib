@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookCopy, BookOpen, Folder, LayoutGrid, Mails, Microscope, Printer, UserRoundSearch } from 'lucide-react';
+import { BookCopy, BookOpen, Folder, LayoutGrid, Microscope, Palette, Printer, UserCheck, UserRoundSearch } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -29,9 +29,14 @@ const mainNavItems: NavItem[] = [
         icon: BookCopy,
     },
     {
-        title: 'Reservations',
-        href: '/reservations',
-        icon: Mails,
+        title: 'Equipment Reservations',
+        href: '/equipment-reservations',
+        icon: Printer,
+    },
+    {
+        title: 'Book Reservations',
+        href: '/book-reservations',
+        icon: BookOpen,
     },
     {
         title: 'Users',
@@ -47,14 +52,19 @@ const mainNavItems: NavItem[] = [
 
 const footerNavItems: NavItem[] = [
     {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
+        title: 'Profile',
+        href: '/settings/profile',
+        icon: UserCheck,
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
+        title: 'Password',
+        href: '/settings/password',
         icon: BookOpen,
+    },
+    {
+        title: 'Appearance',
+        href: '/settings/appearance',
+        icon: Palette,
     },
 ];
 
