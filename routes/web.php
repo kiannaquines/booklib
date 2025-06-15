@@ -1,8 +1,15 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookReservationController;
+use App\Http\Controllers\EquipmentReservationController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\StudySpaceController;
+use App\Http\Controllers\EquipmentController;
+use App\Http\Controllers\ReportController;
+
 use Inertia\Inertia;
 
 Route::get('/', function () {
@@ -17,6 +24,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('books', [BookController::class, 'index'])->name('books');
     Route::get('book-reservation', [BookReservationController::class, 'index'])->name('book-reservation');
+    Route::get('users', [UserController::class, 'index'])->name('users');
+    Route::get('study-spaces', [StudySpaceController::class, 'index'])->name('study-spaces');
+    Route::get('equipments', [EquipmentController::class, 'index'])->name('equipments');
+    Route::get('reports', [ReportController::class, 'index'])->name('reports');
+    Route::get('equipment-reservations', [EquipmentReservationController::class, 'index'])->name('equipment-reservations');
 });
 
 require __DIR__.'/settings.php';

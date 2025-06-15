@@ -20,17 +20,17 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Equipment',
-        href: '/equipment',
+        href: route('equipments'),
         icon: Microscope,
     },
     {
         title: 'Study Space',
-        href: '/study-space',
+        href: route('study-spaces'),
         icon: BookCopy,
     },
     {
         title: 'Equipment Reservations',
-        href: '/equipment-reservations',
+        href: route('equipment-reservations'),
         icon: Printer,
     },
     {
@@ -40,12 +40,12 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Users',
-        href: '/users',
+        href: route('users'),
         icon: UserRoundSearch,
     },
     {
         title: 'Reports',
-        href: '/reports',
+        href: route('reports'),
         icon: Printer,
     },
 ];
