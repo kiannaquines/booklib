@@ -17,7 +17,7 @@ export default function Dashboard() {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
-                <div className="grid auto-rows-min gap-4 md:grid-cols-3">
+                <div className="grid auto-rows-min gap-4 md:grid-cols-4">
                     <div className="relative h-36 overflow-hidden rounded-xl border p-4">
                         <div className="flex flex-col justify-between h-full">
                             <div className="flex items-center justify-between text-sm font-medium text-muted-foreground">
@@ -46,6 +46,16 @@ export default function Dashboard() {
                             </div>
                             <div className="text-3xl font-bold">100</div>
                             <p className="text-xs text-muted-foreground">Total number of study spaces in the system</p>
+                        </div>
+                    </div>
+                    <div className="relative h-36 overflow-hidden rounded-xl border p-4">
+                        <div className="flex flex-col justify-between h-full">
+                            <div className="flex items-center justify-between text-sm font-medium text-muted-foreground">
+                                <Icon className="h-4 w-4" />
+                                <span>Total Equipment Reservations</span>
+                            </div>
+                            <div className="text-3xl font-bold">100</div>
+                            <p className="text-xs text-muted-foreground">Total number of equipment reservations in the system</p>
                         </div>
                     </div>
                 </div>

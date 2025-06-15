@@ -9,7 +9,7 @@ class StudySpace extends Model
     protected $table = 'study_space';
 
     protected $fillable = [
-        'name',
+        'seat_number',
         'status',
     ];
 
