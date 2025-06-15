@@ -29,7 +29,6 @@ type BookReservationProps = {
   books: BookReservation[];
 }
 
-
 const BookReservation = ({ books }: BookReservationProps) => {
   return (
     <AppLayout breadcrumbs={breadcrumbs}>

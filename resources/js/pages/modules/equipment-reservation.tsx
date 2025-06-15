@@ -1,7 +1,6 @@
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
-import { Icon } from '@/components/ui/icon';
 import DataTable from '../components/datatable';
 import { getEquipmentReservationColumns } from './columns/equipment-reservation-columns';
 
