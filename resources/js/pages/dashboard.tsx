@@ -2,10 +2,9 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import DataTable from './components/datatable';
-import { Icon } from '@/components/ui/icon';
 import { BookReservation } from './modules/book-reservation';
 import { getBookReservationColumns } from './modules/columns/book-reservation-columns';
-import { Armchair, BookOpen, Microscope, NotebookPen, User } from 'lucide-react';
+import { Armchair, Microscope, NotebookPen, User } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

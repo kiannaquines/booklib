@@ -37,7 +37,7 @@ import {
     PaginationLink,
     PaginationEllipsis,
 } from "@/components/ui/pagination";
-
+import { Link } from "@inertiajs/react";
 
 type DataTableProps<T> = {
     data: T[];
@@ -48,6 +48,7 @@ type DataTableProps<T> = {
     tableDescription?: string;
     addButtonName?: string;
     displayAddButton?: boolean;
+    route?: string;
 };
 
 const DataTable = <T,>({
@@ -59,6 +60,7 @@ const DataTable = <T,>({
     tableDescription = "This table displays data with various functionalities such as sorting, filtering, and pagination.",
     addButtonName = "Add New Data",
     displayAddButton = true,
+    route,
 }: DataTableProps<T>) => {
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -149,7 +151,9 @@ const DataTable = <T,>({
                 </div>
                 <div className="flex items-center gap-2">
                     {displayAddButton && (
-                        <Button>{addButtonName} <Plus/> </Button>
+                        <Button asChild>
+                            <Link href={route ?? '#'}>{addButtonName} <Plus/> </Link>
+                        </Button>
                     )}
                 </div>
             </div>

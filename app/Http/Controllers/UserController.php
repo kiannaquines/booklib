@@ -25,4 +25,9 @@ class UserController extends Controller
             'users' => $users,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-user');
+    }
 }

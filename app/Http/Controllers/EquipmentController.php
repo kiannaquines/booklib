@@ -23,4 +23,9 @@ class EquipmentController extends Controller
             'equipments' => $equipments,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-equipment');
+    }
 }

@@ -31,9 +31,12 @@ const Equipment = ({ equipments }: EquipmentProps) => {
         <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
           <DataTable
             tableTitle='Available Equipment'
+            filterColumn='name'
+            filterPlaceholder='Search by name'
             tableDescription='Equipment available in the library'
             addButtonName='Add New Equipment'
             data={equipments} columns={getEquipmentColumns(equipments)}
+            route={route('create-equipment')}
           />
         </div>
       </div>

@@ -29,4 +29,9 @@ class EquipmentReservationController extends Controller
             'equipmentReservations' => $equipmentReservations,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-equipment-reservation');
+    }
 }

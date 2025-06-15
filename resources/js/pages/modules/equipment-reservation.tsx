@@ -38,9 +38,12 @@ const EquipmentReservation = ({ equipmentReservations }: EquipmentReservationPro
         <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
           <DataTable
             tableTitle='Equipment Reservation'
+            filterColumn='equipment'
+            filterPlaceholder='Search by equipment'
             tableDescription='Equipment reservation of the library'
             addButtonName='Add New Equipment Reservation'
             data={equipmentReservations} columns={getEquipmentReservationColumns(equipmentReservations)}
+            route={route('create-equipment-reservation')}
           />
         </div>
       </div>

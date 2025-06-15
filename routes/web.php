@@ -28,6 +28,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('equipments', [EquipmentController::class, 'index'])->name('equipments');
     Route::get('reports', [ReportController::class, 'index'])->name('reports');
     Route::get('equipment-reservations', [EquipmentReservationController::class, 'index'])->name('equipment-reservations');
+
+
+    Route::get('create/book', [BookController::class, 'create'])->name('create-book');
+    Route::get('create/equipment', [EquipmentController::class, 'create'])->name('create-equipment');
+    Route::get('create/study-space', [StudySpaceController::class, 'create'])->name('create-study-space');
+    Route::get('create/equipment-reservation', [EquipmentReservationController::class, 'create'])->name('create-equipment-reservation');
+    Route::get('create/book-reservation', [BookReservationController::class, 'create'])->name('create-book-reservation');
+    Route::get('create/user', [UserController::class, 'create'])->name('create-user');
 });
 
 require __DIR__.'/settings.php';

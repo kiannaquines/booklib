@@ -32,9 +32,12 @@ const StudySpace = ({ spaces }: StudySpaceProps) => {
         <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
           <DataTable
             tableTitle='Available Study Spaces'
+            filterColumn='seat_number'
+            filterPlaceholder='Search by seat number'
             tableDescription='Study spaces available in the library'
             addButtonName='Add New Study Space'
             data={spaces} columns={getStudySpaceColumns(spaces)}
+            route={route('create-study-space')}
           />
         </div>
       </div>

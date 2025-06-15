@@ -32,10 +32,13 @@ const Books = ({ books }: BooksProps) => {
         <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
           <DataTable
             tableTitle='Available Books'
+            filterColumn='title'
+            filterPlaceholder='Search by title'
             tableDescription='Books available in the library'
             addButtonName='Add New Book'
             data={books}
             columns={getBooksColumns(books)}
+            route={route('create-book')}
           />
         </div>
       </div>

@@ -29,4 +29,9 @@ class BookReservationController extends Controller
             'books' => $bookReservations,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-book-reservation');
+    }
 }

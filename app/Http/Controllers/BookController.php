@@ -26,4 +26,9 @@ class BookController extends Controller
             'books' => $books,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-book');
+    }
 }

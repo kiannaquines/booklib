@@ -23,4 +23,9 @@ class StudySpaceController extends Controller
             'spaces' => $spaces,
         ]);
     }
+
+    public function create()
+    {
+        return Inertia::render('modules/create/create-study-space');
+    }
 }

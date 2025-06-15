@@ -34,8 +34,11 @@ const Users = ({ users }: UsersProps) => {
           <DataTable
             tableTitle='Users'
             tableDescription='Users of the library'
+            filterColumn='name'
+            filterPlaceholder='Search by name'
             addButtonName='Add New User'
             data={users} columns={getUsersColumns(users)}
+            route={route('create-user')}
           />
         </div>
       </div>
