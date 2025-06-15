@@ -10,12 +10,12 @@ import AppLogo from './app-logo';
 const mainNavItems: NavItem[] = [
     {
         title: 'Dashboard',
-        href: '/dashboard',
+        href: route('dashboard'),
         icon: LayoutGrid,
     },
     {
         title: 'Books',
-        href: '/books',
+        href: route('books'),
         icon: BookOpen,
     },
     {
@@ -35,7 +35,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Book Reservations',
-        href: '/book-reservations',
+        href: route('book-reservation'),
         icon: BookOpen,
     },
     {
