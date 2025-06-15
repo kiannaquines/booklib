@@ -235,3 +235,81 @@ export function getBookReservationColumns(bookReservations: BookReservation[]): 
         },
     ];
 }
+
+
+export function getBookReservationDashboardColumns(bookReservations: BookReservation[]): ColumnDef<BookReservation>[] {
+    return [
+        {
+            id: "select",
+            header: ({ table }) => (
+                <Checkbox
+                    checked={table.getIsAllPageRowsSelected()}
+                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                    aria-label="Select all"
+                />
+            ),
+            cell: ({ row }) => (
+                <Checkbox
+                    checked={row.getIsSelected()}
+                    onCheckedChange={(value) => row.toggleSelected(!!value)}
+                    aria-label="Select row"
+                />
+            ),
+            enableSorting: false,
+            enableHiding: true,
+        },
+        {
+            accessorKey: "book",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Book
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => (
+                <Badge variant="outline" className="capitalize">
+                    {row.getValue("book")}
+                </Badge>
+            ),
+        },
+        {
+            accessorKey: "user",
+            header: "User",
+            cell: ({ row }) => (
+                <Badge variant="outline" className="capitalize">
+                    {row.getValue("user")}
+                </Badge>
+            ),
+        },
+        {
+            accessorKey: "seat_number",
+            header: "Seat",
+            cell: ({ row }) => (
+                <Badge variant="outline" className="capitalize">
+                    {row.getValue("seat_number")}
+                </Badge>
+            ),
+        },
+        {
+            accessorKey: "start_time",
+            header: "Start Time",
+            cell: ({ row }) => (
+                <div>
+                    {row.getValue("start_time")}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "end_time",
+            header: "End Time",
+            cell: ({ row }) => (
+                <div>
+                    {row.getValue("end_time")}
+                </div>
+            ),
+        },
+    ];
+}

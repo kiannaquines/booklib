@@ -3,7 +3,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import DataTable from './components/datatable';
 import { BookReservation } from './modules/book-reservation';
-import { getBookReservationColumns } from './modules/columns/book-reservation-columns';
+import { getBookReservationDashboardColumns } from './modules/columns/book-reservation-columns';
 import { Armchair, Microscope, NotebookPen, User } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -75,8 +75,10 @@ export default function Dashboard({ reservations, totalUsers, totalBooks, totalE
                         tableDescription='Book reservation of the library'
                         addButtonName='Add New Book Reservation'
                         data={reservations}
-                        columns={getBookReservationColumns(reservations)}
+                        columns={getBookReservationDashboardColumns(reservations)}
                         displayAddButton={false}
+                        filterColumn='book'
+                        filterPlaceholder='Search by book'
                     />
                 </div>
             </div>
