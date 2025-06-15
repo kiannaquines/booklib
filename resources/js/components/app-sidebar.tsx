@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { type NavItem } from '@/types';
 import { Link } from '@inertiajs/react';
-import { BookOpen, Folder, LayoutGrid } from 'lucide-react';
+import { BookCopy, BookOpen, Folder, LayoutGrid, Mails, Microscope, Printer, UserRoundSearch } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -12,6 +12,36 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: '/dashboard',
         icon: LayoutGrid,
+    },
+    {
+        title: 'Books',
+        href: '/books',
+        icon: BookOpen,
+    },
+    {
+        title: 'Equipment',
+        href: '/equipment',
+        icon: Microscope,
+    },
+    {
+        title: 'Study Space',
+        href: '/study-space',
+        icon: BookCopy,
+    },
+    {
+        title: 'Reservations',
+        href: '/reservations',
+        icon: Mails,
+    },
+    {
+        title: 'Users',
+        href: '/users',
+        icon: UserRoundSearch,
+    },
+    {
+        title: 'Reports',
+        href: '/reports',
+        icon: Printer,
     },
 ];
 
