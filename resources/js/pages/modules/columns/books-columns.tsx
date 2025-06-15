@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, Link } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -21,7 +21,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { router } from "@inertiajs/react";
+import { router, Link as InertiaLink } from "@inertiajs/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
 import { Book } from "../books";
@@ -98,7 +98,11 @@ function BookActionsCell({ book }: BookActionsCellProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
-          <DropdownMenuSeparator />      
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => router.visit(route('create-book', { book: book.id }))}>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-600 focus:text-red-600 focus:bg-red-50"
             onClick={openDeleteDialog}
