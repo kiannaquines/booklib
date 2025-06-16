@@ -28,4 +28,16 @@ class EquipmentController extends Controller
     {
         return Inertia::render('modules/create/create-equipment');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|string|in:Available,Unavailable',
+        ]);
+
+        Equipment::create($request->all());
+
+        return redirect()->route('equipments')->with('success', 'Equipment created successfully');
+    }
 }

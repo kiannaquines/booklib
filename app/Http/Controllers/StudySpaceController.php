@@ -28,4 +28,16 @@ class StudySpaceController extends Controller
     {
         return Inertia::render('modules/create/create-study-space');
     }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'seat_number' => 'required|string|max:255',
+            'status' => 'required|string|in:Available,Unavailable',
+        ]);
+
+        StudySpace::create($request->all());
+
+        return redirect()->route('study-spaces')->with('success', 'Study space created successfully');
+    }
 }

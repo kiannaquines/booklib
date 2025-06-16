@@ -31,4 +31,17 @@ class BookController extends Controller
     {
         return Inertia::render('modules/create/create-book');
     }
+
+
+    public function store(Request $request) {
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'author' => 'required|string|max:255',
+            'status' => 'required|string|in:Available,Unavailable',
+        ]);
+
+        Books::create($request->all());
+
+        return redirect()->route('books')->with('success', 'Book created successfully');
+    }
 }

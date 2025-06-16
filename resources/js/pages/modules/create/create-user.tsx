@@ -2,7 +2,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
-import { Head, router } from "@inertiajs/react";
+import { Head, router, useForm } from "@inertiajs/react";
 import {
     Select,
     SelectContent,
@@ -11,8 +11,9 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { AlertCircle, ArrowLeft, BadgeInfo, Plus, RefreshCcw } from "lucide-react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { ArrowLeft, Loader2, Plus, RefreshCcw } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -25,13 +26,66 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+
+type UserFormData = {
+    name: string;
+    email: string;
+    number: string;
+    password: string;
+    confirm_password: string;
+    status: string;
+    role: string;
+}
+
+
 const CreateUser = () => {
+
+    const {data, setData, reset, clearErrors} = useForm<UserFormData>({
+        name: '',
+        email: '',
+        number: '',
+        password: '',
+        confirm_password: '',
+        status: '',
+        role: '',
+    });
+
+    const [processing, setProcessing] = useState(false);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        setProcessing(true);
+        e.preventDefault();
+
+        router.post(route('users.store'), data, {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('User created successfully');
+                setProcessing(false);
+                reset();
+            },
+            onError: (e) => {
+                for (const [field, message] of Object.entries(e)) {
+                    toast.error('Oops, please try again', {
+                        description: `${message}`,
+                    });
+                }
+                setProcessing(false);
+            }
+        });
+    }
+
+    const handleReset = () => {
+        reset();
+        clearErrors();
+        toast.info('Form inputs reset.');
+    }
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="User Creation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit('/users')}>
+                    <Button variant="outline" onClick={() => router.visit('/create-book-reservation')}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Users
                     </Button>
@@ -42,63 +96,79 @@ const CreateUser = () => {
                         <h2 className="text-lg font-semibold">Create User</h2>
                         <p className="text-sm text-muted-foreground">Create a new user in the library</p>
                     </div>
-                    <form className="mt-5">
+                    <form onSubmit={handleSubmit} method="POST" className="mt-5">
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="name">Full Name</Label>
-                                <Input id="name" placeholder="Name" />
+                                <Input id="name" value={data.name} onChange={(e) => setData('name', e.target.value)} placeholder="Name" />
                             </div>
                         </div>
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="email">Email</Label>
-                                <Input id="email" placeholder="Email" />
+                                <Input id="email" value={data.email} onChange={(e) => setData('email', e.target.value)} placeholder="Email" />
                             </div>
                         </div>
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="number">Phone Number</Label>
-                                <Input id="number" placeholder="Phone Number" />
+                                <Input id="number" value={data.number} onChange={(e) => setData('number', e.target.value)} placeholder="Phone Number" />
                             </div>
                         </div>
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="password">Password</Label>
-                                <Input id="password" placeholder="Password" />
+                                <Input id="password" value={data.password} onChange={(e) => setData('password', e.target.value)} placeholder="Password" />
                             </div>
                         </div>
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="confirm_password">Confirm Password</Label>
-                                <Input id="confirm_password" placeholder="Confirm Password" />
+                                <Input id="confirm_password" value={data.confirm_password} onChange={(e) => setData('confirm_password', e.target.value)} placeholder="Confirm Password" />
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="role">Role</Label>
+                                <Select value={data.role} onValueChange={(value) => setData('role', value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Role" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="user">User</SelectItem>
+                                        <SelectItem value="admin">Admin</SelectItem>
+                                    </SelectContent>
+                                </Select>
                             </div>
                         </div>
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="status">Status</Label>
-                                <Select>
+                                <Select value={data.status} onValueChange={(value) => setData('status', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Status" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="available">Available</SelectItem>
-                                        <SelectItem value="unavailable">Unavailable</SelectItem>
+                                        <SelectItem value="Available">Available</SelectItem>
+                                        <SelectItem value="Unavailable">Unavailable</SelectItem>
                                     </SelectContent>
                                 </Select>
                             </div>
                         </div>
 
                         <div className="flex w-50 items-center gap-4 mt-4">
-                            <Button type="submit">
-                                <Plus className="w-4 h-4 mr-2" />
+                            <Button type="submit" disabled={processing}>
+                                {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                {!processing && <Plus className="w-4 h-4 mr-2" />}
                                 Create User
                             </Button>
-                            <Button type="button" variant="outline">
+                            <Button type="button" variant="outline" onClick={handleReset}>
                                 <RefreshCcw className="w-4 h-4 mr-2" />
                                 Reset
                             </Button>

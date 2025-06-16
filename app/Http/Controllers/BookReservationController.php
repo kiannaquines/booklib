@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\BookReservation;
+use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Books;
+use App\Models\StudySpace;
+use Spatie\Permission\Models\Role;
 
 class BookReservationController extends Controller
 {
     public function index()
     {
-        $bookReservations = BookReservation::with('book','space', 'user')->get()->map(function($bookReservation) {
+        $bookReservations = BookReservation::with('book', 'space', 'user')->get()->map(function ($bookReservation) {
             return [
                 'id' => $bookReservation->id,
                 'book' => $bookReservation->book->title,
@@ -32,6 +37,70 @@ class BookReservationController extends Controller
 
     public function create()
     {
-        return Inertia::render('modules/create/create-book-reservation');
+
+        $users = User::role('user')->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+            ];
+        });
+
+        $books = Books::get()->map(function ($book) {
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                'status' => $book->status,
+            ];
+        });
+
+        $spaces = StudySpace::get()->map(function ($space) {
+            return [
+                'id' => $space->id,
+                'seat_number' => $space->seat_number,
+                'status' => $space->status,
+            ];
+        });
+
+        return Inertia::render('modules/create/create-book-reservation', [
+            'users' => $users,
+            'books' => $books,
+            'spaces' => $spaces,
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'study_space_id' => 'required|exists:study_space,id',
+        ]);
+
+        $request->merge([
+            'start_time' => now(),
+            'end_time' => now()->addDays(3),
+        ]);
+
+        $bookReservation = BookReservation::where('user_id', $request->user_id)
+            ->whereDate('created_at', now())
+            ->exists();
+
+        if ($bookReservation) {
+            return back()->withErrors([
+                'user_id' => 'User already have a book reservation today'
+            ]);
+        } else {
+            BookReservation::create($request->all());
+
+            Books::where('id', $request->book_id)->update([
+                'status' => 'Unavailable',
+            ]);
+
+            StudySpace::where('id', $request->study_space_id)->update([
+                'status' => 'Unavailable',
+            ]);
+
+            return redirect()->route('book-reservation')->with('success', 'Book reservation created successfully');
+        }
     }
 }

@@ -36,6 +36,15 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('create/equipment-reservation', [EquipmentReservationController::class, 'create'])->name('create-equipment-reservation');
     Route::get('create/book-reservation', [BookReservationController::class, 'create'])->name('create-book-reservation');
     Route::get('create/user', [UserController::class, 'create'])->name('create-user');
+
+
+
+    Route::post('books', [BookController::class, 'store'])->name('books.store');
+    Route::post('equipments', [EquipmentController::class, 'store'])->name('equipments.store');
+    Route::post('study-spaces', [StudySpaceController::class, 'store'])->name('study-spaces.store');
+    Route::post('users', [UserController::class, 'store'])->name('users.store');
+    Route::post('book-reservations', [BookReservationController::class, 'store'])->name('book-reservations.store');
+    Route::post('equipment-reservations', [EquipmentReservationController::class, 'store'])->name('equipment-reservations.store');
 });
 
 require __DIR__.'/settings.php';

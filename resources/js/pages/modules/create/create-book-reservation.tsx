@@ -11,7 +11,7 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BadgeInfo, Plus, RefreshCcw } from "lucide-react";
+import { ArrowLeft, BadgeInfo, Loader2, Plus, RefreshCcw } from "lucide-react";
 import {
     Popover,
     PopoverContent,
@@ -22,6 +22,8 @@ import { Calendar } from "@/components/ui/calendar"
 import { ChevronDownIcon } from "lucide-react"
 import * as React from "react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { useForm } from "@inertiajs/react";
+import { toast } from "sonner";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -34,17 +36,78 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-const CreateBookReservation = () => {
+export type User = {
+    id: number;
+    name: string;
+}
 
-    const [open, setOpen] = React.useState(false)
-    const [date, setDate] = React.useState<Date | undefined>(undefined)
+export type Book = {
+    id: number;
+    title: string;
+    status: string;
+}
+
+export type StudySpace = {
+    id: number;
+    seat_number: string;
+    status: string;
+}
+
+type CreateBookReservationProps = {
+    users: User[];
+    books: Book[];
+    spaces: StudySpace[];
+}
+
+type CreateBookReservationFormData = {
+    user_id: string;
+    book_id: string;
+    study_space_id: string;
+}
+
+const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationProps) => {
+
+    const [processing, setProcessing] = React.useState(false)
+
+    const {data, setData, reset, clearErrors} = useForm<CreateBookReservationFormData>({
+        user_id: '',
+        book_id: '',
+        study_space_id: '',
+    });
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        setProcessing(true);
+        router.post(route('book-reservations.store'), data, {
+            preserveScroll: true,
+            onSuccess: () => {
+                toast.success('Book reservation created successfully');
+                setProcessing(false);
+                reset();
+            },
+            onError: (e) => {
+                for (const [field, message] of Object.entries(e)) {
+                    toast.error('Oops, please try again', {
+                        description: `${message}`,
+                    });
+                }
+                setProcessing(false);
+            }
+        });
+    }
+
+    const handleReset = () => {
+        reset();
+        clearErrors();
+        toast.info('Form inputs reset.');
+    }
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Book Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit('/book-reservations')}>
+                    <Button variant="outline" onClick={() => router.visit(route('book-reservation'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Book Reservations
                     </Button>
@@ -55,18 +118,20 @@ const CreateBookReservation = () => {
                         <h2 className="text-lg font-semibold">Create Book Reservation</h2>
                         <p className="text-sm text-muted-foreground">Create a new book reservation in the library</p>
                     </div>
-                    <form className="mt-4">
+                    <form className="mt-4" onSubmit={handleSubmit} method="POST">
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="user_id">User</Label>
-                                <Select>
+                                <Select value={data.user_id} onValueChange={(value) => setData('user_id', value)}>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="User" />
+                                        <SelectValue placeholder="Select User" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="1">User 1</SelectItem>
-                                        <SelectItem value="2">User 2</SelectItem>
-                                        <SelectItem value="3">User 3</SelectItem>
+                                        {users.map(function(user){
+                                            return (
+                                                <SelectItem key={user.id} value={user.id.toString()}>{user.name}</SelectItem>
+                                            )
+                                        })}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -75,14 +140,16 @@ const CreateBookReservation = () => {
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="book_id">Book</Label>
-                                <Select>
+                                <Select value={data.book_id} onValueChange={(value) => setData('book_id', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Book" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="1">Book 1</SelectItem>
-                                        <SelectItem value="2">Book 2</SelectItem>
-                                        <SelectItem value="3">Book 3</SelectItem>
+                                        {books.map(function(book){
+                                            return (
+                                                <SelectItem key={book.id} value={book.id.toString()} disabled={book.status === 'Unavailable'}>{book.status} - {book.title}</SelectItem>
+                                            )
+                                        })}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -91,135 +158,28 @@ const CreateBookReservation = () => {
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="study_space_id">Study Space</Label>
-                                <Select>
+                                <Select value={data.study_space_id} onValueChange={(value) => setData('study_space_id', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Study Space" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem value="1">Study Space 1</SelectItem>
-                                        <SelectItem value="2">Study Space 2</SelectItem>
-                                        <SelectItem value="3">Study Space 3</SelectItem>
+                                        {spaces.map(function(space){
+                                            return (
+                                                <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
+                                            )
+                                        })}
                                     </SelectContent>
                                 </Select>
-                            </div>
-                        </div>
-
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="status">Status</Label>
-                                <Select>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Status" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="available">Available</SelectItem>
-                                        <SelectItem value="unavailable">Unavailable</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <Alert variant="default" className="mt-4">
-                            <BadgeInfo />
-                            <AlertTitle>Book Reservation Start & End Time</AlertTitle>
-                            <AlertDescription className="flex items-center gap-2">
-                                <p>Please select the start and end time for the book reservation.</p>
-                            </AlertDescription>
-                        </Alert>
-
-                        <div className="flex w-full items-center gap-4 mt-4">
-                            <div className="flex flex-row space-y-1.5 gap-3">
-                                <div className="flex flex-col gap-3">
-                                    <Label htmlFor="date" className="px-1">
-                                        Start Date
-                                    </Label>
-                                    <Popover open={open} onOpenChange={setOpen}>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                id="date"
-                                                className="w-50 justify-between font-normal"
-                                            >
-                                                {date ? date.toLocaleDateString() : "Select date"}
-                                                <ChevronDownIcon />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={date}
-                                                captionLayout="dropdown"
-                                                onSelect={(date) => {
-                                                    setDate(date)
-                                                    setOpen(false)
-                                                }}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                <div className="flex flex-col gap-3">
-                                    <Label htmlFor="time" className="px-1">
-                                        Start Time
-                                    </Label>
-                                    <Input
-                                        type="time"
-                                        id="time"
-                                        step="1"
-                                        defaultValue="10:30:00"
-                                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                    />
-                                </div>
-                            </div>
-                            <div className="flex flex-row space-y-1.5 gap-3">
-                                <div className="flex flex-col gap-3">
-                                    <Label htmlFor="date" className="px-1">
-                                        Start Date
-                                    </Label>
-                                    <Popover open={open} onOpenChange={setOpen}>
-                                        <PopoverTrigger asChild>
-                                            <Button
-                                                variant="outline"
-                                                id="date"
-                                                className="w-50 justify-between font-normal"
-                                            >
-                                                {date ? date.toLocaleDateString() : "Select date"}
-                                                <ChevronDownIcon />
-                                            </Button>
-                                        </PopoverTrigger>
-                                        <PopoverContent className="w-auto overflow-hidden p-0" align="start">
-                                            <Calendar
-                                                mode="single"
-                                                selected={date}
-                                                captionLayout="dropdown"
-                                                onSelect={(date) => {
-                                                    setDate(date)
-                                                    setOpen(false)
-                                                }}
-                                            />
-                                        </PopoverContent>
-                                    </Popover>
-                                </div>
-                                <div className="flex flex-col gap-3">
-                                    <Label htmlFor="time" className="px-1">
-                                        Start Time
-                                    </Label>
-                                    <Input
-                                        type="time"
-                                        id="time"
-                                        step="1"
-                                        defaultValue="10:30:00"
-                                        className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-                                    />
-                                </div>
                             </div>
                         </div>
 
                         <div className="flex w-50 items-center gap-4 mt-4">
-                            <Button type="submit">
-                                <Plus className="w-4 h-4 mr-2" />
-                                Create Study Space
+                            <Button type="submit" disabled={processing}>
+                                {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                                {!processing && <Plus className="w-4 h-4 mr-2" />}
+                                Create Book Reservation
                             </Button>
-                            <Button type="button" variant="outline">
+                            <Button type="button" variant="outline" onClick={handleReset}>
                                 <RefreshCcw className="w-4 h-4 mr-2" />
                                 Reset
                             </Button>
