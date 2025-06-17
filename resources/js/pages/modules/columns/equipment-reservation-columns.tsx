@@ -75,7 +75,7 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
             onSuccess: () => {
                 toast.success("Equipment reservation deleted successfully");
             },
-            onError: (e) => {   
+            onError: (e) => {
                 for (const [field, message] of Object.entries(e)) {
                     toast.error("Failed to delete equipment reservation", {
                         description: `${message}`,
@@ -209,34 +209,13 @@ export function getEquipmentReservationColumns(equipmentReservations: EquipmentR
             ),
         },
         {
-            accessorKey: "created_at",
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Created At
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
+            accessorKey: "status",
+            header: "Status",
+            cell: ({ row }) => (
+                <Badge variant="outline" className="capitalize">
+                    {row.getValue("status")}
+                </Badge>
             ),
-            cell: ({ row }) => {
-                return <div> {row.getValue("updated_at")}</div>;
-            },
-        },
-        {
-            accessorKey: "updated_at",
-            header: ({ column }) => (
-                <Button
-                    variant="ghost"
-                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                    Updated At
-                    <ArrowUpDown className="ml-2 h-4 w-4" />
-                </Button>
-            ),
-            cell: ({ row }) => {
-                return <div> {row.getValue("updated_at")}</div>;
-            },
         },
         {
             id: "actions",

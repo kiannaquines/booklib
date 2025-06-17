@@ -27,6 +27,8 @@ type EquipmentReservation = {
     user_id: string;
     equipment_id: string;
     study_space_id: string;
+    status: string;
+
 }
 
 type UpdateEquipmentReservationProps = {
@@ -41,6 +43,7 @@ type UpdateEquipmentReservationFormData = {
     user_id: string;
     equipment_id: string;
     study_space_id: string;
+    status: string;
 }
 
 const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpaces, users }: UpdateEquipmentReservationProps) => {
@@ -52,6 +55,7 @@ const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpa
         user_id: String(equipmentReservation.user_id),
         equipment_id: String(equipmentReservation.equipment_id),
         study_space_id: String(equipmentReservation.study_space_id),
+        status: equipmentReservation.status,
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -156,6 +160,24 @@ const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpa
                                         {studySpaces.map(function (space) {
                                             return (
                                                 <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
+                                            )
+                                        })}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="status">Status</Label>
+                                <Select value={data.status} onValueChange={(value) => setData('status', value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {['Pending', 'Approved', 'Rejected'].map(function (status) {
+                                            return (
+                                                <SelectItem key={status} value={status}>{status}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>

@@ -15,16 +15,6 @@ import { ArrowLeft, FilePenLine, Loader2, Plus, RefreshCcw } from "lucide-react"
 import { useState } from "react";
 import { toast } from "sonner";
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Study Space',
-        href: route('study-spaces'),
-    },
-    {
-        title: 'Create Study Space',
-        href: route('create-study-space'),
-    },
-];
 
 type StudySpaceFormData = {
     id: string;
@@ -38,11 +28,22 @@ type UpdateStudySpaceProps = {
 
 const UpdateStudySpace = ({ studySpace }: UpdateStudySpaceProps) => {
 
-    const {data, setData, reset, clearErrors} = useForm<StudySpaceFormData>({
+    const { data, setData, reset, clearErrors } = useForm<StudySpaceFormData>({
         id: studySpace.id,
         seat_number: studySpace.seat_number,
         status: studySpace.status,
     });
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Study Space',
+            href: route('study-spaces.index'),
+        },
+        {
+            title: 'Create Study Space',
+            href: route('study-spaces.edit', { id: data.id }),
+        },
+    ];
 
     const [processing, setProcessing] = useState(false);
 

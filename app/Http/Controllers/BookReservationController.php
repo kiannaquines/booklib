@@ -25,6 +25,7 @@ class BookReservationController extends Controller
                 'space_id' => $bookReservation->space->id,
                 'start_time' => $bookReservation->start_time->format('d/m/Y H:i:s'),
                 'end_time' => $bookReservation->end_time->format('d/m/Y H:i:s'),
+                'status' => $bookReservation->status,
                 'created_at' => $bookReservation->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $bookReservation->updated_at->format('d/m/Y H:i:s'),
             ];
@@ -74,6 +75,7 @@ class BookReservationController extends Controller
             'user_id' => 'required|exists:users,id',
             'book_id' => 'required|exists:books,id',
             'study_space_id' => 'required|exists:study_space,id',
+            'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
         $request->merge([
@@ -111,7 +113,7 @@ class BookReservationController extends Controller
             return back()->with('error', 'Book reservation identifier not found');
         }
 
-        $bookReservation = BookReservation::select('id', 'user_id', 'book_id', 'study_space_id')->find($id);
+        $bookReservation = BookReservation::select('id', 'user_id', 'book_id', 'status', 'study_space_id')->find($id);
 
         if (!$bookReservation) {
             return back()->with('error', 'Book reservation not found');
@@ -156,6 +158,7 @@ class BookReservationController extends Controller
             'user_id' => 'required|exists:users,id',
             'book_id' => 'required|exists:books,id',
             'study_space_id' => 'required|exists:study_space,id',
+            'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
         $bookReservation = BookReservation::findOrFail($id);

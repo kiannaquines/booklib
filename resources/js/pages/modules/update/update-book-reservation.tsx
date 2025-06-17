@@ -38,6 +38,7 @@ type BookReservation = {
     user_id: string;
     book_id: string;
     study_space_id: string;
+    status: string;
 }
 
 type CreateBookReservationProps = {
@@ -52,6 +53,7 @@ type UpdateBookReservationFormData = {
     user_id: string;
     book_id: string;
     study_space_id: string;
+    status: string;
 }
 
 const UpdateBookReservation = ({ bookReservation, users, books, spaces }: CreateBookReservationProps) => {
@@ -63,16 +65,17 @@ const UpdateBookReservation = ({ bookReservation, users, books, spaces }: Create
         user_id: String(bookReservation.user_id),
         book_id: String(bookReservation.book_id),
         study_space_id: String(bookReservation.study_space_id),
+        status: bookReservation.status,
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Book Reservation',
-            href: route('book-reservation'),
+            href: route('book-reservations.index'),
         },
         {
             title: 'Edit Book Reservation',
-            href: route('edit-book-reservation', { id: data.id }),
+            href: route('book-reservations.edit', { id: data.id }),
         },
     ];
 
@@ -168,6 +171,24 @@ const UpdateBookReservation = ({ bookReservation, users, books, spaces }: Create
                                         {spaces.map(function (space) {
                                             return (
                                                 <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
+                                            )
+                                        })}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="status">Status</Label>
+                                <Select value={data.status} onValueChange={(value) => setData('status', value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {['Pending', 'Approved', 'Rejected'].map(function (status) {
+                                            return (
+                                                <SelectItem key={status} value={status}>{status}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>

@@ -53,6 +53,7 @@ type CreateBookReservationProps = {
 type CreateBookReservationFormData = {
     user_id: string;
     book_id: string;
+    status: string;
     study_space_id: string;
 }
 
@@ -63,6 +64,7 @@ const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationPr
     const {data, setData, reset, clearErrors} = useForm<CreateBookReservationFormData>({
         user_id: '',
         book_id: '',
+        status: '',
         study_space_id: '',
     });
 
@@ -157,6 +159,24 @@ const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationPr
                                         {spaces.map(function(space){
                                             return (
                                                 <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
+                                            )
+                                        })}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="status">Status</Label>
+                                <Select value={data.status} onValueChange={(value) => setData('status', value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Status" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {['Pending', 'Approved', 'Rejected'].map(function(status){
+                                            return (
+                                                <SelectItem key={status} value={status}>{status}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>

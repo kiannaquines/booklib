@@ -25,6 +25,7 @@ class EquipmentReservationController extends Controller
                 'study_space_id' => $equipmentReservation->study_space_id,
                 'start_time' => $equipmentReservation->start_time->format('d/m/Y H:i:s'),
                 'end_time' => $equipmentReservation->end_time->format('d/m/Y H:i:s'),
+                'status' => $equipmentReservation->status,
                 'created_at' => $equipmentReservation->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $equipmentReservation->updated_at->format('d/m/Y H:i:s'),
             ];
@@ -72,6 +73,7 @@ class EquipmentReservationController extends Controller
             'user_id' => 'required|exists:users,id',
             'equipment_id' => 'required|exists:equipments,id',
             'study_space_id' => 'required|exists:study_space,id',
+            'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
         $request->merge([
@@ -110,7 +112,7 @@ class EquipmentReservationController extends Controller
             return back()->with('error', 'Equipment reservation identifier not found');
         }
 
-        $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'equipment_id', 'study_space_id')->find($id);
+        $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'status', 'equipment_id', 'study_space_id')->find($id);
         
         if (!$equipmentReservation) {
             return back()->with('error', 'Equipment reservation not found');
@@ -163,6 +165,7 @@ class EquipmentReservationController extends Controller
             'user_id' => 'required|exists:users,id',
             'equipment_id' => 'required|exists:equipments,id',
             'study_space_id' => 'required|exists:study_space,id',
+            'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
         $equipmentReservation->update($request->all());

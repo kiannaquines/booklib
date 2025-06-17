@@ -38,11 +38,11 @@ const CreateBook = ({ book }: CreateBookProps) => {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: "Book",
-            href: route("books"),
+            href: route("books.index"),
         },
         {
             title: "Edit Book",
-            href: route("edit-book", { id: data.id }),
+            href: route("books.edit", { id: data.id }),
         },
     ];
 
