@@ -13,20 +13,6 @@ class EquipmentReservationSeeder extends Seeder
      */
     public function run(): void
     {
-        EquipmentReservation::create([
-            'equipment_id' => 1,
-            'user_id' => 1,
-            'study_space_id' => 1,
-            'start_time' => now(),
-            'end_time' => now()->addDays(3),
-        ]);
-
-        EquipmentReservation::create([
-            'equipment_id' => 2,
-            'user_id' => 2,
-            'study_space_id' => 2,
-            'start_time' => now(),
-            'end_time' => now()->addDays(3),
-        ]);
+        EquipmentReservation::factory()->count(100)->create();
     }
 }

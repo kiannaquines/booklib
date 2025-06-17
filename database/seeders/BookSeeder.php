@@ -13,29 +13,6 @@ class BookSeeder extends Seeder
      */
     public function run(): void
     {
-        Books::create([
-            'title' => 'The Great Gatsby',
-            'author' => 'F. Scott Fitzgerald',
-            'status' => 'Available',
-        ]);
-
-        Books::create([
-            'title' => 'The Little Prince',
-            'author' => 'Antoine de Saint-Exupéry',
-            'status' => 'Available',
-        ]);
-
-        Books::create([
-            'title' => 'The Alchemist',
-            'author' => 'Paulo Coelho',
-            'status' => 'Available',
-        ]);
-
-        Books::create([
-            'title' => 'The Catcher in the Rye',
-            'author' => 'J.D. Salinger',
-            'status' => 'Available',
-        ]);
-
+        Books::factory()->count(50)->create();
     }
 }
