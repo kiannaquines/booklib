@@ -68,16 +68,22 @@ function BookActionsCell({ book }: BookActionsCellProps) {
 
   const handleDelete = useCallback(() => {
     setIsDeleting(true);
-    router.delete(route('incidents.destroy', { incident: book.id }), {
+    router.delete(route('books.destroy', { id: book.id }), {
       preserveScroll: true,
       onSuccess: () => {
-        setIsDeleteDialogOpen(false);
         toast.success("Book deleted successfully");
       },
-      onError: () => {
-        toast.error("Failed to delete book");
+      onError: (e) => {
+        for (const [field, message] of Object.entries(e)) {
+          toast.error("Failed to delete book", {
+            description: `${message}`,
+          });
+        }
       },
-      onFinish: () => setIsDeleting(false)
+      onFinish: () => {
+        setIsDeleting(false);
+        setIsDeleteDialogOpen(false);
+      }
     });
   }, [book?.id]);
 
@@ -88,7 +94,7 @@ function BookActionsCell({ book }: BookActionsCellProps) {
   }, []);
 
   return (
-    <div className="flex justify-end">
+    <div className="flex justify-end">  
       <DropdownMenu open={dropdownOpen} onOpenChange={setDropdownOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-8 w-8 p-0">
@@ -100,7 +106,7 @@ function BookActionsCell({ book }: BookActionsCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() =>
-            router.visit(route('edit-book', { id: String(book.id) }))
+            router.visit(route('books.edit', { id: String(book.id) }))
           }>
             <Edit className="mr-2 h-4 w-4" />
             Edit

@@ -98,7 +98,7 @@ class EquipmentReservationController extends Controller
                 'status' => 'Unavailable',
             ]);
 
-            return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation created successfully');
+            return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation created successfully');
         }
     }
 
@@ -167,7 +167,7 @@ class EquipmentReservationController extends Controller
 
         $equipmentReservation->update($request->all());
 
-        return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation updated successfully');
+        return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation updated successfully');
     }
 
 
@@ -185,6 +185,6 @@ class EquipmentReservationController extends Controller
 
         $equipmentReservation->delete();
 
-        return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation deleted successfully');
+        return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation deleted successfully');
     }
 }

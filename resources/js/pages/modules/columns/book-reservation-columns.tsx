@@ -40,7 +40,7 @@ function DeleteBookReservationAlertDialog({ isOpen, setIsOpen, handleAction, isD
                 <AlertDialogHeader>
                     <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this book? This action cannot be undone.
+                        Are you sure you want to delete this book reservation? This action cannot be undone.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -71,13 +71,19 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
         router.delete(route('book-reservations.destroy', { id: bookReservation.id }), {
             preserveScroll: true,
             onSuccess: () => {
-                setIsDeleteDialogOpen(false);
                 toast.success("Book reservation deleted successfully");
             },
-            onError: () => {
-                toast.error("Failed to delete book reservation");
+            onError: (e) => {
+                for (const [field, message] of Object.entries(e)) {
+                    toast.error("Failed to delete book reservation", {
+                        description: `${message}`,
+                    });
+                }
             },
-            onFinish: () => setIsDeleting(false)
+            onFinish: () => {
+                setIsDeleting(false);
+                setIsDeleteDialogOpen(false);
+            }
         });
     }, [bookReservation?.id]);
 
@@ -100,7 +106,7 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('edit-book-reservation', { id: String(bookReservation.id) }))
+                        router.visit(route('book-reservations.edit', { id: String(bookReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit

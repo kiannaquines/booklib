@@ -43,7 +43,7 @@ class BookController extends Controller
 
         Books::create($request->all());
 
-        return redirect()->route('books')->with('success', 'Book created successfully');
+        return redirect()->route('books.index')->with('success', 'Book created successfully');
     }
 
     public function edit(string $id)
@@ -74,7 +74,7 @@ class BookController extends Controller
 
         Books::where('id', $id)->update($request->all());
 
-        return redirect()->route('books')->with('success', 'Book updated successfully');
+        return redirect()->route('books.index')->with('success', 'Book updated successfully');
     }
 
     public function destroy(string $id)
@@ -90,6 +90,6 @@ class BookController extends Controller
         }
         $book->delete();
 
-        return redirect()->route('books')->with('success', 'Book deleted successfully');
+        return redirect()->route('books.index')->with('success', 'Book deleted successfully');
     }
 }

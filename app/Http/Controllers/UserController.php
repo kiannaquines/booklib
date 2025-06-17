@@ -40,7 +40,6 @@ class UserController extends Controller
             'number' => 'required|string|max:255',
             'password' => 'required|string|max:255',
             'confirm_password' => 'required|string|max:255|same:password',
-            'status' => 'required|string|in:Available,Unavailable',
             'role' => 'required|string|in:user,admin',
         ]);
 
@@ -49,10 +48,9 @@ class UserController extends Controller
             'email' => $request->email,
             'number' => $request->number,
             'password' => Hash::make($request->password),
-            'status' => $request->status,
         ])->assignRole($request->role);
 
-        return redirect()->route('users')->with('success', 'User created successfully');
+        return redirect()->route('users.index')->with('success', 'User created successfully');
     }
 
     public function edit(string $id)
@@ -93,7 +91,7 @@ class UserController extends Controller
 
         $user->syncRoles([$request->role]);
 
-        return redirect()->route('users')->with('success', 'User updated successfully');
+        return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
     public function destroy(string $id)
@@ -110,6 +108,6 @@ class UserController extends Controller
 
         $user->delete();
 
-        return redirect()->route('users')->with('success', 'User deleted successfully');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
 }

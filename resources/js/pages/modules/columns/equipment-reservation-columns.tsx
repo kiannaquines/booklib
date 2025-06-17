@@ -42,7 +42,7 @@ function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeletin
                 <AlertDialogHeader>
                     <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this book? This action cannot be undone.
+                        Are you sure you want to delete this equipment reservation? This action cannot be undone.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -70,16 +70,22 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
 
     const handleDelete = useCallback(() => {
         setIsDeleting(true);
-        router.delete(route('incidents.destroy', { incident: equipmentReservation.id }), {
+        router.delete(route('equipment-reservations.destroy', { id: equipmentReservation.id }), {
             preserveScroll: true,
             onSuccess: () => {
+                toast.success("Equipment reservation deleted successfully");
+            },
+            onError: (e) => {   
+                for (const [field, message] of Object.entries(e)) {
+                    toast.error("Failed to delete equipment reservation", {
+                        description: `${message}`,
+                    });
+                }
+            },
+            onFinish: () => {
+                setIsDeleting(false)
                 setIsDeleteDialogOpen(false);
-                toast.success("Book deleted successfully");
-            },
-            onError: () => {
-                toast.error("Failed to delete book");
-            },
-            onFinish: () => setIsDeleting(false)
+            }
         });
     }, [equipmentReservation?.id]);
 
@@ -102,7 +108,7 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('edit-equipment-reservation', { id: String(equipmentReservation.id) }))
+                        router.visit(route('equipment-reservations.edit', { id: String(equipmentReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit

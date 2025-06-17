@@ -41,7 +41,7 @@ function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeletin
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this book? This action cannot be undone.
+            Are you sure you want to delete this equipment? This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -69,16 +69,22 @@ function EquipmentActionsCell({ equipment }: EquipmentActionsCellProps) {
 
   const handleDelete = useCallback(() => {
     setIsDeleting(true);
-    router.delete(route('incidents.destroy', { incident: equipment.id }), {
+    router.delete(route('equipments.destroy', { id: equipment.id }), {
       preserveScroll: true,
       onSuccess: () => {
+        toast.success("Equipment deleted successfully");
+      },
+      onError: (e) => {
+        for (const [field, message] of Object.entries(e)) {
+          toast.error("Failed to delete equipment", {
+            description: `${message}`,
+          });
+        }
+      },
+      onFinish: () => {
+        setIsDeleting(false)
         setIsDeleteDialogOpen(false);
-        toast.success("Book deleted successfully");
-      },
-      onError: () => {
-        toast.error("Failed to delete book");
-      },
-      onFinish: () => setIsDeleting(false)
+      }
     });
   }, [equipment?.id]);
 
@@ -101,7 +107,7 @@ function EquipmentActionsCell({ equipment }: EquipmentActionsCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() =>
-            router.visit(route('edit-equipment', { id: String(equipment.id) }))
+            router.visit(route('equipments.edit', { id: String(equipment.id) }))
           }>
             <Edit className="mr-2 h-4 w-4" />
             Edit

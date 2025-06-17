@@ -38,7 +38,7 @@ class EquipmentController extends Controller
 
         Equipment::create($request->all());
 
-        return redirect()->route('equipments')->with('success', 'Equipment created successfully');
+        return redirect()->route('equipments.index')->with('success', 'Equipment created successfully');
     }
 
     public function edit(string $id)
@@ -69,7 +69,7 @@ class EquipmentController extends Controller
 
         $equipment->update($request->all());
 
-        return redirect()->route('equipments')->with('success', 'Equipment updated successfully');
+        return redirect()->route('equipments.index')->with('success', 'Equipment updated successfully');
     }
 
     public function destroy(string $id)
@@ -85,6 +85,6 @@ class EquipmentController extends Controller
         }
         $equipment->delete();
 
-        return redirect()->route('equipments')->with('success', 'Equipment deleted successfully');
+        return redirect()->route('equipments.index')->with('success', 'Equipment deleted successfully');
     }
 }

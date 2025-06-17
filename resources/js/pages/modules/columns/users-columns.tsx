@@ -68,16 +68,22 @@ function UsersActionsCell({ user }: UsersActionsCellProps) {
 
   const handleDelete = useCallback(() => {
     setIsDeleting(true);
-    router.delete(route('incidents.destroy', { incident: user.id }), {
+    router.delete(route('users.destroy', { id: user.id }), {
       preserveScroll: true,
       onSuccess: () => {
-        setIsDeleteDialogOpen(false);
         toast.success("User deleted successfully");
       },
-      onError: () => {
-        toast.error("Failed to delete user");
+      onError: (e) => {
+        for (const [field, message] of Object.entries(e)) {
+          toast.error("Failed to delete user", {
+            description: `${message}`,
+          });
+        }
       },
-      onFinish: () => setIsDeleting(false)
+      onFinish: () => {
+        setIsDeleting(false)
+        setIsDeleteDialogOpen(false);
+      }
     });
   }, [user?.id]);
 
@@ -100,7 +106,7 @@ function UsersActionsCell({ user }: UsersActionsCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() =>
-            router.visit(route('edit-user', { id: String(user.id) }))
+            router.visit(route('users.edit', { id: String(user.id) }))
           }>
             <Edit className="mr-2 h-4 w-4" />
             Edit
@@ -165,14 +171,14 @@ export function getUsersColumns(users: User[]): ColumnDef<User>[] {
       ),
     },
     {
-        accessorKey: "number",
-        header: "Phone Number",
-        cell: ({ row }) => (
-          <Badge variant="outline" className="normal-case">
-            {row.getValue("number")}
-          </Badge>
-        ),
-      },
+      accessorKey: "number",
+      header: "Phone Number",
+      cell: ({ row }) => (
+        <Badge variant="outline" className="normal-case">
+          {row.getValue("number")}
+        </Badge>
+      ),
+    },
     {
       accessorKey: "email",
       header: "Email",

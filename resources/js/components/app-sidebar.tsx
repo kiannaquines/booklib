@@ -43,11 +43,6 @@ const mainNavItems: NavItem[] = [
         href: route('users.index'),
         icon: UserRoundSearch,
     },
-    {
-        title: 'Reports',
-        href: route('reports.index'),
-        icon: Printer,
-    },
 ];
 
 const footerNavItems: NavItem[] = [

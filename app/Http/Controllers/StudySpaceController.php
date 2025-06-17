@@ -38,7 +38,7 @@ class StudySpaceController extends Controller
 
         StudySpace::create($request->all());
 
-        return redirect()->route('study-spaces')->with('success', 'Study space created successfully');
+        return redirect()->route('study-spaces.index')->with('success', 'Study space created successfully');
     }
 
     public function edit(string $id)
@@ -69,7 +69,7 @@ class StudySpaceController extends Controller
 
         $studySpace->update($request->all());
 
-        return redirect()->route('study-spaces')->with('success', 'Study space updated successfully');
+        return redirect()->route('study-spaces.index')->with('success', 'Study space updated successfully');
     }
 
     public function destroy(string $id)
@@ -86,6 +86,6 @@ class StudySpaceController extends Controller
 
         $studySpace->delete();
 
-        return redirect()->route('study-spaces')->with('success', 'Study space deleted successfully');
+        return redirect()->route('study-spaces.index')->with('success', 'Study space deleted successfully');
     }
 }

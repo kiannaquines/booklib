@@ -100,7 +100,7 @@ class BookReservationController extends Controller
                 'status' => 'Unavailable',
             ]);
 
-            return redirect()->route('book-reservation')->with('success', 'Book reservation created successfully');
+            return redirect()->route('book-reservations.index')->with('success', 'Book reservation created successfully');
         }
     }
 
@@ -161,7 +161,7 @@ class BookReservationController extends Controller
         $bookReservation = BookReservation::findOrFail($id);
         $bookReservation->update($request->all());
 
-        return redirect()->route('book-reservation')->with('success', 'Book reservation updated successfully');
+        return redirect()->route('book-reservations.index')->with('success', 'Book reservation updated successfully');
     }
 
     public function destroy(string $id)
@@ -177,6 +177,6 @@ class BookReservationController extends Controller
         }
         $bookReservation->delete();
 
-        return redirect()->route('book-reservation')->with('success', 'Book reservation deleted successfully');
+        return redirect()->route('book-reservations.index')->with('success', 'Book reservation deleted successfully');
     }
 }

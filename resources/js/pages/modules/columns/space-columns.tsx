@@ -68,16 +68,22 @@ function StudySpaceActionsCell({ studySpace }: StudySpaceActionsCellProps) {
 
   const handleDelete = useCallback(() => {
     setIsDeleting(true);
-    router.delete(route('incidents.destroy', { incident: studySpace.id }), {
+    router.delete(route('study-spaces.destroy', { id: studySpace.id }), {
       preserveScroll: true,
       onSuccess: () => {
+        toast.success("Study space deleted successfully");
+      },
+      onError: (e) => {
+        for (const [field, message] of Object.entries(e)) {
+          toast.error("Failed to delete study space", {
+            description: `${message}`,
+          });
+        }
+      },
+      onFinish: () => {
+        setIsDeleting(false)
         setIsDeleteDialogOpen(false);
-        toast.success("Book deleted successfully");
-      },
-      onError: () => {
-        toast.error("Failed to delete book");
-      },
-      onFinish: () => setIsDeleting(false)
+      }
     });
   }, [studySpace?.id]);
 
@@ -100,7 +106,7 @@ function StudySpaceActionsCell({ studySpace }: StudySpaceActionsCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() =>
-            router.visit(route('edit-study-space', { id: String(studySpace.id) }))
+            router.visit(route('study-spaces.edit', { id: String(studySpace.id) }))
           }>
             <Edit className="mr-2 h-4 w-4" />
             Edit
