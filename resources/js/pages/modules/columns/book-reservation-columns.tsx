@@ -276,30 +276,21 @@ export function getBookReservationDashboardColumns(bookReservations: BookReserva
             ),
         },
         {
-            accessorKey: "seat_number",
+            accessorKey: "seat",
             header: "Seat",
             cell: ({ row }) => (
                 <Badge variant="outline" className="capitalize">
-                    {row.getValue("seat_number")}
+                    {row.getValue("seat")}
                 </Badge>
             ),
         },
         {
-            accessorKey: "start_time",
-            header: "Start Time",
+            accessorKey: "status",
+            header: "Status",
             cell: ({ row }) => (
-                <div>
-                    {row.getValue("start_time")}
-                </div>
-            ),
-        },
-        {
-            accessorKey: "end_time",
-            header: "End Time",
-            cell: ({ row }) => (
-                <div>
-                    {row.getValue("end_time")}
-                </div>
+                <Badge variant="outline" className="capitalize">
+                    {row.getValue("status")}
+                </Badge>
             ),
         },
     ];

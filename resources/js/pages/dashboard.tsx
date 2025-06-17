@@ -12,51 +12,8 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-
-
-const chartData = [
-    { month: "January", book: 132 },
-    { month: "February", book: 278 },
-    { month: "March", book: 198 },
-    { month: "April", book: 67 },
-    { month: "May", book: 245 },
-    { month: "June", book: 162 },
-    { month: "July", book: 310 },
-    { month: "August", book: 97 },
-    { month: "September", book: 184 },
-    { month: "October", book: 222 },
-    { month: "November", book: 143 },
-    { month: "December", book: 267 },
-];
-
-const equipmentChartData = [
-    { month: "January", equipment: 153 },
-    { month: "February", equipment: 201 },
-    { month: "March", equipment: 180 },
-    { month: "April", equipment: 99 },
-    { month: "May", equipment: 231 },
-    { month: "June", equipment: 172 },
-    { month: "July", equipment: 305 },
-    { month: "August", equipment: 121 },
-    { month: "September", equipment: 159 },
-    { month: "October", equipment: 245 },
-    { month: "November", equipment: 130 },
-    { month: "December", equipment: 288 },
-];
-
-const chartConfig = {
-    book: {
-        label: "Reservations ",
-        color: "var(--chart-1)",
-    },
-} satisfies ChartConfig
-
-const equipmentChartConfig = {
-    equipment: {
-        label: "Equipment Reservations",
-        color: "var(--chart-2)",
-    },
-} satisfies ChartConfig
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -74,7 +31,64 @@ type DashboardProps = {
     totalEquipmentReservations: number;
 }
 
+type ReservationChartItem = {
+    month: string;
+    book: number;
+    equipment: number;
+};
+
+type BookChartItem = {
+    month: string;
+    book: number;
+};
+
+type EquipmentChartItem = {
+    month: string;
+    equipment: number;
+};
+
 export default function Dashboard({ reservations, totalUsers, totalBooks, totalEquipment, totalStudySpaces, totalEquipmentReservations }: DashboardProps) {
+
+
+    const [chartData, setChartData] = useState<BookChartItem[]>([]);
+    const [equipmentChartData, setEquipmentChartData] = useState<EquipmentChartItem[]>([]);
+    const chartConfig = {
+        book: {
+            label: "Reservations ",
+            color: "var(--chart-1)",
+        },
+    } satisfies ChartConfig
+
+    const equipmentChartConfig = {
+        equipment: {
+            label: "Equipment Reservations",
+            color: "var(--chart-2)",
+        },
+    } satisfies ChartConfig
+    useEffect(() => {
+        axios
+            .get<ReservationChartItem[]>(route('reservation-charts'))
+            .then((res) => {
+                const rawData = res.data;
+
+                const bookData: BookChartItem[] = rawData.map((item) => ({
+                    month: item.month,
+                    book: item.book,
+                }));
+
+                const equipmentData: EquipmentChartItem[] = rawData.map((item) => ({
+                    month: item.month,
+                    equipment: item.equipment,
+                }));
+
+                setChartData(bookData);
+                setEquipmentChartData(equipmentData);
+            })
+            .catch((error) => {
+                console.error('Error fetching chart data:', error);
+            });
+    }, []);
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />

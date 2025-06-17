@@ -69,6 +69,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
     Route::delete('book-reservations/{id}', [BookReservationController::class, 'destroy'])->name('book-reservations.destroy');
     Route::delete('equipment-reservations/{id}', [EquipmentReservationController::class, 'destroy'])->name('equipment-reservations.destroy');
+
+
+    // API Routes
+    Route::get('reservation-charts', [DashboardController::class, 'getReservationCharts'])->name('reservation-charts');
 });
 
 require __DIR__.'/settings.php';

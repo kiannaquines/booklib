@@ -66,7 +66,7 @@ const DataTable = <T,>({
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
     const [rowSelection, setRowSelection] = React.useState({});
-
+    
     const table = useReactTable({
         data,
         columns,
@@ -75,10 +75,6 @@ const DataTable = <T,>({
             columnFilters,
             columnVisibility,
             rowSelection,
-            pagination: {
-                pageIndex: 0,
-                pageSize: 20,
-            },
         },
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
