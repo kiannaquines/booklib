@@ -14,33 +14,69 @@ class StudySpaceSeeder extends Seeder
     public function run(): void
     {
         StudySpace::create([
-            'seat_number' => '101',
+            'seat_number' => 'S101',
             'status' => 'Available',
         ]);
 
         StudySpace::create([
-            'seat_number' => '102',
+            'seat_number' => 'S102',
             'status' => 'Available',
         ]);
 
         StudySpace::create([
-            'seat_number' => '103',
+            'seat_number' => 'S103',
             'status' => 'Available',
         ]);
 
         StudySpace::create([
-            'seat_number' => '104',
+            'seat_number' => 'S104',
             'status' => 'Available',
         ]);
 
         StudySpace::create([
-            'seat_number' => '105',
+            'seat_number' => 'S105',
             'status' => 'Available',
         ]);
 
         StudySpace::create([
-            'seat_number' => '106',
+            'seat_number' => 'S106',
             'status' => 'Available',
         ]);
+
+        StudySpace::create([
+            'seat_number' => 'S106',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S107',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S108',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S109',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S110',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S111',
+            'status' => 'Available',
+        ]);
+
+        StudySpace::create([
+            'seat_number' => 'S112',
+            'status' => 'Available',
+        ]);
+        
     }
 }

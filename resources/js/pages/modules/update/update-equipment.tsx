@@ -39,11 +39,11 @@ const UpdateEquipment = ({ equipment }: UpdateEquipmentProps) => {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Equipment',
-            href: route('equipments'),
+            href: route('equipments.index'),
         },
         {
             title: 'Edit Equipment',
-            href: route('edit-equipment', { id: data.id }),
+            href: route('equipments.edit', { id: data.id }),
         },
     ];
 

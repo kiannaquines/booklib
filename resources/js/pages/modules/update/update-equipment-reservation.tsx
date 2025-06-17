@@ -49,21 +49,19 @@ const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpa
 
     const { data, setData, reset, clearErrors } = useForm<UpdateEquipmentReservationFormData>({
         id: equipmentReservation.id,
-        user_id: equipmentReservation.user_id,
-        equipment_id: equipmentReservation.equipment_id,
-        study_space_id: equipmentReservation.study_space_id,
+        user_id: String(equipmentReservation.user_id),
+        equipment_id: String(equipmentReservation.equipment_id),
+        study_space_id: String(equipmentReservation.study_space_id),
     });
-
-    console.log(data);
 
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Equipment Reservation',
-            href: route('equipment-reservations'),
+            href: route('equipment-reservations.index'),
         },
         {
             title: 'Edit Equipment Reservation',
-            href: route('edit-equipment-reservation', { id: data.id }),
+            href: route('equipment-reservations.edit', { id: data.id }),
         },
     ];
 

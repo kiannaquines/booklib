@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('equipment_id')->references('id')->on('equipments');
             $table->foreignId('study_space_id')->references('id')->on('study_space');
+            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->timestamps();

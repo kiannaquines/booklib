@@ -19,16 +19,66 @@ class RoleSeeder extends Seeder
         $admin = Role::create(['name' => 'admin']);
         $user = Role::create(['name' => 'user']);
 
-        $editArticles = Permission::create(['name' => 'edit articles']);
-        $deleteArticles = Permission::create(['name' => 'delete articles']);
+        // Books Permissions
+        $addBooks = Permission::create(['name' => 'add-books']);
+        $editBooks = Permission::create(['name' => 'edit-books']);
+        $deleteBooks = Permission::create(['name' => 'delete-books']);
 
-        $admin->givePermissionTo($editArticles);
-        $admin->givePermissionTo($deleteArticles);
+        // Equipment Permissions
+        $addEquipment = Permission::create(['name' => 'add-equipment']);
+        $editEquipment = Permission::create(['name' => 'edit-equipment']);
+        $deleteEquipment = Permission::create(['name' => 'delete-equipment']);
 
-        $user = User::find(1);
-        $user->assignRole('admin');
+        // Study Space Permissions
+        $addStudySpace = Permission::create(['name' => 'add-study-space']);
+        $editStudySpace = Permission::create(['name' => 'edit-study-space']);
+        $deleteStudySpace = Permission::create(['name' => 'delete-study-space']);
 
-        $user = User::find(2);
-        $user->assignRole('user');
+        // Equipment Reservation Permissions
+        $addEquipmentReservation = Permission::create(['name' => 'add-equipment-reservation']);
+        $editEquipmentReservation = Permission::create(['name' => 'edit-equipment-reservation']);
+        $deleteEquipmentReservation = Permission::create(['name' => 'delete-equipment-reservation']);
+
+        // Book Reservation Permissions
+        $addBookReservation = Permission::create(['name' => 'add-book-reservation']);
+        $editBookReservation = Permission::create(['name' => 'edit-book-reservation']);
+        $deleteBookReservation = Permission::create(['name' => 'delete-book-reservation']);
+
+        // View Permissions
+        $viewEquipmentReservation = Permission::create(['name' => 'view-equipment-reservation']);
+        $viewBookReservation = Permission::create(['name' => 'view-book-reservation']);
+        $viewEquipment = Permission::create(['name' => 'view-equipment']);
+        $viewStudySpace = Permission::create(['name' => 'view-study-space']);
+
+        // Books Permissions
+        $admin->givePermissionTo($addBooks);
+        $admin->givePermissionTo($editBooks);
+        $admin->givePermissionTo($deleteBooks);
+
+        // Equipment Permissions
+        $admin->givePermissionTo($addEquipment);
+        $admin->givePermissionTo($editEquipment);
+        $admin->givePermissionTo($deleteEquipment);
+
+        // Study Space Permissions
+        $admin->givePermissionTo($addStudySpace);
+        $admin->givePermissionTo($editStudySpace);
+        $admin->givePermissionTo($deleteStudySpace);
+
+        // Equipment Reservation Permissions
+        $admin->givePermissionTo($addEquipmentReservation);
+        $admin->givePermissionTo($editEquipmentReservation);
+        $admin->givePermissionTo($deleteEquipmentReservation);
+
+        // Book Reservation Permissions
+        $admin->givePermissionTo($addBookReservation);
+        $admin->givePermissionTo($editBookReservation);
+        $admin->givePermissionTo($deleteBookReservation);
+
+        // View Permissions
+        $admin->givePermissionTo($viewEquipmentReservation);
+        $admin->givePermissionTo($viewBookReservation);
+        $admin->givePermissionTo($viewEquipment);
+        $admin->givePermissionTo($viewStudySpace);
     }
 }

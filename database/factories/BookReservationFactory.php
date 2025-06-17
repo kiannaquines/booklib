@@ -14,7 +14,7 @@ class BookReservationFactory extends Factory
 {
     public function definition(): array
     {
-        $user = User::where('id', '!=', 1)->inRandomOrder()->first();
+        $user = User::where('name', '!=', 'James Napone')->inRandomOrder()->first();
         $book = Books::inRandomOrder()->first();
         $space = StudySpace::inRandomOrder()->first();
 
@@ -32,6 +32,7 @@ class BookReservationFactory extends Factory
             'study_space_id' => $space->id,
             'start_time' => $startTime,
             'end_time' => $endTime,
+            'status' => 'Pending',
             'created_at' => $startTime,
             'updated_at' => $endTime,
         ];
