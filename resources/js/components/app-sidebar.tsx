@@ -15,37 +15,37 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Books',
-        href: route('books'),
+        href: route('books.index'),
         icon: BookOpen,
     },
     {
         title: 'Equipment',
-        href: route('equipments'),
+        href: route('equipments.index'),
         icon: Microscope,
     },
     {
         title: 'Study Space',
-        href: route('study-spaces'),
+        href: route('study-spaces.index'),
         icon: BookCopy,
     },
     {
         title: 'Equipment Reservations',
-        href: route('equipment-reservations'),
+        href: route('equipment-reservations.index'),
         icon: Printer,
     },
     {
         title: 'Book Reservations',
-        href: route('book-reservation'),
+        href: route('book-reservations.index'),
         icon: BookOpen,
     },
     {
         title: 'Users',
-        href: route('users'),
+        href: route('users.index'),
         icon: UserRoundSearch,
     },
     {
         title: 'Reports',
-        href: route('reports'),
+        href: route('reports.index'),
         icon: Printer,
     },
 ];

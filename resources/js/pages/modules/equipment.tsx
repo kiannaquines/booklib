@@ -7,7 +7,7 @@ import { getEquipmentColumns } from './columns/equipment-columns';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Equipment',
-    href: route('equipments'),
+    href: route('equipments.index'),
   },
 ];
 
@@ -36,7 +36,7 @@ const Equipment = ({ equipments }: EquipmentProps) => {
             tableDescription='Equipment available in the library'
             addButtonName='Add New Equipment'
             data={equipments} columns={getEquipmentColumns(equipments)}
-            route={route('create-equipment')}
+            route={route('equipments.create')}
           />
         </div>
       </div>

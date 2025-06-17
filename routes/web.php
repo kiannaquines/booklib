@@ -20,25 +20,24 @@ Route::get('/', function () {
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
+    // Index Routes
+    Route::get('books', [BookController::class, 'index'])->name('books.index');
+    Route::get('book-reservations', [BookReservationController::class, 'index'])->name('book-reservations.index');
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
+    Route::get('study-spaces', [StudySpaceController::class, 'index'])->name('study-spaces.index');
+    Route::get('equipments', [EquipmentController::class, 'index'])->name('equipments.index');
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('equipment-reservations', [EquipmentReservationController::class, 'index'])->name('equipment-reservations.index');
 
-    Route::get('books', [BookController::class, 'index'])->name('books');
-    Route::get('book-reservation', [BookReservationController::class, 'index'])->name('book-reservation');
-    Route::get('users', [UserController::class, 'index'])->name('users');
-    Route::get('study-spaces', [StudySpaceController::class, 'index'])->name('study-spaces');
-    Route::get('equipments', [EquipmentController::class, 'index'])->name('equipments');
-    Route::get('reports', [ReportController::class, 'index'])->name('reports');
-    Route::get('equipment-reservations', [EquipmentReservationController::class, 'index'])->name('equipment-reservations');
+    // Create Routes
+    Route::get('books/create', [BookController::class, 'create'])->name('books.create');
+    Route::get('equipments/create', [EquipmentController::class, 'create'])->name('equipments.create');
+    Route::get('study-spaces/create', [StudySpaceController::class, 'create'])->name('study-spaces.create');
+    Route::get('equipment-reservations/create', [EquipmentReservationController::class, 'create'])->name('equipment-reservations.create');
+    Route::get('book-reservations/create', [BookReservationController::class, 'create'])->name('book-reservations.create');
+    Route::get('users/create', [UserController::class, 'create'])->name('users.create');
 
-
-    Route::get('create/book', [BookController::class, 'create'])->name('create-book');
-    Route::get('create/equipment', [EquipmentController::class, 'create'])->name('create-equipment');
-    Route::get('create/study-space', [StudySpaceController::class, 'create'])->name('create-study-space');
-    Route::get('create/equipment-reservation', [EquipmentReservationController::class, 'create'])->name('create-equipment-reservation');
-    Route::get('create/book-reservation', [BookReservationController::class, 'create'])->name('create-book-reservation');
-    Route::get('create/user', [UserController::class, 'create'])->name('create-user');
-
-
-
+    // Store Routes
     Route::post('books', [BookController::class, 'store'])->name('books.store');
     Route::post('equipments', [EquipmentController::class, 'store'])->name('equipments.store');
     Route::post('study-spaces', [StudySpaceController::class, 'store'])->name('study-spaces.store');
@@ -46,32 +45,30 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('book-reservations', [BookReservationController::class, 'store'])->name('book-reservations.store');
     Route::post('equipment-reservations', [EquipmentReservationController::class, 'store'])->name('equipment-reservations.store');
 
-
-
-
-
     // Edit Routes
-
-    Route::get('edit/book/{id}', [BookController::class, 'edit'])->name('edit-book');
-
-
-    Route::get('edit/equipment/{id}', [EquipmentController::class, 'edit'])->name('edit-equipment');
-    Route::get('edit/study-space/{id}', [StudySpaceController::class, 'edit'])->name('edit-study-space');
-    Route::get('edit/equipment-reservation/{id}', [EquipmentReservationController::class, 'edit'])->name('edit-equipment-reservation');
-    Route::get('edit/book-reservation/{id}', [BookReservationController::class, 'edit'])->name('edit-book-reservation');
-    Route::get('edit/user/{id}', [UserController::class, 'edit'])->name('edit-user');
-
-
+    Route::get('books/{id}', [BookController::class, 'edit'])->name('books.edit');
+    Route::get('equipments/{id}', [EquipmentController::class, 'edit'])->name('equipments.edit');
+    Route::get('study-spaces/{id}', [StudySpaceController::class, 'edit'])->name('study-spaces.edit');
+    Route::get('equipment-reservations/{id}', [EquipmentReservationController::class, 'edit'])->name('equipment-reservations.edit');
+    Route::get('book-reservations/{id}', [BookReservationController::class, 'edit'])->name('book-reservations.edit');
+    Route::get('users/{id}', [UserController::class, 'edit'])->name('users.edit');
 
     // Update Routes
     Route::put('books/{id}', [BookController::class, 'update'])->name('books.update');
     Route::put('equipments/{id}', [EquipmentController::class, 'update'])->name('equipments.update');
     Route::put('study-spaces/{id}', [StudySpaceController::class, 'update'])->name('study-spaces.update');
     Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');
-
-    
     Route::put('book-reservations/{id}', [BookReservationController::class, 'update'])->name('book-reservations.update');
     Route::put('equipment-reservations/{id}', [EquipmentReservationController::class, 'update'])->name('equipment-reservations.update');
+
+
+    // Delete Routes
+    Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::delete('equipments/{id}', [EquipmentController::class, 'destroy'])->name('equipments.destroy');
+    Route::delete('study-spaces/{id}', [StudySpaceController::class, 'destroy'])->name('study-spaces.destroy');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('book-reservations/{id}', [BookReservationController::class, 'destroy'])->name('book-reservations.destroy');
+    Route::delete('equipment-reservations/{id}', [EquipmentReservationController::class, 'destroy'])->name('equipment-reservations.destroy');
 });
 
 require __DIR__.'/settings.php';

@@ -68,14 +68,14 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
 
     const handleDelete = useCallback(() => {
         setIsDeleting(true);
-        router.delete(route('incidents.destroy', { incident: bookReservation.id }), {
+        router.delete(route('book-reservations.destroy', { id: bookReservation.id }), {
             preserveScroll: true,
             onSuccess: () => {
                 setIsDeleteDialogOpen(false);
-                toast.success("Book deleted successfully");
+                toast.success("Book reservation deleted successfully");
             },
             onError: () => {
-                toast.error("Failed to delete book");
+                toast.error("Failed to delete book reservation");
             },
             onFinish: () => setIsDeleting(false)
         });

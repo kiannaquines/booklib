@@ -7,7 +7,7 @@ import { getBooksColumns } from './columns/books-columns';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Books',
-    href: '/books',
+    href: route('books.index'),
   },
 ];
 
@@ -38,7 +38,7 @@ const Books = ({ books }: BooksProps) => {
             addButtonName='Add New Book'
             data={books}
             columns={getBooksColumns(books)}
-            route={route('create-book')}
+            route={route('books.create')}
           />
         </div>
       </div>

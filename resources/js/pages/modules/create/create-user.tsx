@@ -18,11 +18,11 @@ import { toast } from "sonner";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Users',
-        href: route('users'),
+        href: route('users.index'),
     },
     {
         title: 'Create User',
-        href: route('create-user'),
+        href: route('users.create'),
     },
 ];
 
@@ -83,7 +83,7 @@ const CreateUser = () => {
             <Head title="User Creation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit(route('users'))}>
+                    <Button variant="outline" onClick={() => router.visit(route('users.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Users
                     </Button>

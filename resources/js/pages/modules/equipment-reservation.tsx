@@ -7,7 +7,7 @@ import { getEquipmentReservationColumns } from './columns/equipment-reservation-
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Equipment Reservation',
-    href: route('equipment-reservations'),
+    href: route('equipment-reservations.index'),
   },
 ];
 
@@ -43,7 +43,7 @@ const EquipmentReservation = ({ equipmentReservations }: EquipmentReservationPro
             tableDescription='Equipment reservation of the library'
             addButtonName='Add New Equipment Reservation'
             data={equipmentReservations} columns={getEquipmentReservationColumns(equipmentReservations)}
-            route={route('create-equipment-reservation')}
+            route={route('equipment-reservations.create')}
           />
         </div>
       </div>

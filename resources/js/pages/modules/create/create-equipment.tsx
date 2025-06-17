@@ -19,11 +19,11 @@ import { useState } from "react";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Equipment',
-        href: route('equipments'),
+        href: route('equipments.index'),
     },
     {
         title: 'Create Equipment',
-        href: route('create-equipment'),
+        href: route('equipments.create'),
     },
 ];
 
@@ -73,7 +73,7 @@ const CreateEquipment = () => {
             <Head title="Create Equipment" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit('/equipments')}>
+                    <Button variant="outline" onClick={() => router.visit(route('equipments.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Equipment
                     </Button>

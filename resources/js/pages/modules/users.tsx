@@ -7,7 +7,7 @@ import { getUsersColumns } from './columns/users-columns';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Users',
-    href: route('users'),
+    href: route('users.index'),
   },
 ];
 
@@ -38,7 +38,7 @@ const Users = ({ users }: UsersProps) => {
             filterPlaceholder='Search by name'
             addButtonName='Add New User'
             data={users} columns={getUsersColumns(users)}
-            route={route('create-user')}
+            route={route('users.create')}
           />
         </div>
       </div>

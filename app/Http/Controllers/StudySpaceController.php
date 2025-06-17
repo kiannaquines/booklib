@@ -71,4 +71,21 @@ class StudySpaceController extends Controller
 
         return redirect()->route('study-spaces')->with('success', 'Study space updated successfully');
     }
+
+    public function destroy(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Study space identifier not found');
+        }
+
+        $studySpace = StudySpace::find($id);
+
+        if (!$studySpace) {
+            return back()->with('error', 'Study space not found');
+        }
+
+        $studySpace->delete();
+
+        return redirect()->route('study-spaces')->with('success', 'Study space deleted successfully');
+    }
 }

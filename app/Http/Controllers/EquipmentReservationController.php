@@ -169,4 +169,22 @@ class EquipmentReservationController extends Controller
 
         return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation updated successfully');
     }
+
+
+    public function destroy(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Equipment reservation identifier not found');
+        }
+
+        $equipmentReservation = EquipmentReservation::find($id);
+
+        if (!$equipmentReservation) {
+            return back()->with('error', 'Equipment reservation not found');
+        }
+
+        $equipmentReservation->delete();
+
+        return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation deleted successfully');
+    }
 }

@@ -11,28 +11,19 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, BadgeInfo, Loader2, Plus, RefreshCcw } from "lucide-react";
-import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
-} from "@/components/ui/popover"
-import { Calendar } from "@/components/ui/calendar"
-
-import { ChevronDownIcon } from "lucide-react"
+import { ArrowLeft, Loader2, Plus, RefreshCcw } from "lucide-react";
 import * as React from "react"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Book Reservation',
-        href: route('book-reservation'),
+        href: route('book-reservations.index'),
     },
     {
         title: 'Create Book Reservation',
-        href: route('create-book-reservation'),
+        href: route('book-reservations.create'),
     },
 ];
 
@@ -107,7 +98,7 @@ const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationPr
             <Head title="Book Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit(route('book-reservation'))}>
+                    <Button variant="outline" onClick={() => router.visit(route('book-reservations.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Book Reservations
                     </Button>

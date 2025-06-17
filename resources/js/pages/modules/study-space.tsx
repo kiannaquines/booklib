@@ -7,7 +7,7 @@ import { getStudySpaceColumns } from './columns/space-columns';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Study Space',
-    href: route('study-spaces'),
+    href: route('study-spaces.index'),
   },
 ];
 
@@ -37,7 +37,7 @@ const StudySpace = ({ spaces }: StudySpaceProps) => {
             tableDescription='Study spaces available in the library'
             addButtonName='Add New Study Space'
             data={spaces} columns={getStudySpaceColumns(spaces)}
-            route={route('create-study-space')}
+            route={route('study-spaces.create')}
           />
         </div>
       </div>

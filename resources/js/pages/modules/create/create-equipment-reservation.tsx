@@ -20,11 +20,11 @@ import { StudySpace, User } from "./create-book-reservation";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Equipment Reservation',
-        href: route('equipment-reservations'),
+        href: route('equipment-reservations.index'),
     },
     {
         title: 'Create Equipment Reservation',
-        href: route('create-equipment-reservation'),
+        href: route('equipment-reservations.create'),
     },
 ];
 
@@ -87,7 +87,7 @@ const CreateEquipmentReservation = ({ equipments, studySpaces, users }: CreateEq
             <Head title="Equipment Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit('/equipment-reservations')}>
+                    <Button variant="outline" onClick={() => router.visit(route('equipment-reservations.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Equipment Reservations
                     </Button>

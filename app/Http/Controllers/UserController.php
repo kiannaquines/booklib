@@ -95,4 +95,21 @@ class UserController extends Controller
 
         return redirect()->route('users')->with('success', 'User updated successfully');
     }
+
+    public function destroy(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'User identifier not found');
+        }
+
+        $user = User::findOrFail($id);
+
+        if (!$user) {
+            return back()->with('error', 'User not found');
+        }
+
+        $user->delete();
+
+        return redirect()->route('users')->with('success', 'User deleted successfully');
+    }
 }

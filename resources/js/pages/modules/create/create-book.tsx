@@ -17,11 +17,11 @@ import { useState } from "react";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: "Book",
-        href: route("books"),
+        href: route("books.index"),
     },
     {
         title: "Create Book",
-        href: route("create-book"),
+        href: route("books.create"),
     },
 ];
 
@@ -72,7 +72,7 @@ const CreateBook = () => {
             <Head title="Book Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit("/books")}>
+                    <Button variant="outline" onClick={() => router.visit(route("books.index"))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Books
                     </Button>

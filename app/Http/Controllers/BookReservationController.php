@@ -163,4 +163,20 @@ class BookReservationController extends Controller
 
         return redirect()->route('book-reservation')->with('success', 'Book reservation updated successfully');
     }
+
+    public function destroy(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Book reservation identifier not found');
+        }
+
+        $bookReservation = BookReservation::find($id);
+
+        if (!$bookReservation) {
+            return back()->with('error', 'Book reservation not found');
+        }
+        $bookReservation->delete();
+
+        return redirect()->route('book-reservation')->with('success', 'Book reservation deleted successfully');
+    }
 }

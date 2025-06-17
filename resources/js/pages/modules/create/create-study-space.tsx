@@ -18,11 +18,11 @@ import { toast } from "sonner";
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Study Space',
-        href: route('study-spaces'),
+        href: route('study-spaces.index'),
     },
     {
         title: 'Create Study Space',
-        href: route('create-study-space'),
+        href: route('study-spaces.create'),
     },
 ];
 
@@ -72,7 +72,7 @@ const CreateStudySpace = () => {
             <Head title="Book Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit('/study-spaces')}>
+                    <Button variant="outline" onClick={() => router.visit(route('study-spaces.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
                         Back to Study Spaces
                     </Button>

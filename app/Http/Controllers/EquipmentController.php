@@ -71,4 +71,20 @@ class EquipmentController extends Controller
 
         return redirect()->route('equipments')->with('success', 'Equipment updated successfully');
     }
+
+    public function destroy(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Equipment identifier not found');
+        }
+
+        $equipment = Equipment::find($id);
+
+        if (!$equipment) {
+            return back()->with('error', 'Equipment not found');
+        }
+        $equipment->delete();
+
+        return redirect()->route('equipments')->with('success', 'Equipment deleted successfully');
+    }
 }

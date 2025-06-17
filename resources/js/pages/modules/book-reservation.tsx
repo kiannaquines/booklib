@@ -7,7 +7,7 @@ import { getBookReservationColumns } from './columns/book-reservation-columns';
 const breadcrumbs: BreadcrumbItem[] = [
   {
     title: 'Book Reservation',
-    href: route('book-reservation'),
+    href: route('book-reservations.index'),
   },
 ];
 
@@ -42,7 +42,7 @@ const BookReservation = ({ books }: BookReservationProps) => {
             tableDescription='Book reservation of the library'
             addButtonName='Add New Book Reservation'
             data={books} columns={getBookReservationColumns(books)}
-            route={route('create-book-reservation')}
+            route={route('book-reservations.create')}
           />
         </div>
       </div>
