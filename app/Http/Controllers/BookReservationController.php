@@ -103,4 +103,64 @@ class BookReservationController extends Controller
             return redirect()->route('book-reservation')->with('success', 'Book reservation created successfully');
         }
     }
+
+    public function edit(string $id)
+    {
+
+        if (!$id) {
+            return back()->with('error', 'Book reservation identifier not found');
+        }
+
+        $bookReservation = BookReservation::select('id', 'user_id', 'book_id', 'study_space_id')->find($id);
+
+        if (!$bookReservation) {
+            return back()->with('error', 'Book reservation not found');
+        }
+
+        $users = User::role('user')->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+            ];
+        });
+
+        $books = Books::get()->map(function ($book) {
+            return [
+                'id' => $book->id,
+                'title' => $book->title,
+                'status' => $book->status,
+            ];
+        });
+
+        $spaces = StudySpace::get()->map(function ($space) {
+            return [
+                'id' => $space->id,
+                'seat_number' => $space->seat_number,
+                'status' => $space->status,
+            ];
+        });
+
+
+
+        return Inertia::render('modules/update/update-book-reservation', [
+            'bookReservation' => $bookReservation,
+            'users' => $users,
+            'books' => $books,
+            'spaces' => $spaces,
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'book_id' => 'required|exists:books,id',
+            'study_space_id' => 'required|exists:study_space,id',
+        ]);
+
+        $bookReservation = BookReservation::findOrFail($id);
+        $bookReservation->update($request->all());
+
+        return redirect()->route('book-reservation')->with('success', 'Book reservation updated successfully');
+    }
 }

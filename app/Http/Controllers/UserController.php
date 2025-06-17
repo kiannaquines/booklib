@@ -54,4 +54,45 @@ class UserController extends Controller
 
         return redirect()->route('users')->with('success', 'User created successfully');
     }
+
+    public function edit(string $id)
+    {
+
+        if (!$id) {
+            return back()->with('error', 'User identifier not found');
+        }
+
+        $user = User::find($id);
+
+        if (!$user) {
+            return back()->with('error', 'User not found');
+        }
+
+        return Inertia::render('modules/update/update-user', [
+            'user' => $user,
+            'role' => $user->roles()->pluck('name')->first(),
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'number' => 'required|string|max:255',
+            'role' => 'required|string|in:user,admin',
+        ]);
+
+        $user = User::findOrFail($id);
+
+        $user->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'number' => $request->number,
+        ]);
+
+        $user->syncRoles([$request->role]);
+
+        return redirect()->route('users')->with('success', 'User updated successfully');
+    }
 }

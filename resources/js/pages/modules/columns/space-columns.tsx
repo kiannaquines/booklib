@@ -24,8 +24,6 @@ import { Badge } from "@/components/ui/badge";
 import { router } from "@inertiajs/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { Book } from "../books";
-import { Equipment } from "../equipment";
 import { StudySpace } from "../study-space";
 
 type DialogIsOpenProps = {
@@ -101,6 +99,12 @@ function StudySpaceActionsCell({ studySpace }: StudySpaceActionsCellProps) {
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() =>
+            router.visit(route('edit-study-space', { id: String(studySpace.id) }))
+          }>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-600 focus:text-red-600 focus:bg-red-50"
             onClick={openDeleteDialog}

@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Trash2 } from "lucide-react";
+import { ArrowUpDown, Edit, MoreHorizontal, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -99,6 +99,12 @@ function UsersActionsCell({ user }: UsersActionsCellProps) {
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() =>
+            router.visit(route('edit-user', { id: String(user.id) }))
+          }>
+            <Edit className="mr-2 h-4 w-4" />
+            Edit
+          </DropdownMenuItem>
           <DropdownMenuItem
             className="text-red-600 focus:text-red-600 focus:bg-red-50"
             onClick={openDeleteDialog}

@@ -11,42 +11,46 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Loader2, Plus, RefreshCcw } from "lucide-react";
+import { ArrowLeft, FilePenLine, Loader2, Plus, RefreshCcw } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Users',
-        href: route('users'),
-    },
-    {
-        title: 'Create User',
-        href: route('create-user'),
-    },
-];
-
 
 type UserFormData = {
+    id: string;
     name: string;
     email: string;
     number: string;
-    password: string;
-    confirm_password: string;
+    status: string;
     role: string;
 }
 
+type UpdateUserProps = {
+    user: UserFormData;
+    role: string;
+}
 
-const CreateUser = () => {
+const UpdateUser = ({ user, role }: UpdateUserProps) => {
 
-    const {data, setData, reset, clearErrors} = useForm<UserFormData>({
-        name: '',
-        email: '',
-        number: '',
-        password: '',
-        confirm_password: '',
-        role: '',
+    const { data, setData, reset, clearErrors } = useForm<UserFormData>({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        number: user.number,
+        status: user.status,
+        role: role,
     });
+
+    const breadcrumbs: BreadcrumbItem[] = [
+        {
+            title: 'Users',
+            href: route('users'),
+        },
+        {
+            title: 'Edit User',
+            href: route('edit-user', { id: data.id }),
+        },
+    ];
 
     const [processing, setProcessing] = useState(false);
 
@@ -54,10 +58,10 @@ const CreateUser = () => {
         setProcessing(true);
         e.preventDefault();
 
-        router.post(route('users.store'), data, {
+        router.put(route('users.update', { id: data.id }), data, {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('User created successfully');
+                toast.success('User updated successfully');
                 setProcessing(false);
                 reset();
             },
@@ -91,8 +95,8 @@ const CreateUser = () => {
 
                 <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
                     <div className="flex flex-col gap-1 mb-4">
-                        <h2 className="text-lg font-semibold">Create User</h2>
-                        <p className="text-sm text-muted-foreground">Create a new user in the library</p>
+                        <h2 className="text-lg font-semibold">Update User</h2>
+                        <p className="text-sm text-muted-foreground">Update a user in the database</p>
                     </div>
                     <form onSubmit={handleSubmit} method="POST" className="mt-5">
                         <div className="grid w-full items-center gap-4 mt-4">
@@ -118,20 +122,6 @@ const CreateUser = () => {
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="password">Password</Label>
-                                <Input id="password" value={data.password} onChange={(e) => setData('password', e.target.value)} placeholder="Password" />
-                            </div>
-                        </div>
-
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="confirm_password">Confirm Password</Label>
-                                <Input id="confirm_password" value={data.confirm_password} onChange={(e) => setData('confirm_password', e.target.value)} placeholder="Confirm Password" />
-                            </div>
-                        </div>
-
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="role">Role</Label>
                                 <Select value={data.role} onValueChange={(value) => setData('role', value)}>
                                     <SelectTrigger className="w-full">
@@ -148,8 +138,8 @@ const CreateUser = () => {
                         <div className="flex w-50 items-center gap-4 mt-4">
                             <Button type="submit" disabled={processing}>
                                 {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                                {!processing && <Plus className="w-4 h-4 mr-2" />}
-                                Create User
+                                {!processing && <FilePenLine className="w-4 h-4 mr-2" />}
+                                Update User
                             </Button>
                             <Button type="button" variant="outline" onClick={handleReset}>
                                 <RefreshCcw className="w-4 h-4 mr-2" />
@@ -164,4 +154,4 @@ const CreateUser = () => {
     )
 }
 
-export default CreateUser
+export default UpdateUser

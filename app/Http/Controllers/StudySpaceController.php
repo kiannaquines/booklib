@@ -40,4 +40,35 @@ class StudySpaceController extends Controller
 
         return redirect()->route('study-spaces')->with('success', 'Study space created successfully');
     }
+
+    public function edit(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Study space identifier not found');
+        }
+
+        $studySpace = StudySpace::find($id);
+
+        if (!$studySpace) {
+            return back()->with('error', 'Study space not found');
+        }
+
+        return Inertia::render('modules/update/update-study-space', [
+            'studySpace' => $studySpace,
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'seat_number' => 'required|string|max:255',
+            'status' => 'required|string|in:Available,Unavailable',
+        ]);
+
+        $studySpace = StudySpace::findOrFail($id);
+
+        $studySpace->update($request->all());
+
+        return redirect()->route('study-spaces')->with('success', 'Study space updated successfully');
+    }
 }

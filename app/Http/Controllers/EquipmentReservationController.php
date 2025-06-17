@@ -101,4 +101,72 @@ class EquipmentReservationController extends Controller
             return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation created successfully');
         }
     }
+
+
+    public function edit(string $id)
+    {
+
+        if (!$id) {
+            return back()->with('error', 'Equipment reservation identifier not found');
+        }
+
+        $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'equipment_id', 'study_space_id')->find($id);
+        
+        if (!$equipmentReservation) {
+            return back()->with('error', 'Equipment reservation not found');
+        }
+
+        $equipments = Equipment::get()->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'name' => $row->name,
+                'status' => $row->status,
+            ];
+        });
+
+        $studySpaces = StudySpace::get()->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'seat_number' => $row->seat_number,
+                'status' => $row->status,
+            ];
+        });
+
+        $users = User::role('user')->get()->map(function ($row) {
+            return [
+                'id' => $row->id,
+                'name' => $row->name,
+            ];
+        });
+
+        return Inertia::render('modules/update/update-equipment-reservation', [
+            'equipmentReservation' => $equipmentReservation,
+            'equipments' => $equipments,
+            'studySpaces' => $studySpaces,
+            'users' => $users,
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Equipment reservation identifier not found');
+        }
+
+        $equipmentReservation = EquipmentReservation::find($id);
+
+        if (!$equipmentReservation) {
+            return back()->with('error', 'Equipment reservation not found');
+        }
+
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'equipment_id' => 'required|exists:equipments,id',
+            'study_space_id' => 'required|exists:study_space,id',
+        ]);
+
+        $equipmentReservation->update($request->all());
+
+        return redirect()->route('equipment-reservations')->with('success', 'Equipment reservation updated successfully');
+    }
 }

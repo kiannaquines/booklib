@@ -40,4 +40,35 @@ class EquipmentController extends Controller
 
         return redirect()->route('equipments')->with('success', 'Equipment created successfully');
     }
+
+    public function edit(string $id)
+    {
+        if (!$id) {
+            return back()->with('error', 'Equipment identifier not found');
+        }
+
+        $equipment = Equipment::find($id);
+
+        if (!$equipment) {
+            return back()->with('error', 'Equipment not found');
+        }
+
+        return Inertia::render('modules/update/update-equipment', [
+            'equipment' => $equipment,
+        ]);
+    }
+
+    public function update(Request $request, string $id)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'status' => 'required|string|in:Available,Unavailable',
+        ]);
+
+        $equipment = Equipment::findOrFail($id);
+
+        $equipment->update($request->all());
+
+        return redirect()->route('equipments')->with('success', 'Equipment updated successfully');
+    }
 }

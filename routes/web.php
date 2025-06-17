@@ -45,6 +45,33 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('users', [UserController::class, 'store'])->name('users.store');
     Route::post('book-reservations', [BookReservationController::class, 'store'])->name('book-reservations.store');
     Route::post('equipment-reservations', [EquipmentReservationController::class, 'store'])->name('equipment-reservations.store');
+
+
+
+
+
+    // Edit Routes
+
+    Route::get('edit/book/{id}', [BookController::class, 'edit'])->name('edit-book');
+
+
+    Route::get('edit/equipment/{id}', [EquipmentController::class, 'edit'])->name('edit-equipment');
+    Route::get('edit/study-space/{id}', [StudySpaceController::class, 'edit'])->name('edit-study-space');
+    Route::get('edit/equipment-reservation/{id}', [EquipmentReservationController::class, 'edit'])->name('edit-equipment-reservation');
+    Route::get('edit/book-reservation/{id}', [BookReservationController::class, 'edit'])->name('edit-book-reservation');
+    Route::get('edit/user/{id}', [UserController::class, 'edit'])->name('edit-user');
+
+
+
+    // Update Routes
+    Route::put('books/{id}', [BookController::class, 'update'])->name('books.update');
+    Route::put('equipments/{id}', [EquipmentController::class, 'update'])->name('equipments.update');
+    Route::put('study-spaces/{id}', [StudySpaceController::class, 'update'])->name('study-spaces.update');
+    Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');
+
+    
+    Route::put('book-reservations/{id}', [BookReservationController::class, 'update'])->name('book-reservations.update');
+    Route::put('equipment-reservations/{id}', [EquipmentReservationController::class, 'update'])->name('equipment-reservations.update');
 });
 
 require __DIR__.'/settings.php';

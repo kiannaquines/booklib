@@ -99,6 +99,12 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
                 <DropdownMenuContent align="end" className="w-40">
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() =>
+                        router.visit(route('edit-book-reservation', { id: String(bookReservation.id) }))
+                    }>
+                        <Edit className="mr-2 h-4 w-4" />
+                        Edit
+                    </DropdownMenuItem>
                     <DropdownMenuItem
                         className="text-red-600 focus:text-red-600 focus:bg-red-50"
                         onClick={openDeleteDialog}

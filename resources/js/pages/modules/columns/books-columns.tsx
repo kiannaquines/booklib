@@ -99,7 +99,9 @@ function BookActionsCell({ book }: BookActionsCellProps) {
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => router.visit(route('create-book', { book: book.id }))}>
+          <DropdownMenuItem onClick={() =>
+            router.visit(route('edit-book', { id: String(book.id) }))
+          }>
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </DropdownMenuItem>
