@@ -16,6 +16,7 @@ class EquipmentReservation extends Model
         'study_space_id',
         'start_time',
         'end_time',
+        'status',
     ];
 
     protected $casts = [

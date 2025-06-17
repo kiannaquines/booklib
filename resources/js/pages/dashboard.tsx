@@ -54,7 +54,7 @@ export default function Dashboard({ reservations, totalUsers, totalBooks, totalE
     const [equipmentChartData, setEquipmentChartData] = useState<EquipmentChartItem[]>([]);
     const chartConfig = {
         book: {
-            label: "Reservations ",
+            label: "Book Reservations",
             color: "var(--chart-1)",
         },
     } satisfies ChartConfig
