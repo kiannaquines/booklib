@@ -67,6 +67,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // API Routes
     Route::get('reservation-charts', [DashboardController::class, 'getReservationCharts'])->name('reservation-charts');
+
+
+
+    // Report Routes
+    Route::get('book-reservation', [ReportController::class, 'bookReservationView'])->name('book-reservation.view');
+    Route::get('equipment-reservation', [ReportController::class, 'equipmentReservationView'])->name('equipment-reservation.view');
 });
 
 require __DIR__.'/settings.php';
