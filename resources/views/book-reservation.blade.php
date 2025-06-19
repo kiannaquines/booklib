@@ -9,7 +9,6 @@
 </head>
 
 <body class="bg-gray-50 text-gray-900 min-h-screen">
-    <!-- Header Section -->
     <header class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
         <div class="max-w-6xl mx-auto px-6 py-8">
             <div class="text-center">
@@ -40,10 +39,8 @@
         </div>
     </header>
 
-    <!-- Main Content -->
     <main class="max-w-6xl mx-auto px-6 py-8">
         <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
-            <!-- Table Header -->
             <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -53,7 +50,6 @@
                 </h3>
             </div>
 
-            <!-- Table Container with Horizontal Scroll -->
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead class="bg-gray-100">
@@ -115,11 +111,9 @@
         </div>
     </main>
 
-    <!-- Footer Section -->
     <footer class="bg-gray-800 text-white mt-12">
         <div class="max-w-6xl mx-auto px-6 py-8">
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- School Info -->
                 <div class="text-center md:text-left">
                     <h4 class="text-lg font-semibold mb-3 text-gray-200">Carmen National High School</h4>
                     <p class="text-gray-400 text-sm leading-relaxed">
@@ -129,7 +123,6 @@
                     </p>
                 </div>
 
-                <!-- Report Info -->
                 <div class="text-center">
                     <h4 class="text-lg font-semibold mb-3 text-gray-200">Report Information</h4>
                     <div class="space-y-2 text-sm text-gray-400">
@@ -144,7 +137,6 @@
                     </div>
                 </div>
 
-                <!-- System Info -->
                 <div class="text-center md:text-right">
                     <h4 class="text-lg font-semibold mb-3 text-gray-200">System Details</h4>
                     <div class="text-sm text-gray-400 space-y-2">
@@ -157,7 +149,6 @@
                 </div>
             </div>
 
-            <!-- Bottom Border -->
             <div class="border-t border-gray-700 mt-8 pt-6 text-center">
                 <p class="text-sm text-gray-500">
                     This report is confidential and intended for authorized personnel only.
