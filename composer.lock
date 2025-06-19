@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f6dd48d7b57b6de0a924c0d3dc90d04",
+    "content-hash": "adc4af6b12a8b04d3f4fdd6e92acb1a2",
     "packages": [
         {
             "name": "brick/math",
@@ -3471,16 +3471,16 @@
         },
         {
             "name": "spatie/laravel-pdf",
-            "version": "1.5.6",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-pdf.git",
-                "reference": "e920c49d5a63e6c9f087cef1941954382adc27f6"
+                "reference": "d766ba14e9e8c66700458927bc1a1fbf083d3d69"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-pdf/zipball/e920c49d5a63e6c9f087cef1941954382adc27f6",
-                "reference": "e920c49d5a63e6c9f087cef1941954382adc27f6",
+                "url": "https://api.github.com/repos/spatie/laravel-pdf/zipball/d766ba14e9e8c66700458927bc1a1fbf083d3d69",
+                "reference": "d766ba14e9e8c66700458927bc1a1fbf083d3d69",
                 "shasum": ""
             },
             "require": {
@@ -3550,9 +3550,9 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-pdf/issues",
-                "source": "https://github.com/spatie/laravel-pdf/tree/1.5.6"
+                "source": "https://github.com/spatie/laravel-pdf/tree/1.6.0"
             },
-            "time": "2025-06-11T06:24:37+00:00"
+            "time": "2025-06-16T07:49:03+00:00"
         },
         {
             "name": "spatie/laravel-permission",
