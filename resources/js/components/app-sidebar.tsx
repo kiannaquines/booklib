@@ -45,22 +45,22 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'My Book Reservation',
-        href: route('student.dashboard'),
+        href: route('student.myBookReservation'),
         icon: LayoutGrid,
     },
     {
         title: 'My Equipment Reservation',
-        href: route('student.dashboard'),
+        href: route('student.myEquipmentReservation'),
         icon: LayoutGrid,
     },
     {
         title: 'Book Equipment',
-        href: route('student.book-equipment'),
+        href: route('student.bookEquipment'),
         icon: BookOpen,
     },
     {
         title: 'Equipment Reservation',
-        href: route('student.equipment-reservation'),
+        href: route('student.equipmentReservation'),
         icon: Microscope,
     },
 ];
@@ -99,9 +99,10 @@ export function AppSidebar() {
     ];
 
     const userOnly = [
-        "My Dashboard",
         "Book Equipment",
-        "Equipment Reservation"
+        "Equipment Reservation",
+        "My Book Reservation",
+        "My Equipment Reservation"
     ];
 
     const visibleModules = mainNavItems.filter(item => {
@@ -122,7 +123,7 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href={role === "admin" ? route('dashboard') : route('student.dashboard')} prefetch>
+                            <Link href={role === "admin" ? route('dashboard') : route('student.myBookReservation')} prefetch>
                                 <AppLogo header={role === "admin" ? "BookLib Admin Panel v0.1" : "BookLib Student Panel v0.1"} />
                             </Link>
                         </SidebarMenuButton>

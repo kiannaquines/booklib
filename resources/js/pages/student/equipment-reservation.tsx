@@ -5,12 +5,12 @@ import { Head } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Equipment Reservation',
-        href: route('student.equipment-reservation'),
+        href: route('student.equipmentReservation'),
     },
 ];
 
 
-export default function StudentDashboard() {
+export default function EquipmentReservation() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Equipment Reservation" />

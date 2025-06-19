@@ -79,9 +79,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('student/my-book-reservation', [StudentController::class, 'myBookReservation'])->name('student.myBookReservation');
     Route::get('student/my-equipment-reservation', [StudentController::class, 'myEquipmentReservation'])->name('student.myEquipmentReservation');
 
+    // Student Reservation Form
     Route::get('student/book-equipment', [StudentController::class, 'bookEquipment'])->name('student.bookEquipment');
     Route::get('student/equipment-reservation', [StudentController::class, 'equipmentReservation'])->name('student.equipmentReservation');
 
+    // Student Reservation Save Data
     Route::post('student/book-equipment', [StudentController::class, 'bookEquipmentCreate'])->name('student.bookEquipmentCreate');
     Route::post('student/equipment-reservation', [StudentController::class, 'bookBookCreate'])->name('student.bookBookCreate');
 

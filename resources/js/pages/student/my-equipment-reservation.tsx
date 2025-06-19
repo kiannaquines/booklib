@@ -6,12 +6,12 @@ import DataTable from '../components/datatable';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'My Equipment Reservation',
-        href: route('student.dashboard'),
+        href: route('student.myEquipmentReservation'),
     },
 ];
 
 
-export default function StudentDashboard() {
+export default function MyEquipmentReservation() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="My Equipment Reservation" />

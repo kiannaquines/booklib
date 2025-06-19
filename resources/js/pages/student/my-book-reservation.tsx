@@ -5,13 +5,13 @@ import DataTable from '../components/datatable';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'My Dashboard',
-        href: route('student.dashboard'),
+        title: 'My Book Reservation',
+        href: route('student.myBookReservation'),
     },
 ];
 
 
-export default function StudentDashboard() {
+export default function MyBookReservation() {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="My Dashboard" />
