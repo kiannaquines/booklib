@@ -74,8 +74,17 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
+    
     // Student Dashboard Routes
-    Route::get('student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
+    Route::get('student/my-book-reservation', [StudentController::class, 'myBookReservation'])->name('student.myBookReservation');
+    Route::get('student/my-equipment-reservation', [StudentController::class, 'myEquipmentReservation'])->name('student.myEquipmentReservation');
+
+    Route::get('student/book-equipment', [StudentController::class, 'bookEquipment'])->name('student.bookEquipment');
+    Route::get('student/equipment-reservation', [StudentController::class, 'equipmentReservation'])->name('student.equipmentReservation');
+
+    Route::post('student/book-equipment', [StudentController::class, 'bookEquipmentCreate'])->name('student.bookEquipmentCreate');
+    Route::post('student/equipment-reservation', [StudentController::class, 'bookBookCreate'])->name('student.bookBookCreate');
+
 });
 
 require __DIR__.'/settings.php';

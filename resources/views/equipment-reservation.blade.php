@@ -20,7 +20,7 @@
                 </div>
 
                 <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-2xl mx-auto">
-                    <h2 class="text-xl font-semibold mb-3 text-blue-100">Carmen National High School</h2>
+                    <h2 class="text-xl font-semibold mb-3 text-blue-100">Carmen Senior High School</h2>
                     <p class="text-blue-200 mb-4">Carmen, Cotabato</p>
 
                     <div class="grid md:grid-cols-2 gap-4 text-sm">
@@ -115,7 +115,7 @@
         <div class="max-w-6xl mx-auto px-6 py-8">
             <div class="grid md:grid-cols-3 gap-8">
                 <div class="text-center md:text-left">
-                    <h4 class="text-lg font-semibold mb-3 text-gray-200">Carmen National High School</h4>
+                    <h4 class="text-lg font-semibold mb-3 text-gray-200">Carmen Senior High School</h4>
                     <p class="text-gray-400 text-sm leading-relaxed">
                         Excellence in Education<br>
                         Carmen, Cotabato<br>
@@ -143,7 +143,7 @@
                         <p>Equipment Reservation System</p>
                         <p>Version 1.0</p>
                         <p class="text-xs text-gray-500 mt-4">
-                            © {{ date('Y') }} Carmen National High School
+                            © {{ date('Y') }} Carmen Senior High School
                         </p>
                     </div>
                 </div>

@@ -44,10 +44,25 @@ const mainNavItems: NavItem[] = [
         icon: UserRoundSearch,
     },
     {
-        title: 'My Dashboard',
+        title: 'My Book Reservation',
         href: route('student.dashboard'),
         icon: LayoutGrid,
-    }
+    },
+    {
+        title: 'My Equipment Reservation',
+        href: route('student.dashboard'),
+        icon: LayoutGrid,
+    },
+    {
+        title: 'Book Equipment',
+        href: route('student.book-equipment'),
+        icon: BookOpen,
+    },
+    {
+        title: 'Equipment Reservation',
+        href: route('student.equipment-reservation'),
+        icon: Microscope,
+    },
 ];
 
 const footerNavItems: NavItem[] = [
@@ -71,23 +86,25 @@ const footerNavItems: NavItem[] = [
 export function AppSidebar() {
 
     const { auth } = usePage<SharedData>().props
-    const role = Array.isArray(auth.user?.roles) ? auth.user.roles[0]?.name : undefined
+    const role = Array.isArray(auth.user?.roles) ? auth.user.roles[0]?.name : 'user'
+
+    const adminOnly = [
+        "Dashboard",
+        "Books",
+        "Equipment",
+        "Study Space",
+        "Equipment Reservations",
+        "Book Reservations",
+        "Users"
+    ];
+
+    const userOnly = [
+        "My Dashboard",
+        "Book Equipment",
+        "Equipment Reservation"
+    ];
 
     const visibleModules = mainNavItems.filter(item => {
-        const adminOnly = [
-            "Dashboard",
-            "Books",
-            "Equipment",
-            "Study Space",
-            "Equipment Reservations",
-            "Book Reservations",
-            "Users"
-        ];
-
-        const userOnly = [
-            "My Dashboard"
-        ];
-
         if (role === "admin") {
             return !userOnly.includes(item.title);
         }
@@ -105,8 +122,8 @@ export function AppSidebar() {
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton size="lg" asChild>
-                            <Link href="/dashboard" prefetch>
-                                <AppLogo />
+                            <Link href={role === "admin" ? route('dashboard') : route('student.dashboard')} prefetch>
+                                <AppLogo header={role === "admin" ? "BookLib Admin Panel v0.1" : "BookLib Student Panel v0.1"} />
                             </Link>
                         </SidebarMenuButton>
                     </SidebarMenuItem>
