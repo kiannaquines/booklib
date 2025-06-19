@@ -2,9 +2,9 @@ import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { type NavItem } from '@/types';
-import { Link } from '@inertiajs/react';
-import { BookCopy, BookOpen, Folder, LayoutGrid, Microscope, Palette, Printer, UserCheck, UserRoundSearch } from 'lucide-react';
+import { SharedData, type NavItem } from '@/types';
+import { Link, usePage } from '@inertiajs/react';
+import { BookCopy, BookOpen, LayoutGrid, Microscope, Palette, Printer, UserCheck, UserRoundSearch } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -43,6 +43,11 @@ const mainNavItems: NavItem[] = [
         href: route('users.index'),
         icon: UserRoundSearch,
     },
+    {
+        title: 'My Dashboard',
+        href: route('student.dashboard'),
+        icon: LayoutGrid,
+    }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -64,6 +69,36 @@ const footerNavItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
+
+    const { auth } = usePage<SharedData>().props
+    const role = Array.isArray(auth.user?.roles) ? auth.user.roles[0]?.name : undefined
+
+    const visibleModules = mainNavItems.filter(item => {
+        const adminOnly = [
+            "Dashboard",
+            "Books",
+            "Equipment",
+            "Study Space",
+            "Equipment Reservations",
+            "Book Reservations",
+            "Users"
+        ];
+
+        const userOnly = [
+            "My Dashboard"
+        ];
+
+        if (role === "admin") {
+            return !userOnly.includes(item.title);
+        }
+
+        if (role === "user") {
+            return userOnly.includes(item.title);
+        }
+
+        return !adminOnly.includes(item.title);
+    });
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -79,7 +114,7 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={visibleModules} />
             </SidebarContent>
 
             <SidebarFooter>

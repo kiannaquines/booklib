@@ -10,8 +10,10 @@ use App\Http\Controllers\StudySpaceController;
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StudentController;
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+    // Dashboard Routes
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     // Index Routes
@@ -55,7 +57,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::put('book-reservations/{id}', [BookReservationController::class, 'update'])->name('book-reservations.update');
     Route::put('equipment-reservations/{id}', [EquipmentReservationController::class, 'update'])->name('equipment-reservations.update');
 
-
     // Delete Routes
     Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
     Route::delete('equipments/{id}', [EquipmentController::class, 'destroy'])->name('equipments.destroy');
@@ -64,15 +65,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('book-reservations/{id}', [BookReservationController::class, 'destroy'])->name('book-reservations.destroy');
     Route::delete('equipment-reservations/{id}', [EquipmentReservationController::class, 'destroy'])->name('equipment-reservations.destroy');
 
-
     // API Routes
     Route::get('reservation-charts', [DashboardController::class, 'getReservationCharts'])->name('reservation-charts');
-
-
 
     // Report Routes
     Route::get('book-reservation', [ReportController::class, 'bookReservationView'])->name('book-reservation.view');
     Route::get('equipment-reservation', [ReportController::class, 'equipmentReservationView'])->name('equipment-reservation.view');
+});
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    // Student Dashboard Routes
+    Route::get('student/dashboard', [StudentController::class, 'index'])->name('student.dashboard');
 });
 
 require __DIR__.'/settings.php';
