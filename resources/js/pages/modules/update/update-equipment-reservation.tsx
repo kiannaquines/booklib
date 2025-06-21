@@ -14,7 +14,7 @@ import { ArrowLeft, FilePenLine, Loader2, RefreshCcw } from "lucide-react";
 import { useForm } from "@inertiajs/react";
 import { toast } from "sonner";
 import * as React from "react";
-import { StudySpace, User } from "./update-book-reservation";
+import { User } from "./update-book-reservation";
 
 type Equipment = {
     id: number;
@@ -26,7 +26,6 @@ type EquipmentReservation = {
     id: string;
     user_id: string;
     equipment_id: string;
-    study_space_id: string;
     status: string;
 
 }
@@ -34,7 +33,6 @@ type EquipmentReservation = {
 type UpdateEquipmentReservationProps = {
     equipmentReservation: EquipmentReservation;
     equipments: Equipment[];
-    studySpaces: StudySpace[];
     users: User[];
 }
 
@@ -42,11 +40,10 @@ type UpdateEquipmentReservationFormData = {
     id: string;
     user_id: string;
     equipment_id: string;
-    study_space_id: string;
     status: string;
 }
 
-const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpaces, users }: UpdateEquipmentReservationProps) => {
+const UpdateEquipmentReservation = ({ equipmentReservation, equipments, users }: UpdateEquipmentReservationProps) => {
 
     const [processing, setProcessing] = React.useState(false)
 
@@ -54,7 +51,6 @@ const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpa
         id: equipmentReservation.id,
         user_id: String(equipmentReservation.user_id),
         equipment_id: String(equipmentReservation.equipment_id),
-        study_space_id: String(equipmentReservation.study_space_id),
         status: equipmentReservation.status,
     });
 
@@ -142,24 +138,6 @@ const UpdateEquipmentReservation = ({ equipmentReservation, equipments, studySpa
                                         {equipments.map(function (equipment) {
                                             return (
                                                 <SelectItem key={equipment.id} value={equipment.id.toString()} disabled={equipment.status === 'Unavailable'}>{equipment.status} - {equipment.name}</SelectItem>
-                                            )
-                                        })}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="study_space_id">Study Space</Label>
-                                <Select value={String(data.study_space_id)} onValueChange={(value) => setData('study_space_id', value)}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Study Space" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {studySpaces.map(function (space) {
-                                            return (
-                                                <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>

@@ -14,15 +14,13 @@ class EquipmentReservationController extends Controller
 {
     public function index()
     {
-        $equipmentReservations = EquipmentReservation::with('equipment', 'user', 'studySpace')->get()->map(function ($equipmentReservation) {
+        $equipmentReservations = EquipmentReservation::with('equipment', 'user')->get()->map(function ($equipmentReservation) {
             return [
                 'id' => $equipmentReservation->id,
                 'equipment' => $equipmentReservation->equipment->name,
                 'equipment_id' => $equipmentReservation->equipment_id,
                 'user' => $equipmentReservation->user->name,
                 'user_id' => $equipmentReservation->user_id,
-                'study_space' => $equipmentReservation->studySpace->seat_number,
-                'study_space_id' => $equipmentReservation->study_space_id,
                 'start_time' => $equipmentReservation->start_time->format('d/m/Y H:i:s'),
                 'end_time' => $equipmentReservation->end_time->format('d/m/Y H:i:s'),
                 'status' => $equipmentReservation->status,
@@ -45,14 +43,6 @@ class EquipmentReservationController extends Controller
             ];
         });
 
-        $studySpaces = StudySpace::get()->map(function ($row) {
-            return [
-                'id' => $row->id,
-                'seat_number' => $row->seat_number,
-                'status' => $row->status,
-            ];
-        });
-
         $users = User::role('user')->get()->map(function ($row) {
             return [
                 'id' => $row->id,
@@ -62,7 +52,6 @@ class EquipmentReservationController extends Controller
 
         return Inertia::render('modules/create/create-equipment-reservation', [
             'equipments' => $equipments,
-            'studySpaces' => $studySpaces,
             'users' => $users,
         ]);
     }
@@ -72,7 +61,6 @@ class EquipmentReservationController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'equipment_id' => 'required|exists:equipments,id',
-            'study_space_id' => 'required|exists:study_space,id',
             'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
@@ -96,10 +84,6 @@ class EquipmentReservationController extends Controller
                 'status' => 'Unavailable',
             ]);
 
-            StudySpace::where('id', $request->study_space_id)->update([
-                'status' => 'Unavailable',
-            ]);
-
             return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation created successfully');
         }
     }
@@ -112,7 +96,7 @@ class EquipmentReservationController extends Controller
             return back()->with('error', 'Equipment reservation identifier not found');
         }
 
-        $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'status', 'equipment_id', 'study_space_id')->find($id);
+        $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'status', 'equipment_id')->find($id);
         
         if (!$equipmentReservation) {
             return back()->with('error', 'Equipment reservation not found');
@@ -122,14 +106,6 @@ class EquipmentReservationController extends Controller
             return [
                 'id' => $row->id,
                 'name' => $row->name,
-                'status' => $row->status,
-            ];
-        });
-
-        $studySpaces = StudySpace::get()->map(function ($row) {
-            return [
-                'id' => $row->id,
-                'seat_number' => $row->seat_number,
                 'status' => $row->status,
             ];
         });
@@ -144,7 +120,6 @@ class EquipmentReservationController extends Controller
         return Inertia::render('modules/update/update-equipment-reservation', [
             'equipmentReservation' => $equipmentReservation,
             'equipments' => $equipments,
-            'studySpaces' => $studySpaces,
             'users' => $users,
         ]);
     }
@@ -164,7 +139,6 @@ class EquipmentReservationController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'equipment_id' => 'required|exists:equipments,id',
-            'study_space_id' => 'required|exists:study_space,id',
             'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 

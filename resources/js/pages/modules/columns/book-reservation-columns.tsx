@@ -180,15 +180,6 @@ export function getBookReservationColumns(bookReservations: BookReservation[]): 
             ),
         },
         {
-            accessorKey: "seat_number",
-            header: "Seat",
-            cell: ({ row }) => (
-                <Badge variant="outline" className="capitalize">
-                    {row.getValue("seat_number")}
-                </Badge>
-            ),
-        },
-        {
             accessorKey: "start_time",
             header: "Start Time",
             cell: ({ row }) => (
@@ -272,15 +263,6 @@ export function getBookReservationDashboardColumns(bookReservations: BookReserva
             cell: ({ row }) => (
                 <Badge variant="outline" className="capitalize">
                     {row.getValue("user")}
-                </Badge>
-            ),
-        },
-        {
-            accessorKey: "seat",
-            header: "Seat",
-            cell: ({ row }) => (
-                <Badge variant="outline" className="capitalize">
-                    {row.getValue("seat")}
                 </Badge>
             ),
         },

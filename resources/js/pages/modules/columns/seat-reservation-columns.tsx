@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2 } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import {
     DropdownMenu,
     DropdownMenuTrigger,
@@ -24,9 +24,7 @@ import { Badge } from "@/components/ui/badge";
 import { router } from "@inertiajs/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { Book } from "../books";
-import { Equipment } from "../equipment";
-import { EquipmentReservation } from "../equipment-reservation";
+import { SeatReservation } from '../seat-reservation';
 
 type DialogIsOpenProps = {
     isOpen: boolean
@@ -35,14 +33,14 @@ type DialogIsOpenProps = {
     isDeleting?: boolean
 }
 
-function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: DialogIsOpenProps) {
+function DeleteSpaceReservationAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: DialogIsOpenProps) {
     return (
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Are you sure you want to delete this equipment reservation? This action cannot be undone.
+                        Are you sure you want to delete this study space reservation? This action cannot be undone.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
                 <AlertDialogFooter>
@@ -51,7 +49,7 @@ function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeletin
                         className="bg-red-600 hover:bg-red-700"
                         onClick={handleAction}
                     >
-                        {isDeleting ? "Deleting..." : "Delete Incident"}
+                        {isDeleting ? "Deleting..." : "Delete Reservation"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>
@@ -59,25 +57,25 @@ function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeletin
     );
 }
 
-interface EquipmentReservationActionsCellProps {
-    equipmentReservation: EquipmentReservation
+interface SeatReservationProps {
+    seatReservation: SeatReservation
 }
 
-function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentReservationActionsCellProps) {
+function SeatReservationAction({ seatReservation }: SeatReservationProps) {
     const [isDeleting, setIsDeleting] = useState(false);
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
     const [dropdownOpen, setDropdownOpen] = useState(false);
 
     const handleDelete = useCallback(() => {
         setIsDeleting(true);
-        router.delete(route('equipment-reservations.destroy', { id: equipmentReservation.id }), {
+        router.delete(route('seat-reservations.destroy', { id: seatReservation.id }), {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success("Equipment reservation deleted successfully");
+                toast.success("Study reservation deleted successfully");
             },
             onError: (e) => {
                 for (const [field, message] of Object.entries(e)) {
-                    toast.error("Failed to delete equipment reservation", {
+                    toast.error("Failed to delete space reservation", {
                         description: `${message}`,
                     });
                 }
@@ -87,7 +85,7 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
                 setIsDeleteDialogOpen(false);
             }
         });
-    }, [equipmentReservation?.id]);
+    }, [seatReservation?.id]);
 
     const openDeleteDialog = useCallback((e: React.MouseEvent) => {
         e.preventDefault();
@@ -108,7 +106,7 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('equipment-reservations.edit', { id: String(equipmentReservation.id) }))
+                        router.visit(route('seat-reservations.edit', { id: String(seatReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
@@ -123,18 +121,18 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
                 </DropdownMenuContent>
             </DropdownMenu>
 
-            <DeleteEquipmentAlertDialog isOpen={isDeleteDialogOpen} setIsOpen={setIsDeleteDialogOpen} handleAction={handleDelete} isDeleting={isDeleting} />
+            <DeleteSpaceReservationAlertDialog isOpen={isDeleteDialogOpen} setIsOpen={setIsDeleteDialogOpen} handleAction={handleDelete} isDeleting={isDeleting} />
 
         </div>
     );
 
 }
 
-type EquipmentReservationColumnProps = {
-    equipmentReservations: EquipmentReservation[]
+type StudySpaceColumnProps = {
+    seatReservation: SeatReservation[]
 }
 
-export function getEquipmentReservationColumns(equipmentReservations: EquipmentReservation[]): ColumnDef<EquipmentReservation>[] {
+export function getSeatReservation(): ColumnDef<SeatReservation>[] {
     return [
         {
             id: "select",
@@ -156,25 +154,25 @@ export function getEquipmentReservationColumns(equipmentReservations: EquipmentR
             enableHiding: true,
         },
         {
-            accessorKey: "equipment",
+            accessorKey: "seat",
             header: ({ column }) => (
                 <Button
                     variant="ghost"
                     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                 >
-                    Equipment
+                    Seat
                     <ArrowUpDown className="ml-2 h-4 w-4" />
                 </Button>
             ),
             cell: ({ row }) => (
                 <Badge variant="outline" className="capitalize">
-                    {row.getValue("equipment")}
+                    {row.getValue("seat")}
                 </Badge>
             ),
         },
         {
             accessorKey: "user",
-            header: "User",
+            header: "Reserved by",
             cell: ({ row }) => (
                 <Badge variant="outline" className="capitalize">
                     {row.getValue("user")}
@@ -182,38 +180,41 @@ export function getEquipmentReservationColumns(equipmentReservations: EquipmentR
             ),
         },
         {
-            accessorKey: "start_time",
-            header: "Start Time",
-            cell: ({ row }) => (
-                <div>
-                    {row.getValue("start_time")}
-                </div>
+            accessorKey: "created_at",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Created At
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
             ),
+            cell: ({ row }) => {
+                return <div> {row.getValue("updated_at")}</div>;
+            },
         },
         {
-            accessorKey: "end_time",
-            header: "End Time",
-            cell: ({ row }) => (
-                <div>
-                    {row.getValue("end_time")}
-                </div>
+            accessorKey: "updated_at",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Updated At
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
             ),
-        },
-        {
-            accessorKey: "status",
-            header: "Status",
-            cell: ({ row }) => (
-                <Badge variant="outline" className="capitalize">
-                    {row.getValue("status")}
-                </Badge>
-            ),
+            cell: ({ row }) => {
+                return <div> {row.getValue("updated_at")}</div>;
+            },
         },
         {
             id: "actions",
             enableHiding: false,
             cell: ({ row }) => {
                 return (
-                    <EquipmentReservationActionsCell equipmentReservation={row.original} />
+                    <SeatReservationAction seatReservation={row.original} />
                 )
             },
         },

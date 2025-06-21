@@ -61,9 +61,6 @@
                                 Student
                             </th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200">
-                                Study Space
-                            </th>
-                            <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200">
                                 Start Time
                             </th>
                             <th class="px-6 py-4 text-left text-xs font-bold text-gray-700 uppercase tracking-wider border-b border-gray-200">
@@ -85,9 +82,6 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-700 border-r border-gray-100">
                                 {{ $reservation['user'] }}
-                            </td>
-                            <td class="px-6 py-4 text-sm text-gray-700 border-r border-gray-100">
-                                {{ $reservation['study_space'] }}
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-700 border-r border-gray-100">
                                 {{ $reservation['start_time'] }}

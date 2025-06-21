@@ -106,6 +106,7 @@ const UpdateStudySpace = ({ studySpace }: UpdateStudySpaceProps) => {
                                         <SelectValue placeholder="Status" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="In Use">In Use</SelectItem>
                                         <SelectItem value="Available">Available</SelectItem>
                                         <SelectItem value="Unavailable">Unavailable</SelectItem>
                                     </SelectContent>

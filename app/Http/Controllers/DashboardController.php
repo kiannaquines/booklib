@@ -17,15 +17,13 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $bookReservations = BookReservation::with('book', 'space', 'user')->orderBy('status', 'desc')->get()->map(function ($bookReservation) {
+        $bookReservations = BookReservation::with('book', 'user')->orderBy('status', 'desc')->get()->map(function ($bookReservation) {
             return [
                 'id' => $bookReservation->id,
                 'book' => $bookReservation->book->title,
                 'book_id' => $bookReservation->book_id,
                 'user' => $bookReservation->user->name,
                 'user_id' => $bookReservation->user_id,
-                'seat' => $bookReservation->space->seat_number,
-                'space_id' => $bookReservation->space->id,
                 'status' => $bookReservation->status,
                 'start_time' => $bookReservation->start_time->format('d/m/Y H:i:s'),
                 'end_time' => $bookReservation->end_time->format('d/m/Y H:i:s'),

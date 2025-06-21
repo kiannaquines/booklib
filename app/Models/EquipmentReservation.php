@@ -13,7 +13,6 @@ class EquipmentReservation extends Model
     protected $fillable = [
         'equipment_id',
         'user_id',
-        'study_space_id',
         'start_time',
         'end_time',
         'status',
@@ -34,10 +33,5 @@ class EquipmentReservation extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function studySpace()
-    {
-        return $this->belongsTo(StudySpace::class);
     }
 }

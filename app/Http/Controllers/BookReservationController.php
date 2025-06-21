@@ -14,15 +14,13 @@ class BookReservationController extends Controller
 {
     public function index()
     {
-        $bookReservations = BookReservation::with('book', 'space', 'user')->get()->map(function ($bookReservation) {
+        $bookReservations = BookReservation::with('book', 'user')->get()->map(function ($bookReservation) {
             return [
                 'id' => $bookReservation->id,
                 'book' => $bookReservation->book->title,
                 'book_id' => $bookReservation->book_id,
                 'user' => $bookReservation->user->name,
                 'user_id' => $bookReservation->user_id,
-                'seat_number' => $bookReservation->space->seat_number,
-                'space_id' => $bookReservation->space->id,
                 'start_time' => $bookReservation->start_time->format('d/m/Y H:i:s'),
                 'end_time' => $bookReservation->end_time->format('d/m/Y H:i:s'),
                 'status' => $bookReservation->status,
@@ -54,18 +52,9 @@ class BookReservationController extends Controller
             ];
         });
 
-        $spaces = StudySpace::get()->map(function ($space) {
-            return [
-                'id' => $space->id,
-                'seat_number' => $space->seat_number,
-                'status' => $space->status,
-            ];
-        });
-
         return Inertia::render('modules/create/create-book-reservation', [
             'users' => $users,
             'books' => $books,
-            'spaces' => $spaces,
         ]);
     }
 
@@ -74,7 +63,6 @@ class BookReservationController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'book_id' => 'required|exists:books,id',
-            'study_space_id' => 'required|exists:study_space,id',
             'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 
@@ -98,10 +86,6 @@ class BookReservationController extends Controller
                 'status' => 'Unavailable',
             ]);
 
-            StudySpace::where('id', $request->study_space_id)->update([
-                'status' => 'Unavailable',
-            ]);
-
             return redirect()->route('book-reservations.index')->with('success', 'Book reservation created successfully');
         }
     }
@@ -113,7 +97,7 @@ class BookReservationController extends Controller
             return back()->with('error', 'Book reservation identifier not found');
         }
 
-        $bookReservation = BookReservation::select('id', 'user_id', 'book_id', 'status', 'study_space_id')->find($id);
+        $bookReservation = BookReservation::select('id', 'user_id', 'book_id', 'status')->find($id);
 
         if (!$bookReservation) {
             return back()->with('error', 'Book reservation not found');
@@ -134,21 +118,12 @@ class BookReservationController extends Controller
             ];
         });
 
-        $spaces = StudySpace::get()->map(function ($space) {
-            return [
-                'id' => $space->id,
-                'seat_number' => $space->seat_number,
-                'status' => $space->status,
-            ];
-        });
-
 
 
         return Inertia::render('modules/update/update-book-reservation', [
             'bookReservation' => $bookReservation,
             'users' => $users,
             'books' => $books,
-            'spaces' => $spaces,
         ]);
     }
 
@@ -157,7 +132,6 @@ class BookReservationController extends Controller
         $request->validate([
             'user_id' => 'required|exists:users,id',
             'book_id' => 'required|exists:books,id',
-            'study_space_id' => 'required|exists:study_space,id',
             'status' => 'required|in:Pending,Approved,Rejected',
         ]);
 

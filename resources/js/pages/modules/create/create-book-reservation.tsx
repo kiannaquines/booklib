@@ -54,7 +54,6 @@ type CreateBookReservationFormData = {
     user_id: string;
     book_id: string;
     status: string;
-    study_space_id: string;
 }
 
 const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationProps) => {
@@ -65,7 +64,6 @@ const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationPr
         user_id: '',
         book_id: '',
         status: '',
-        study_space_id: '',
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -141,24 +139,6 @@ const CreateBookReservation = ({ users, books, spaces }: CreateBookReservationPr
                                         {books.map(function(book){
                                             return (
                                                 <SelectItem key={book.id} value={book.id.toString()} disabled={book.status === 'Unavailable'}>{book.status} - {book.title}</SelectItem>
-                                            )
-                                        })}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="study_space_id">Study Space</Label>
-                                <Select value={data.study_space_id} onValueChange={(value) => setData('study_space_id', value)}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Study Space" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {spaces.map(function(space){
-                                            return (
-                                                <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>

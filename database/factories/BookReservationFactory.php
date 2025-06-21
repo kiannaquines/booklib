@@ -16,9 +16,8 @@ class BookReservationFactory extends Factory
     {
         $user = User::where('name', '!=', 'James Napone')->inRandomOrder()->first();
         $book = Books::inRandomOrder()->first();
-        $space = StudySpace::inRandomOrder()->first();
 
-        if (!$user || !$book || !$space) {
+        if (!$user || !$book) {
             return [];
         }
 
@@ -29,7 +28,6 @@ class BookReservationFactory extends Factory
         return [
             'user_id' => $user->id,
             'book_id' => $book->id,
-            'study_space_id' => $space->id,
             'start_time' => $startTime,
             'end_time' => $endTime,
             'status' => 'Pending',

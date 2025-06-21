@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('equipment_reservation', function (Blueprint $table) {
+        Schema::create('seat_reservation', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('reserved_seat')->references('id')->on('study_space');
             $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('equipment_id')->references('id')->on('equipments');
-            $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('equipment_reservation');
+        Schema::dropIfExists('seat_reservation');
     }
 };

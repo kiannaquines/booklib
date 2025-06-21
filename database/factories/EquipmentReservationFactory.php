@@ -21,7 +21,6 @@ class EquipmentReservationFactory extends Factory
     {
         $user = User::where('name', '!=', 'James Napone')->inRandomOrder()->first();
         $equipment = Equipment::inRandomOrder()->first();
-        $space = StudySpace::inRandomOrder()->first();
 
         $year = now()->year;
         $startTime = $this->faker->dateTimeBetween("$year-01-01", "$year-12-31");
@@ -30,7 +29,6 @@ class EquipmentReservationFactory extends Factory
         return [
             'user_id' => $user->id,
             'equipment_id' => $equipment->id,
-            'study_space_id' => $space->id,
             'start_time' => $startTime,
             'end_time' => $endTime,
             'status' => 'Pending',

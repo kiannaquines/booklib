@@ -4,7 +4,7 @@ import { NavUser } from '@/components/nav-user';
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
 import { SharedData, type NavItem } from '@/types';
 import { Link, usePage } from '@inertiajs/react';
-import { BookCopy, BookOpen, LayoutGrid, Microscope, Palette, Printer, UserCheck, UserRoundSearch } from 'lucide-react';
+import { BookCopy, BookOpen, LayoutGrid, Microscope, Palette, Printer, RockingChair, UserCheck, UserRoundSearch } from 'lucide-react';
 import AppLogo from './app-logo';
 
 const mainNavItems: NavItem[] = [
@@ -39,10 +39,16 @@ const mainNavItems: NavItem[] = [
         icon: BookOpen,
     },
     {
+        title: 'Seat Reservations',
+        href: route('seat-reservations.index'),
+        icon: RockingChair
+    },
+    {
         title: 'Users',
         href: route('users.index'),
         icon: UserRoundSearch,
     },
+    // users route
     {
         title: 'My Book Reservation',
         href: route('student.myBookReservation'),
@@ -63,6 +69,11 @@ const mainNavItems: NavItem[] = [
         href: route('student.equipmentReservation'),
         icon: Microscope,
     },
+    {
+        title: 'Book Seats',
+        href: '#',
+        icon: RockingChair
+    }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -80,7 +91,7 @@ const footerNavItems: NavItem[] = [
         title: 'Appearance',
         href: '/settings/appearance',
         icon: Palette,
-    },
+    }
 ];
 
 export function AppSidebar() {
@@ -95,14 +106,16 @@ export function AppSidebar() {
         "Study Space",
         "Equipment Reservations",
         "Book Reservations",
-        "Users"
+        "Users",
+        "Seat Reservations"
     ];
 
     const userOnly = [
         "Book Equipment",
         "Equipment Reservation",
         "My Book Reservation",
-        "My Equipment Reservation"
+        "My Equipment Reservation",
+        "Book Seats"
     ];
 
     const visibleModules = mainNavItems.filter(item => {

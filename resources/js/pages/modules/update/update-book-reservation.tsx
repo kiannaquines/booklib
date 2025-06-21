@@ -27,12 +27,6 @@ export type Book = {
     status: string;
 }
 
-export type StudySpace = {
-    id: number;
-    seat_number: string;
-    status: string;
-}
-
 type BookReservation = {
     id: string;
     user_id: string;
@@ -45,18 +39,16 @@ type CreateBookReservationProps = {
     bookReservation: BookReservation;
     users: User[];
     books: Book[];
-    spaces: StudySpace[];
 }
 
 type UpdateBookReservationFormData = {
     id: string;
     user_id: string;
     book_id: string;
-    study_space_id: string;
     status: string;
 }
 
-const UpdateBookReservation = ({ bookReservation, users, books, spaces }: CreateBookReservationProps) => {
+const UpdateBookReservation = ({ bookReservation, users, books }: CreateBookReservationProps) => {
 
     const [processing, setProcessing] = React.useState(false)
 
@@ -64,7 +56,6 @@ const UpdateBookReservation = ({ bookReservation, users, books, spaces }: Create
         id: String(bookReservation.id),
         user_id: String(bookReservation.user_id),
         book_id: String(bookReservation.book_id),
-        study_space_id: String(bookReservation.study_space_id),
         status: bookReservation.status,
     });
 
@@ -160,24 +151,7 @@ const UpdateBookReservation = ({ bookReservation, users, books, spaces }: Create
                             </div>
                         </div>
 
-                        <div className="grid w-full items-center gap-4 mt-4">
-                            <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="study_space_id">Study Space</Label>
-                                <Select value={data.study_space_id} onValueChange={(value) => setData('study_space_id', value)}>
-                                    <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Study Space" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {spaces.map(function (space) {
-                                            return (
-                                                <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'Unavailable'}>{space.status} - {space.seat_number}</SelectItem>
-                                            )
-                                        })}
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-
+    
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="status">Status</Label>

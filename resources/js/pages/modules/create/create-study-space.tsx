@@ -33,7 +33,7 @@ type StudySpaceFormData = {
 
 const CreateStudySpace = () => {
 
-    const {data, setData, reset, clearErrors} = useForm<StudySpaceFormData>({
+    const { data, setData, reset, clearErrors } = useForm<StudySpaceFormData>({
         seat_number: '',
         status: '',
     });
@@ -99,6 +99,7 @@ const CreateStudySpace = () => {
                                         <SelectValue placeholder="Status" />
                                     </SelectTrigger>
                                     <SelectContent>
+                                        <SelectItem value="In Use">In Use</SelectItem>
                                         <SelectItem value="Available">Available</SelectItem>
                                         <SelectItem value="Unavailable">Unavailable</SelectItem>
                                     </SelectContent>
