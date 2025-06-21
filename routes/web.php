@@ -99,6 +99,8 @@ Route::middleware(['auth', 'verified', 'user.only'])->group(function () {
 
     // Student Reservation Save Data
     Route::post('student/book-equipment', [StudentController::class, 'bookEquipmentCreate'])->name('student.bookEquipmentCreate');
+
+
     Route::post('student/equipment-reservation', [StudentController::class, 'bookBookCreate'])->name('student.bookBookCreate');
 });
 

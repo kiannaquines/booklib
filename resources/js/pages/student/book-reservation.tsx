@@ -38,7 +38,7 @@ export default function BookReservation({ books }: BookReservationProps) {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setProcessing(true);
-        router.post(route('book-reservations.store'), data, {
+        router.post(route('student.bookEquipmentCreate'), data, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Book reservation created successfully');

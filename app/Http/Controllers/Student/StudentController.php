@@ -126,9 +126,20 @@ class StudentController extends Controller
 
     public function bookEquipmentCreate(Request $request)
     {
-        $currentUser = $request->user()->id;
-        $request->validate([]);
-        // TODO: Save the request body
+        $request->validate([
+            'book_id' => 'required|exists:books,id',
+        ]);
+
+        BookReservation::create([
+            'user_id' => $this->userId(),
+            'book_id' => $request->book_id,
+            'start_time' => now(),
+            'end_time' => now()->addDays(3),
+        ]);
+
+        Books::where('id', $request->book_id)->update(['status' => 'Unavailable']);
+
+        return redirect()->route('student.myBookReservation')->with(['success' => 'You have successfully reserved the book.']);
     }
 
     public function bookBookCreate(Request $request)
