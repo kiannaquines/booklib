@@ -2,33 +2,36 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import DataTable from '../components/datatable';
-import { getEquipmentReservationColumns } from '../modules/columns/equipment-reservation-columns';
-import { EquipmentReservation } from '../modules/equipment-reservation';
+import { getBookReservationColumns } from '../modules/columns/book-reservation-columns';
+import { BookReservation } from '../modules/book-reservation';
+import { SeatReservation } from '../modules/seat-reservation';
+import { getSeatReservation } from '../modules/columns/seat-reservation-columns';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'My Equipment Reservation',
-        href: route('student.myEquipmentReservation'),
+        title: 'My Book Reservation',
+        href: route('student.myBookReservation'),
     },
 ];
 
-type MyEquipmentReservationProps = {
-    myEquipmentReservations: EquipmentReservation[];
-};
+type MySeatReservationProps = {
+    mySeatReservations: SeatReservation[];
+}
 
-export default function MyEquipmentReservation({myEquipmentReservations}: MyEquipmentReservationProps) {
+
+export default function MySeatReservation({ mySeatReservations }: MySeatReservationProps) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="My Equipment Reservation" />
+            <Head title="My Dashboard" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5 bg-background">
                     <DataTable
-                        data={myEquipmentReservations}
-                        columns={getEquipmentReservationColumns(myEquipmentReservations)}
+                        data={mySeatReservations}
+                        columns={getSeatReservation()}
                         filterColumn={"user"}
                         filterPlaceholder='Search something'
-                        tableTitle='My Equipment Reservations'
-                        tableDescription='List of my equipment reservations'
+                        tableTitle='My Book Reservations'
+                        tableDescription='List of my book reservations'
                         displayAddButton={false}
                     />
                 </div>

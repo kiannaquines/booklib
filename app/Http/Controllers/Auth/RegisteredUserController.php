@@ -53,7 +53,7 @@ class RegisteredUserController extends Controller
         if ($request->user()->hasRole('admin')) {
             return redirect()->intended(route('dashboard', absolute: false));
         } else {
-            return redirect()->intended(route('student.dashboard', absolute: false));
+            return redirect()->intended(route('student.myBookReservation', absolute: false));
         }
     }
 }

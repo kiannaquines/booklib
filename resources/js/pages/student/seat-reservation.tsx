@@ -1,48 +1,51 @@
+import { useState } from 'react'
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Head, router, useForm } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { User, type BreadcrumbItem } from '@/types';
+import { Head, useForm, router } from '@inertiajs/react';
 import { toast } from 'sonner';
-import { Plus, RefreshCcw, Loader2 } from 'lucide-react';
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft, Loader2, Plus, RefreshCcw } from 'lucide-react';
+import { Label } from '@/components/ui/label';
+import { Textarea } from "@/components/ui/textarea"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Equipment Reservation',
-        href: route('student.equipmentReservation'),
+        title: 'Seat Reservation',
+        href: route('seat-reservations.index'),
     },
 ];
 
-type EquipmentReservationFormData = {
-    equipment_id: string;
+type Spaces = {
+    id: string
+    status: string
+    seat: string
 }
 
-type EquipmentReservationProps = {
-    equipments: {
-        id: number;
-        name: string;
-        status: string;
-    }[];
+type CreateSeatReservationProps = {
+    spaces: Spaces[]
 }
 
-export default function EquipmentReservation({ equipments }: EquipmentReservationProps) {
+type SeatReservationFormData = {
+    seat: string
+    reason: string
+}
 
-    const [processing, setProcessing] = useState(false)
+const SeatReservation = ({ spaces }: CreateSeatReservationProps) => {
+    const { data, setData, reset, clearErrors } = useForm<SeatReservationFormData>({
+        seat: '',
+        reason: '',
+    })
 
-    const { data, setData, reset, clearErrors } = useForm<EquipmentReservationFormData>({
-        equipment_id: '',
-    });
+    const [processing, setProcessing] = useState(false);
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
         setProcessing(true);
-        router.post(route('book-reservations.store'), data, {
+        e.preventDefault();
+        router.post(route('seat-reservations.store'), data, {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Book reservation created successfully');
+                toast.success('Space reservation created successfully');
                 setProcessing(false);
                 reset();
             },
@@ -65,43 +68,52 @@ export default function EquipmentReservation({ equipments }: EquipmentReservatio
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Equipment Reservation" />
+            <Head title="Create Seat Reservation" />
             <div className="flex h-full flex-1 flex-col gap-4 rounded-xl p-4 overflow-x-auto">
                 <div className="flex justify-between items-center mb-4">
-                    <Button variant="outline" onClick={() => router.visit(route('equipment-reservations.index'))}>
+                    <Button variant="outline" onClick={() => router.visit(route('seat-reservations.index'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
-                        Back to Equipment Reservations
+                        Back to Seat Reservation
                     </Button>
                 </div>
 
                 <div className="relative h-full flex-1 overflow-hidden rounded-xl border border-sidebar-border/70 md:min-h-min dark:border-sidebar-border p-5">
                     <div className="flex flex-col gap-1">
-                        <h2 className="text-lg font-semibold">Create Equipment Reservation</h2>
-                        <p className="text-sm text-muted-foreground">Create a new equipment reservation in the library</p>
+                        <h2 className="text-lg font-semibold">Create Seat Reservation</h2>
+                        <p className="text-sm text-muted-foreground">Create a new seat reservation in the library</p>
                     </div>
                     <form onSubmit={handleSubmit} method="POST" className="mt-4">
+
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="equipment_id">Equipment</Label>
-                                <Select value={data.equipment_id} onValueChange={(value) => setData('equipment_id', value)}>
+                                <Label htmlFor="seat">Seat</Label>
+                                <Select value={data.seat} onValueChange={(value) => setData('seat', value)}>
                                     <SelectTrigger className="w-full">
-                                        <SelectValue placeholder="Select Equipment" />
+                                        <SelectValue placeholder="Seat" />
                                     </SelectTrigger>
                                     <SelectContent>
-                                        {equipments.map(function (equipment) {
+                                        {spaces.map(function (space) {
                                             return (
-                                                <SelectItem key={equipment.id} value={equipment.id.toString()} disabled={equipment.status === 'Unavailable'}>{equipment.status} - {equipment.name}</SelectItem>
+                                                <SelectItem key={space.id} value={space.id.toString()}>{space.status} - {space.seat}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>
                                 </Select>
                             </div>
                         </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="reason">Reason</Label>
+                                <Textarea name='reason' id='reason' placeholder="Type your message here." />
+                            </div>
+                        </div>
+
                         <div className="flex w-50 items-center gap-4 mt-4">
                             <Button type="submit" disabled={processing}>
                                 {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
                                 {!processing && <Plus className="w-4 h-4 mr-2" />}
-                                Create Equipment Reservation
+                                Create Seat Reservation
                             </Button>
                             <Button type="button" variant="outline" onClick={handleReset}>
                                 <RefreshCcw className="w-4 h-4 mr-2" />
@@ -113,5 +125,7 @@ export default function EquipmentReservation({ equipments }: EquipmentReservatio
                 </div>
             </div>
         </AppLayout>
-    );
+    )
 }
+
+export default SeatReservation

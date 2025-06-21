@@ -7,6 +7,8 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Spatie\Permission\Middleware\RoleMiddleware;
+use App\Http\Middleware\RedirectNotAdmin;
+use App\Http\Middleware\RedirectNotUser;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -18,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->encryptCookies(except: ['appearance', 'sidebar_state']);
         $middleware->alias([
             'role' => RoleMiddleware::class, 
+            'admin.only' => RedirectNotAdmin::class,
+            'user.only' => RedirectNotUser::class,
         ]);
         $middleware->web(append: [
             HandleAppearance::class,

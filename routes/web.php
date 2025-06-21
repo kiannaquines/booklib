@@ -11,9 +11,9 @@ use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SeatReservationController;
-use App\Http\Controllers\StudentController;
+use App\Http\Controllers\Student\StudentController;
 
-Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
     // Dashboard Routes
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
@@ -86,15 +86,16 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     Route::get('seat-reservation', [ReportController::class, 'seatReservationView'])->name('seat-reservation.view');
 });
 
-Route::middleware(['auth', 'verified'])->group(function () {
+Route::middleware(['auth', 'verified', 'user.only'])->group(function () {
 
     // Student Dashboard Routes
     Route::get('student/my-book-reservation', [StudentController::class, 'myBookReservation'])->name('student.myBookReservation');
     Route::get('student/my-equipment-reservation', [StudentController::class, 'myEquipmentReservation'])->name('student.myEquipmentReservation');
-
+    Route::get('student/my-seat-reservation', [StudentController::class, 'mySeatReservation'])->name('student.mySeatReservation');
     // Student Reservation Form
     Route::get('student/book-equipment', [StudentController::class, 'bookEquipment'])->name('student.bookEquipment');
     Route::get('student/equipment-reservation', [StudentController::class, 'equipmentReservation'])->name('student.equipmentReservation');
+    Route::get('student/seat-reservation', [StudentController::class, 'seatReservation'])->name('student.seatReservation');
 
     // Student Reservation Save Data
     Route::post('student/book-equipment', [StudentController::class, 'bookEquipmentCreate'])->name('student.bookEquipmentCreate');
