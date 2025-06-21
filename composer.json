@@ -59,6 +59,20 @@
             "Composer\\Config::disableProcessTimeout",
             "npx concurrently -c \"#93c5fd,#c4b5fd,#fdba74\" \"php artisan serve\" \"php artisan queue:listen --tries=1\" \"npm run dev\" --names='server,queue,vite'"
         ],
+        "clear": [
+            "@php artisan config:clear",
+            "@php artisan route:clear",
+            "@php artisan view:clear",
+            "@php artisan cache:clear"
+        ],
+        "seed": [
+            "@php artisan db:seed --class=Database\\Seeders\\DatabaseSeeder --ansi"
+        ],
+        "wipe-seed": [
+            "@php artisan db:wipe --force --ansi",
+            "@php artisan migrate --graceful --ansi",
+            "@php artisan db:seed --class=Database\\Seeders\\DatabaseSeeder --ansi"
+        ],
         "dev:ssr": [
             "npm run build:ssr",
             "Composer\\Config::disableProcessTimeout",

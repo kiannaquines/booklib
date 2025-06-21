@@ -83,6 +83,7 @@ Route::middleware(['auth', 'verified', 'role:admin'])->group(function () {
     // Report Routes
     Route::get('book-reservation', [ReportController::class, 'bookReservationView'])->name('book-reservation.view');
     Route::get('equipment-reservation', [ReportController::class, 'equipmentReservationView'])->name('equipment-reservation.view');
+    Route::get('seat-reservation', [ReportController::class, 'seatReservationView'])->name('seat-reservation.view');
 });
 
 Route::middleware(['auth', 'verified'])->group(function () {
