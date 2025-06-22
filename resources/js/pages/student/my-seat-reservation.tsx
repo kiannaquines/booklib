@@ -2,15 +2,13 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import DataTable from '../components/datatable';
-import { getBookReservationColumns } from '../modules/columns/book-reservation-columns';
-import { BookReservation } from '../modules/book-reservation';
 import { SeatReservation } from '../modules/seat-reservation';
-import { getSeatReservation } from '../modules/columns/seat-reservation-columns';
+import { getSeatReservation } from '@/pages/student/columns/seat-columns';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'My Book Reservation',
-        href: route('student.myBookReservation'),
+        title: 'My Seat Reservation',
+        href: route('student.mySeatReservation'),
     },
 ];
 

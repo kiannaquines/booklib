@@ -106,7 +106,7 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('book-reservations.edit', { id: String(bookReservation.id) }))
+                        router.visit(route('student.editBookReservation', { id: String(bookReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
@@ -122,7 +122,6 @@ function BookReservationActionsCell({ bookReservation }: BookReservationActionsC
             </DropdownMenu>
 
             <DeleteBookReservationAlertDialog isOpen={isDeleteDialogOpen} setIsOpen={setIsDeleteDialogOpen} handleAction={handleDelete} isDeleting={isDeleting} />
-
         </div>
     );
 

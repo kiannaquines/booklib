@@ -3,7 +3,7 @@ import { type BreadcrumbItem } from '@/types';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Head, router, useForm } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, FilePenLine } from 'lucide-react';
 import { toast } from 'sonner';
 import { Plus, RefreshCcw, Loader2 } from 'lucide-react';
 import { useState } from 'react';
@@ -20,7 +20,13 @@ type EditEquipmentReservationFormData = {
     equipment: string;
 }
 
+
+
 type EditEquipmentReservationProps = {
+    equipmentReservation: {
+        id: number;
+        equipment_id: string;
+    }
     equipments: {
         id: number;
         name: string;
@@ -28,18 +34,18 @@ type EditEquipmentReservationProps = {
     }[];
 }
 
-export default function EditEquipmentReservation({ equipments }: EditEquipmentReservationProps) {
+export default function EditEquipmentReservation({ equipments, equipmentReservation }: EditEquipmentReservationProps) {
 
     const [processing, setProcessing] = useState(false)
 
     const { data, setData, reset, clearErrors } = useForm<EditEquipmentReservationFormData>({
-        equipment: '',
+        equipment: equipmentReservation.equipment_id,
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setProcessing(true);
-        router.post(route('student.equipmentReservationUpdate'), data, {
+        router.put(route('student.updateEquipmentReservation', equipmentReservation.id), data, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Equipment reservation updated successfully');
@@ -83,14 +89,14 @@ export default function EditEquipmentReservation({ equipments }: EditEquipmentRe
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="equipment">Equipment</Label>
-                                <Select value={data.equipment} onValueChange={(value) => setData('equipment', value)}>
+                                <Select value={String(data.equipment)} onValueChange={(value) => setData('equipment', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select Equipment" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {equipments.map(function (equipment) {
                                             return (
-                                                <SelectItem key={equipment.id} value={equipment.id.toString()} disabled={equipment.status === 'Unavailable'}>{equipment.status} - {equipment.name}</SelectItem>
+                                                <SelectItem key={equipment.id} value={equipment.id.toString()} disabled={equipment.status === 'In Use'}>{equipment.status} - {equipment.name}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>
@@ -100,7 +106,7 @@ export default function EditEquipmentReservation({ equipments }: EditEquipmentRe
                         <div className="flex w-50 items-center gap-4 mt-4">
                             <Button type="submit" disabled={processing}>
                                 {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                                {!processing && <Plus className="w-4 h-4 mr-2" />}
+                                {!processing && <FilePenLine className="w-4 h-4 mr-2" />}
                                 Update Equipment Reservation
                             </Button>
                             <Button type="button" variant="outline" onClick={handleReset}>

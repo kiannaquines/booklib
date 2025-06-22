@@ -106,7 +106,7 @@ function SeatReservationAction({ seatReservation }: SeatReservationProps) {
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('seat-reservations.edit', { id: String(seatReservation.id) }))
+                        router.visit(route('student.editSeatReservation', { id: String(seatReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit

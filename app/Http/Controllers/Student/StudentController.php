@@ -181,33 +181,104 @@ class StudentController extends Controller
     public function editBookReservation(string $id)
     {
         $bookReservation = BookReservation::findOrFail($id);
-        return Inertia::render('student/edit-book-reservation', [
+        return Inertia::render('student/update/edit-book-reservation', [
             'bookReservation' => [
                 'id' => $bookReservation->id,
                 'book_id' => $bookReservation->book_id,
             ],
+            'books' => Books::all()->map(function ($book) {
+                return [
+                    'id' => $book->id,
+                    'title' => $book->title,
+                    'status' => $book->status,
+                ];
+            }),
         ]);
     }
 
     public function editSeatReservation(string $id)
     {
         $seatReservation = SeatReservation::findOrFail($id);
-        return Inertia::render('student/edit-seat-reservation', [
+        return Inertia::render('student/update/edit-seat-reservation', [
             'seatReservation' => [
                 'id' => $seatReservation->id,
                 'reserved_seat' => $seatReservation->reserved_seat,
                 'reason' => $seatReservation->reason,
             ],
+            'spaces' => StudySpace::all()->map(function ($space) {
+                return [
+                    'id' => $space->id,
+                    'seat' => $space->seat_number,
+                    'status' => $space->status,
+                ];
+            }),
         ]);
     }
     public function editEquipmentReservation(string $id)
     {
         $equipmentReservation = EquipmentReservation::findOrFail($id);
-        return Inertia::render('student/edit-equipment-reservation', [
+        return Inertia::render('student/update/edit-equipment-reservation', [
             'equipmentReservation' => [
                 'id' => $equipmentReservation->id,
                 'equipment_id' => $equipmentReservation->equipment_id,
             ],
+            'equipments' => Equipment::all()->map(function ($equipment) {
+                return [
+                    'id' => $equipment->id,
+                    'name' => $equipment->name,
+                    'status' => $equipment->status,
+                ];
+            }),
         ]);
+    }
+
+    public function updateBookReservation(Request $request, string $id)
+    {
+        $request->validate([
+            'book_id' => 'required|exists:books,id',
+        ]);
+
+        $bookReservation = BookReservation::findOrFail($id);
+        $bookReservation->update([
+            'book_id' => $request->book_id,
+        ]);
+
+        Books::where('id', $request->book_id)->update(['status' => 'Unavailable']);
+
+        return redirect()->route('student.myBookReservation')->with(['success' => 'You have successfully updated the book reservation.']);
+    }
+
+    public function updateSeatReservation(Request $request, string $id)
+    {
+        $request->validate([
+            'seat' => 'required|exists:study_space,id',
+            'reason' => 'nullable|string|max:255',
+        ]);
+
+        $seatReservation = SeatReservation::findOrFail($id);
+        $seatReservation->update([
+            'reserved_seat' => $request->seat,
+            'reason' => $request->reason,
+        ]);
+
+        StudySpace::where('id', $request->seat)->update(['status' => 'In Use']);
+
+        return redirect()->route('student.mySeatReservation')->with(['success' => 'You have successfully updated the seat reservation.']);
+    }
+
+    public function updateEquipmentReservation(Request $request, string $id)
+    {
+        $request->validate([
+            'equipment' => 'required|exists:equipments,id',
+        ]);
+
+        $equipmentReservation = EquipmentReservation::findOrFail($id);
+        $equipmentReservation->update([
+            'equipment_id' => $request->equipment,
+        ]);
+
+        Equipment::where('id', $request->equipment)->update(['status' => 'In Use']);
+
+        return redirect()->route('student.myEquipmentReservation')->with(['success' => 'You have successfully updated the equipment reservation.']);
     }
 }

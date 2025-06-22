@@ -2,8 +2,8 @@ import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
 import { Head } from '@inertiajs/react';
 import DataTable from '../components/datatable';
-import { getBookReservationColumns } from '../modules/columns/book-reservation-columns';
 import { BookReservation } from '../modules/book-reservation';
+import { getBookReservationColumns } from '@/pages/student/columns/book-columns';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {

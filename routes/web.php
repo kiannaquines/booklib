@@ -108,6 +108,10 @@ Route::middleware(['auth', 'verified', 'user.only'])->group(function () {
     Route::get('student/book-reservation/{id}', [StudentController::class, 'editBookReservation'])->name('student.editBookReservation');
     Route::get('student/seat-reservation/{id}', [StudentController::class, 'editSeatReservation'])->name('student.editSeatReservation');
     Route::get('student/equipment-reservation/{id}', [StudentController::class, 'editEquipmentReservation'])->name('student.editEquipmentReservation');
+
+    Route::put('student/book-reservation/{id}', [StudentController::class, 'updateBookReservation'])->name('student.updateBookReservation');
+    Route::put('student/seat-reservation/{id}', [StudentController::class, 'updateSeatReservation'])->name('student.updateSeatReservation');
+    Route::put('student/equipment-reservation/{id}', [StudentController::class, 'updateEquipmentReservation'])->name('student.updateEquipmentReservation');
 });
 
 require __DIR__ . '/settings.php';

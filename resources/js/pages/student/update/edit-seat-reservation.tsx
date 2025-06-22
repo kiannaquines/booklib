@@ -4,7 +4,7 @@ import { User, type BreadcrumbItem } from '@/types';
 import { Head, useForm, router } from '@inertiajs/react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Loader2, Plus, RefreshCcw } from 'lucide-react';
+import { ArrowLeft, FilePenLine, Loader2, Plus, RefreshCcw } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -22,19 +22,27 @@ type Spaces = {
     seat: string
 }
 
+type SeatReservation = {
+    id: string
+    reserved_seat: string
+    reason: string
+}
+
 type EditSeatReservationProps = {
     spaces: Spaces[]
+    seatReservation: SeatReservation
 }
+
 
 type EditSeatReservationFormData = {
     seat: string
     reason: string
 }
 
-const EditSeatReservation = ({ spaces }: EditSeatReservationProps) => {
+const EditSeatReservation = ({ spaces, seatReservation }: EditSeatReservationProps) => {
     const { data, setData, reset, clearErrors } = useForm<EditSeatReservationFormData>({
-        seat: '',
-        reason: '',
+        seat: seatReservation.reserved_seat,
+        reason: seatReservation.reason,
     })
 
     const [processing, setProcessing] = useState(false);
@@ -42,7 +50,7 @@ const EditSeatReservation = ({ spaces }: EditSeatReservationProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         setProcessing(true);
         e.preventDefault();
-        router.post(route('student.seatReservationUpdate'), data, {
+        router.put(route('student.updateSeatReservation', seatReservation.id), data, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Space reservation updated successfully');
@@ -87,14 +95,14 @@ const EditSeatReservation = ({ spaces }: EditSeatReservationProps) => {
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="seat">Seat</Label>
-                                <Select value={data.seat} onValueChange={(value) => setData('seat', value)}>
+                                <Select value={String(data.seat)} onValueChange={(value) => setData('seat', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Seat" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {spaces.map(function (space) {
                                             return (
-                                                <SelectItem key={space.id} value={space.id.toString()}>{space.status} - {space.seat}</SelectItem>
+                                                <SelectItem key={space.id} value={space.id.toString()} disabled={space.status === 'In Use'}>{space.status} - {space.seat}</SelectItem>
                                             )
                                         })}
                                     </SelectContent>
@@ -105,15 +113,15 @@ const EditSeatReservation = ({ spaces }: EditSeatReservationProps) => {
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="reason">Reason</Label>
-                                <Textarea name='reason' id='reason' placeholder="Type your message here." />
+                                <Textarea value={data.reason} onChange={(e) => setData('reason', e.target.value)} name='reason' id='reason' placeholder="Type your message here." />
                             </div>
                         </div>
 
                         <div className="flex w-50 items-center gap-4 mt-4">
                             <Button type="submit" disabled={processing}>
                                 {processing && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                                {!processing && <Plus className="w-4 h-4 mr-2" />}
-                                Create Seat Reservation
+                                {!processing && <FilePenLine className="w-4 h-4 mr-2" />}
+                                Update Seat Reservation
                             </Button>
                             <Button type="button" variant="outline" onClick={handleReset}>
                                 <RefreshCcw className="w-4 h-4 mr-2" />

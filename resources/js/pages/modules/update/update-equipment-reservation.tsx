@@ -27,7 +27,6 @@ type EquipmentReservation = {
     user_id: string;
     equipment_id: string;
     status: string;
-
 }
 
 type UpdateEquipmentReservationProps = {

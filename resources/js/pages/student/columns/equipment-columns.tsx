@@ -24,8 +24,6 @@ import { Badge } from "@/components/ui/badge";
 import { router } from "@inertiajs/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { Book } from "@/pages/modules/books";
-import { Equipment } from "@/pages/modules/equipment";
 import { EquipmentReservation } from "@/pages/modules/equipment-reservation";
 
 type DialogIsOpenProps = {
@@ -108,7 +106,7 @@ function EquipmentReservationActionsCell({ equipmentReservation }: EquipmentRese
                     <DropdownMenuLabel>Actions</DropdownMenuLabel>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={() =>
-                        router.visit(route('equipment-reservations.edit', { id: String(equipmentReservation.id) }))
+                        router.visit(route('student.editEquipmentReservation', { id: String(equipmentReservation.id) }))
                     }>
                         <Edit className="mr-2 h-4 w-4" />
                         Edit
