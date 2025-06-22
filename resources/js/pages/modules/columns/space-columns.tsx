@@ -49,7 +49,7 @@ function DeleteStudeSpaceAlertDialog({ isOpen, setIsOpen, handleAction, isDeleti
             className="bg-red-600 hover:bg-red-700"
             onClick={handleAction}
           >
-            {isDeleting ? "Deleting..." : "Delete Incident"}
+            {isDeleting ? "Deleting..." : "Delete Study Space"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

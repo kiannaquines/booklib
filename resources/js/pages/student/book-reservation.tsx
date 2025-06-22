@@ -11,8 +11,8 @@ import { useState } from 'react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Book Equipment',
-        href: route('student.bookEquipment'),
+        title: 'Book Reservation',
+        href: route('student.bookReservation'),
     },
 ];
 
@@ -38,7 +38,7 @@ export default function BookReservation({ books }: BookReservationProps) {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setProcessing(true);
-        router.post(route('student.bookEquipmentCreate'), data, {
+        router.post(route('student.bookReservationCreate'), data, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Book reservation created successfully');

@@ -66,7 +66,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'Book Reservation',
-        href: route('student.bookEquipment'),
+        href: route('student.bookReservation'),
         icon: BookOpen,
     },
     {

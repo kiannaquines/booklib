@@ -13,6 +13,16 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SeatReservationController;
 use App\Http\Controllers\Student\StudentController;
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::delete('equipments/{id}', [EquipmentController::class, 'destroy'])->name('equipments.destroy');
+    Route::delete('study-spaces/{id}', [StudySpaceController::class, 'destroy'])->name('study-spaces.destroy');
+    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
+    Route::delete('book-reservations/{id}', [BookReservationController::class, 'destroy'])->name('book-reservations.destroy');
+    Route::delete('equipment-reservations/{id}', [EquipmentReservationController::class, 'destroy'])->name('equipment-reservations.destroy');
+    Route::delete('seat-reservations/{id}', [SeatReservationController::class, 'destroy'])->name('seat-reservations.destroy');
+});
+
 Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
     // Dashboard Routes
     Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -50,7 +60,6 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
     Route::post('seat-reservations', [SeatReservationController::class, 'store'])->name('seat-reservations.store');
     Route::get('seat-reservations/{id}', [SeatReservationController::class, 'edit'])->name('seat-reservations.edit');
     Route::put('seat-reservations/{id}', [SeatReservationController::class, 'update'])->name('seat-reservations.update');
-    Route::delete('seat-reservations/{id}', [SeatReservationController::class, 'destroy'])->name('seat-reservations.destroy');
 
     // Edit Routes
     Route::get('books/{id}', [BookController::class, 'edit'])->name('books.edit');
@@ -68,15 +77,6 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
     Route::put('book-reservations/{id}', [BookReservationController::class, 'update'])->name('book-reservations.update');
     Route::put('equipment-reservations/{id}', [EquipmentReservationController::class, 'update'])->name('equipment-reservations.update');
 
-    // Delete Routes
-    Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
-    Route::delete('equipments/{id}', [EquipmentController::class, 'destroy'])->name('equipments.destroy');
-    Route::delete('study-spaces/{id}', [StudySpaceController::class, 'destroy'])->name('study-spaces.destroy');
-    Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
-    Route::delete('book-reservations/{id}', [BookReservationController::class, 'destroy'])->name('book-reservations.destroy');
-    Route::delete('equipment-reservations/{id}', [EquipmentReservationController::class, 'destroy'])->name('equipment-reservations.destroy');
-
-
     // API Routes
     Route::get('reservation-charts', [DashboardController::class, 'getReservationCharts'])->name('reservation-charts');
 
@@ -90,18 +90,25 @@ Route::middleware(['auth', 'verified', 'user.only'])->group(function () {
 
     // Student Dashboard Routes
     Route::get('student/my-book-reservation', [StudentController::class, 'myBookReservation'])->name('student.myBookReservation');
+    
     Route::get('student/my-equipment-reservation', [StudentController::class, 'myEquipmentReservation'])->name('student.myEquipmentReservation');
     Route::get('student/my-seat-reservation', [StudentController::class, 'mySeatReservation'])->name('student.mySeatReservation');
+
     // Student Reservation Form
-    Route::get('student/book-equipment', [StudentController::class, 'bookEquipment'])->name('student.bookEquipment');
+    Route::get('student/book-reservation', [StudentController::class, 'bookReservation'])->name('student.bookReservation');
+
+
     Route::get('student/equipment-reservation', [StudentController::class, 'equipmentReservation'])->name('student.equipmentReservation');
     Route::get('student/seat-reservation', [StudentController::class, 'seatReservation'])->name('student.seatReservation');
 
     // Student Reservation Save Data
-    Route::post('student/book-equipment', [StudentController::class, 'bookEquipmentCreate'])->name('student.bookEquipmentCreate');
+    Route::post('student/book-reservation', [StudentController::class, 'bookReservationCreate'])->name('student.bookReservationCreate');
+    Route::post('student/seat-reservation', [StudentController::class, 'seatReservationCreate'])->name('student.seatReservationCreate');
+    Route::post('student/equipment-reservation', [StudentController::class, 'equipmentReservationCreate'])->name('student.equipmentReservationCreate');
 
 
-    Route::post('student/equipment-reservation', [StudentController::class, 'bookBookCreate'])->name('student.bookBookCreate');
+
+    Route::delete('student/book-reservation/{id}', [StudentController::class, 'bookReservationDelete'])->name('student.bookReservationDelete');
 });
 
 require __DIR__ . '/settings.php';

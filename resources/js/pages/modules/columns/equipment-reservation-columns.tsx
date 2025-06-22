@@ -51,7 +51,7 @@ function DeleteEquipmentAlertDialog({ isOpen, setIsOpen, handleAction, isDeletin
                         className="bg-red-600 hover:bg-red-700"
                         onClick={handleAction}
                     >
-                        {isDeleting ? "Deleting..." : "Delete Incident"}
+                        {isDeleting ? "Deleting..." : "Delete Reservation"}
                     </AlertDialogAction>
                 </AlertDialogFooter>
             </AlertDialogContent>

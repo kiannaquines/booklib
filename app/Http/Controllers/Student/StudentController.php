@@ -81,7 +81,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function bookEquipment()
+    public function bookReservation()
     {
         $books = Books::all()->map(function ($book) {
             return [
@@ -124,7 +124,7 @@ class StudentController extends Controller
         ]);
     }
 
-    public function bookEquipmentCreate(Request $request)
+    public function bookReservationCreate(Request $request)
     {
         $request->validate([
             'book_id' => 'required|exists:books,id',
@@ -142,57 +142,41 @@ class StudentController extends Controller
         return redirect()->route('student.myBookReservation')->with(['success' => 'You have successfully reserved the book.']);
     }
 
-    public function bookBookCreate(Request $request)
+    public function seatReservationCreate(Request $request)
     {
-        $currentUser = $request->user()->id;
-        $request->validate([]);
-        // TODO: Save the request body
+        $request->validate([
+            'seat' => 'required|exists:study_space,id',
+            'reason' => 'nullable|string|max:255',
+        ]);
+
+        SeatReservation::create([
+            'user_id' => $this->userId(),
+            'reserved_seat' => $request->seat,
+            'reason' => $request->reason,
+        ]);
+
+        StudySpace::where('id', $request->seat)->update(['status' => 'In Use']);
+
+        return redirect()->route('student.mySeatReservation')->with(['success' => 'You have successfully reserved the seat.']);
     }
 
-    public function bookEquipmentEdit(Request $request, string $id)
+    public function equipmentReservationCreate(Request $request)
     {
-        $currentUser = $request->user()->id;
-        $request->validate([]);
+        $request->validate([
+            'equipment' => 'required|exists:equipments,id',
+        ]);
 
-        // TODO: Edit the request body
+        EquipmentReservation::create([
+            'user_id' => $this->userId(),
+            'equipment_id' => $request->equipment,
+            'start_time' => now(),
+            'end_time' => now()->addDays(3),
+        ]);
+
+        Equipment::where('id', $request->equipment)->update(['status' => 'In Use']);
+
+        return redirect()->route('student.myEquipmentReservation')->with(['success' => 'You have successfully reserved the equipment.']);
     }
 
-    public function bookBookEdit(Request $request, string $id)
-    {
-        $currentUser = $request->user()->id;
-        $request->validate(rules: []);
-
-
-        // TODO: Edit the request body
-    }
-
-    public function bookEquipmentUpdate(Request $request, string $id)
-    {
-        $request->validate(rules: []);
-        $reservation = EquipmentReservation::findOrFail($id);
-        // TODO: Update the request body
-    }
-
-    public function bookBookUpdate(Request $request, string $id)
-    {
-        $request->validate(rules: []);
-        $reservation = BookReservation::findOrFail($id);
-        // TODO: Update the request body
-    }
-
-    public function bookEquipmentDestroy(Request $request, string $id)
-    {
-        $reservation = EquipmentReservation::findOrFail($id);
-        $reservation->delete();
-
-        return redirect()->route('student.myBookReservation')->with(['success', 'You have succesffuly removed your equipment reservation.']);
-    }
-
-    public function bookBookDestroy(Request $request, string $id)
-    {
-        $reservation = BookReservation::findOrFail($id);
-        $reservation->delete();
-
-        return redirect()->route('student.myBookReservation')->with(['success', 'You have succesffuly removed your book reservation.']);
-    }
+    
 }

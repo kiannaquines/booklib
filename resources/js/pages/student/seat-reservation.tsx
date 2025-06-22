@@ -12,7 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Seat Reservation',
-        href: route('seat-reservations.index'),
+        href: route('student.mySeatReservation'),
     },
 ];
 
@@ -42,7 +42,7 @@ const SeatReservation = ({ spaces }: CreateSeatReservationProps) => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         setProcessing(true);
         e.preventDefault();
-        router.post(route('seat-reservations.store'), data, {
+        router.post(route('student.seatReservationCreate'), data, {
             preserveScroll: true,
             onSuccess: () => {
                 toast.success('Space reservation created successfully');

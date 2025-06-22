@@ -161,12 +161,16 @@ class SeatReservationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         $reservation = SeatReservation::findOrFail($id);
 
         $reservation->delete();
 
-        return redirect()->route('seat-reservations.index')->with('success', 'You have successfully removed the seat reservation.');
+        if ($request->user()->hasRole('admin')) {
+            return redirect()->route('seat-reservations.index')->with('success', 'You have successfully removed the seat reservation.');
+        } else {
+            return redirect()->route('student.mySeatReservation')->with('success', 'You have successfully removed the seat reservation.');
+        }
     }
 }

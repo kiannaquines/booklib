@@ -49,7 +49,7 @@ function DeleteBookAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: 
             className="bg-red-600 hover:bg-red-700"
             onClick={handleAction}
           >
-            {isDeleting ? "Deleting..." : "Delete Incident"}
+            {isDeleting ? "Deleting..." : "Delete Book"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

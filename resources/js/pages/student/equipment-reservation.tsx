@@ -17,7 +17,7 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 type EquipmentReservationFormData = {
-    equipment_id: string;
+    equipment: string;
 }
 
 type EquipmentReservationProps = {
@@ -33,16 +33,16 @@ export default function EquipmentReservation({ equipments }: EquipmentReservatio
     const [processing, setProcessing] = useState(false)
 
     const { data, setData, reset, clearErrors } = useForm<EquipmentReservationFormData>({
-        equipment_id: '',
+        equipment: '',
     });
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setProcessing(true);
-        router.post(route('book-reservations.store'), data, {
+        router.post(route('student.equipmentReservationCreate'), data, {
             preserveScroll: true,
             onSuccess: () => {
-                toast.success('Book reservation created successfully');
+                toast.success('Equipment reservation created successfully');
                 setProcessing(false);
                 reset();
             },
@@ -82,8 +82,8 @@ export default function EquipmentReservation({ equipments }: EquipmentReservatio
                     <form onSubmit={handleSubmit} method="POST" className="mt-4">
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
-                                <Label htmlFor="equipment_id">Equipment</Label>
-                                <Select value={data.equipment_id} onValueChange={(value) => setData('equipment_id', value)}>
+                                <Label htmlFor="equipment">Equipment</Label>
+                                <Select value={data.equipment} onValueChange={(value) => setData('equipment', value)}>
                                     <SelectTrigger className="w-full">
                                         <SelectValue placeholder="Select Equipment" />
                                     </SelectTrigger>

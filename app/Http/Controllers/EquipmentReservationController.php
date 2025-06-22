@@ -97,7 +97,7 @@ class EquipmentReservationController extends Controller
         }
 
         $equipmentReservation = EquipmentReservation::select('id', 'user_id', 'status', 'equipment_id')->find($id);
-        
+
         if (!$equipmentReservation) {
             return back()->with('error', 'Equipment reservation not found');
         }
@@ -148,7 +148,7 @@ class EquipmentReservationController extends Controller
     }
 
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         if (!$id) {
             return back()->with('error', 'Equipment reservation identifier not found');
@@ -162,6 +162,10 @@ class EquipmentReservationController extends Controller
 
         $equipmentReservation->delete();
 
-        return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation deleted successfully');
+        if ($request->user()->hasRole('admin')) {
+            return redirect()->route('equipment-reservations.index')->with('success', 'Equipment reservation deleted successfully');
+        } else {
+            return redirect()->route('student.myEquipmentReservation')->with('success', 'Equipment reservation deleted successfully');
+        }
     }
 }

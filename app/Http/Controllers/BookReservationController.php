@@ -141,7 +141,7 @@ class BookReservationController extends Controller
         return redirect()->route('book-reservations.index')->with('success', 'Book reservation updated successfully');
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, string $id)
     {
         if (!$id) {
             return back()->with('error', 'Book reservation identifier not found');
@@ -154,6 +154,10 @@ class BookReservationController extends Controller
         }
         $bookReservation->delete();
 
-        return redirect()->route('book-reservations.index')->with('success', 'Book reservation deleted successfully');
+        if ($request->user()->hasRole('admin')) {
+            return redirect()->route(route: 'book-reservations.index')->with('success', 'Book reservation deleted successfully');
+        } else {
+            return redirect()->route(route: 'student.myBookReservation')->with('success', 'Book reservation deleted successfully');
+        }
     }
 }
