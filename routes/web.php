@@ -88,27 +88,26 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
 Route::middleware(['auth', 'verified', 'user.only'])->group(function () {
 
-    // Student Dashboard Routes
+    // Student Index Routes
     Route::get('student/my-book-reservation', [StudentController::class, 'myBookReservation'])->name('student.myBookReservation');
-    
+
     Route::get('student/my-equipment-reservation', [StudentController::class, 'myEquipmentReservation'])->name('student.myEquipmentReservation');
     Route::get('student/my-seat-reservation', [StudentController::class, 'mySeatReservation'])->name('student.mySeatReservation');
 
-    // Student Reservation Form
+    // Student Create Form
     Route::get('student/book-reservation', [StudentController::class, 'bookReservation'])->name('student.bookReservation');
-
-
     Route::get('student/equipment-reservation', [StudentController::class, 'equipmentReservation'])->name('student.equipmentReservation');
     Route::get('student/seat-reservation', [StudentController::class, 'seatReservation'])->name('student.seatReservation');
 
-    // Student Reservation Save Data
+    // Student Save Data Routes
     Route::post('student/book-reservation', [StudentController::class, 'bookReservationCreate'])->name('student.bookReservationCreate');
     Route::post('student/seat-reservation', [StudentController::class, 'seatReservationCreate'])->name('student.seatReservationCreate');
     Route::post('student/equipment-reservation', [StudentController::class, 'equipmentReservationCreate'])->name('student.equipmentReservationCreate');
 
-
-
-    Route::delete('student/book-reservation/{id}', [StudentController::class, 'bookReservationDelete'])->name('student.bookReservationDelete');
+    // Student Edit Form
+    Route::get('student/book-reservation/{id}', [StudentController::class, 'editBookReservation'])->name('student.editBookReservation');
+    Route::get('student/seat-reservation/{id}', [StudentController::class, 'editSeatReservation'])->name('student.editSeatReservation');
+    Route::get('student/equipment-reservation/{id}', [StudentController::class, 'editEquipmentReservation'])->name('student.editEquipmentReservation');
 });
 
 require __DIR__ . '/settings.php';

@@ -178,5 +178,36 @@ class StudentController extends Controller
         return redirect()->route('student.myEquipmentReservation')->with(['success' => 'You have successfully reserved the equipment.']);
     }
 
-    
+    public function editBookReservation(string $id)
+    {
+        $bookReservation = BookReservation::findOrFail($id);
+        return Inertia::render('student/edit-book-reservation', [
+            'bookReservation' => [
+                'id' => $bookReservation->id,
+                'book_id' => $bookReservation->book_id,
+            ],
+        ]);
+    }
+
+    public function editSeatReservation(string $id)
+    {
+        $seatReservation = SeatReservation::findOrFail($id);
+        return Inertia::render('student/edit-seat-reservation', [
+            'seatReservation' => [
+                'id' => $seatReservation->id,
+                'reserved_seat' => $seatReservation->reserved_seat,
+                'reason' => $seatReservation->reason,
+            ],
+        ]);
+    }
+    public function editEquipmentReservation(string $id)
+    {
+        $equipmentReservation = EquipmentReservation::findOrFail($id);
+        return Inertia::render('student/edit-equipment-reservation', [
+            'equipmentReservation' => [
+                'id' => $equipmentReservation->id,
+                'equipment_id' => $equipmentReservation->equipment_id,
+            ],
+        ]);
+    }
 }
