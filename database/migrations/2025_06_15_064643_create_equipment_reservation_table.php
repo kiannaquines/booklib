@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('equipment_reservation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('equipment_id')->references('id')->on('equipments');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('equipment_id')->references('id')->on('equipments')->cascadeOnDelete();
             $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->dateTime('start_time');
             $table->dateTime('end_time');

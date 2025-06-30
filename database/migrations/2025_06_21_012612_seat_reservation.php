@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('seat_reservation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('reserved_seat')->references('id')->on('study_space');
-            $table->foreignId('user_id')->references('id')->on('users');
+            $table->foreignId('reserved_seat')->references('id')->on('study_space')->cascadeOnDelete();
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
             $table->string('reason')->nullable();
             $table->timestamps();
         });

@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('book_reservation', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->references('id')->on('users');
-            $table->foreignId('book_id')->references('id')->on('books');
+            $table->foreignId('user_id')->references('id')->on('users')->cascadeOnDelete();
+            $table->foreignId('book_id')->references('id')->on('books')->cascadeOnDelete();
             $table->enum('status', ['Pending', 'Approved', 'Rejected'])->default('Pending');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
