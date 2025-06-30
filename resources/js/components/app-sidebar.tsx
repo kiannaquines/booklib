@@ -50,6 +50,21 @@ const mainNavItems: NavItem[] = [
     },
     // users route
     {
+        title: 'Create Book Reservation',
+        href: route('student.bookReservation'),
+        icon: BookOpen,
+    },
+    {
+        title: 'Create Seat Reservation',
+        href: route('student.seatReservation'),
+        icon: BookOpen,
+    },
+    {
+        title: 'Create Equipment Reservation',
+        href: route('student.equipmentReservation'),
+        icon: Microscope,
+    },
+    {
         title: 'My Book Reservation',
         href: route('student.myBookReservation'),
         icon: LayoutGrid,
@@ -64,21 +79,6 @@ const mainNavItems: NavItem[] = [
         href: route('student.mySeatReservation'),
         icon: LayoutGrid,
     },
-    {
-        title: 'Book Reservation',
-        href: route('student.bookReservation'),
-        icon: BookOpen,
-    },
-    {
-        title: 'Seat Reservation',
-        href: route('student.seatReservation'),
-        icon: BookOpen,
-    },
-    {
-        title: 'Equipment Reservation',
-        href: route('student.equipmentReservation'),
-        icon: Microscope,
-    }
 ];
 
 const footerNavItems: NavItem[] = [
@@ -116,12 +116,12 @@ export function AppSidebar() {
     ];
 
     const userOnly = [
-        "Book Reservation",
-        "Equipment Reservation",
+        "Create Book Reservation",
+        "Create Equipment Reservation",
         "My Book Reservation",
         "My Equipment Reservation",
         "My Seat Reservation",
-        "Seat Reservation"
+        "Create Seat Reservation"
     ];
 
     const visibleModules = mainNavItems.filter(item => {
