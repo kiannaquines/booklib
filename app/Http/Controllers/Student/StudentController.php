@@ -65,11 +65,11 @@ class StudentController extends Controller
                 'book_id' => $myBookReservation->book_id,
                 'user' => $myBookReservation->user->name,
                 'user_id' => $myBookReservation->user_id,
-                'start_time' => $myBookReservation->start_time->format('d/m/Y H:i:s'),
-                'end_time' => $myBookReservation->end_time->format('d/m/Y H:i:s'),
+                'start_time' => $myBookReservation->start_time->format('d/m/Y h:i:s A'),
+                'end_time' => $myBookReservation->end_time->format('d/m/Y h:i:s A'),
                 'status' => $myBookReservation->status,
-                'created_at' => $myBookReservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $myBookReservation->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $myBookReservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $myBookReservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
 
@@ -87,11 +87,11 @@ class StudentController extends Controller
                 'equipment_id' => $myEquipmentReservation->equipment_id,
                 'user' => $myEquipmentReservation->user->name,
                 'user_id' => $myEquipmentReservation->user_id,
-                'start_time' => $myEquipmentReservation->start_time->format('d/m/Y H:i:s'),
-                'end_time' => $myEquipmentReservation->end_time->format('d/m/Y H:i:s'),
+                'start_time' => $myEquipmentReservation->start_time->format('d/m/Y h:i:s A'),
+                'end_time' => $myEquipmentReservation->end_time->format('d/m/Y h:i:s A'),
                 'status' => $myEquipmentReservation->status,
-                'created_at' => $myEquipmentReservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $myEquipmentReservation->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $myEquipmentReservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $myEquipmentReservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
         return Inertia::render('student/my-equipment-reservation', [
@@ -106,8 +106,11 @@ class StudentController extends Controller
                 'id' => $reservation->id,
                 'seat' => $reservation->space->seat_number,
                 'user' => $reservation->user->name,
-                'created_at' => $reservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $reservation->updated_at->format('d/m/Y H:i:s'),
+                'start_time' => $reservation->start_time ? $reservation->start_time->format('d/m/Y h:i:s A') : null,
+                'end_time' => $reservation->end_time ? $reservation->end_time->format('d/m/Y h:i:s A') : null,
+                'duration' => '2 hours',
+                'created_at' => $reservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $reservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
 
@@ -137,6 +140,8 @@ class StudentController extends Controller
                 'max_slots' => $book->max_slots,
                 'reserved_today' => $book->reserved_today,
                 'available_slots' => $book->max_slots - $book->reserved_today,
+                'available_quantity' => $book->available_quantity,
+                'total_quantity' => $book->total_quantity,
             ];
         });
         return Inertia::render('student/book-reservation', [
@@ -165,6 +170,8 @@ class StudentController extends Controller
                 'max_slots' => $equipment->max_slots,
                 'reserved_today' => $equipment->reserved_today,
                 'available_slots' => $equipment->max_slots - $equipment->reserved_today,
+                'available_quantity' => $equipment->available_quantity,
+                'total_quantity' => $equipment->total_quantity,
             ];
         });
         return Inertia::render('student/equipment-reservation', [
@@ -218,6 +225,13 @@ class StudentController extends Controller
             ]);
         }
 
+        // Check if book has available quantity
+        if ($book->available_quantity <= 0) {
+            return back()->withErrors([
+                'quantity' => 'This book is currently out of stock. Please try again later.'
+            ]);
+        }
+
         BookReservation::create([
             'user_id' => $this->userId(),
             'book_id' => $request->book_id,
@@ -228,8 +242,11 @@ class StudentController extends Controller
         // Increment reserved_today counter
         $book->increment('reserved_today');
         
-        // Update status to Unavailable if all slots are taken
-        if ($book->reserved_today >= $book->max_slots) {
+        // Decrement available quantity
+        $book->decrement('available_quantity');
+        
+        // Update status to Unavailable if all slots are taken or no stock
+        if ($book->reserved_today >= $book->max_slots || $book->available_quantity <= 0) {
             $book->update(['status' => 'Unavailable']);
         }
 
@@ -251,17 +268,22 @@ class StudentController extends Controller
             'reason' => 'nullable|string|max:255',
         ]);
 
+        $startTime = now();
+        $endTime = now()->addHours(2); // Maximum stay is 2 hours
+
         SeatReservation::create([
             'user_id' => $this->userId(),
             'reserved_seat' => $request->seat,
             'reason' => $request->reason,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
         ]);
 
         StudySpace::where('id', $request->seat)->update(['status' => 'In Use']);
 
         $this->incrementReservationCount('seat');
 
-        return redirect()->route('student.mySeatReservation')->with(['success' => 'You have successfully reserved the seat.']);
+        return redirect()->route('student.mySeatReservation')->with(['success' => 'You have successfully reserved the seat for 2 hours.']);
     }
 
     public function equipmentReservationCreate(Request $request)
@@ -294,6 +316,13 @@ class StudentController extends Controller
             ]);
         }
 
+        // Check if equipment has available quantity
+        if ($equipment->available_quantity <= 0) {
+            return back()->withErrors([
+                'quantity' => 'This equipment is currently out of stock. Please try again later.'
+            ]);
+        }
+
         EquipmentReservation::create([
             'user_id' => $this->userId(),
             'equipment_id' => $request->equipment,
@@ -304,8 +333,11 @@ class StudentController extends Controller
         // Increment reserved_today counter
         $equipment->increment('reserved_today');
         
-        // Update status to In Use if all slots are taken
-        if ($equipment->reserved_today >= $equipment->max_slots) {
+        // Decrement available quantity
+        $equipment->decrement('available_quantity');
+        
+        // Update status to In Use if all slots are taken or no stock
+        if ($equipment->reserved_today >= $equipment->max_slots || $equipment->available_quantity <= 0) {
             $equipment->update(['status' => 'In Use']);
         }
 

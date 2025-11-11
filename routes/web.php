@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\BookCategoryController;
 use App\Http\Controllers\BookReservationController;
 use App\Http\Controllers\EquipmentReservationController;
 use App\Http\Controllers\UserController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Student\StudentController;
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('books/{id}', [BookController::class, 'destroy'])->name('books.destroy');
+    Route::delete('book-categories/{id}', [BookCategoryController::class, 'destroy'])->name('book-categories.destroy');
     Route::delete('equipments/{id}', [EquipmentController::class, 'destroy'])->name('equipments.destroy');
     Route::delete('study-spaces/{id}', [StudySpaceController::class, 'destroy'])->name('study-spaces.destroy');
     Route::delete('users/{id}', [UserController::class, 'destroy'])->name('users.destroy');
@@ -29,6 +31,7 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
     // Index Routes
     Route::get('books', [BookController::class, 'index'])->name('books.index');
+    Route::get('book-categories', [BookCategoryController::class, 'index'])->name('book-categories.index');
     Route::get('book-reservations', [BookReservationController::class, 'index'])->name('book-reservations.index');
     Route::get('users', [UserController::class, 'index'])->name('users.index');
     Route::get('study-spaces', [StudySpaceController::class, 'index'])->name('study-spaces.index');
@@ -39,6 +42,7 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
     // Create Routes
     Route::get('books/create', [BookController::class, 'create'])->name('books.create');
+    Route::get('book-categories/create', [BookCategoryController::class, 'create'])->name('book-categories.create');
     Route::get('equipments/create', [EquipmentController::class, 'create'])->name('equipments.create');
     Route::get('study-spaces/create', [StudySpaceController::class, 'create'])->name('study-spaces.create');
     Route::get('equipment-reservations/create', [EquipmentReservationController::class, 'create'])->name('equipment-reservations.create');
@@ -48,6 +52,7 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
     // Store Routes
     Route::post('books', [BookController::class, 'store'])->name('books.store');
+    Route::post('book-categories', [BookCategoryController::class, 'store'])->name('book-categories.store');
     Route::post('equipments', [EquipmentController::class, 'store'])->name('equipments.store');
     Route::post('study-spaces', [StudySpaceController::class, 'store'])->name('study-spaces.store');
     Route::post('users', [UserController::class, 'store'])->name('users.store');
@@ -63,6 +68,7 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
     // Edit Routes
     Route::get('books/{id}', [BookController::class, 'edit'])->name('books.edit');
+    Route::get('book-categories/{id}', [BookCategoryController::class, 'edit'])->name('book-categories.edit');
     Route::get('equipments/{id}', [EquipmentController::class, 'edit'])->name('equipments.edit');
     Route::get('study-spaces/{id}', [StudySpaceController::class, 'edit'])->name('study-spaces.edit');
     Route::get('equipment-reservations/{id}', [EquipmentReservationController::class, 'edit'])->name('equipment-reservations.edit');
@@ -71,6 +77,7 @@ Route::middleware(['auth', 'verified', 'admin.only'])->group(function () {
 
     // Update Routes
     Route::put('books/{id}', [BookController::class, 'update'])->name('books.update');
+    Route::put('book-categories/{id}', [BookCategoryController::class, 'update'])->name('book-categories.update');
     Route::put('equipments/{id}', [EquipmentController::class, 'update'])->name('equipments.update');
     Route::put('study-spaces/{id}', [StudySpaceController::class, 'update'])->name('study-spaces.update');
     Route::put('users/{id}', [UserController::class, 'update'])->name('users.update');

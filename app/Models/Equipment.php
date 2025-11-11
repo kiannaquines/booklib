@@ -13,6 +13,8 @@ class Equipment extends Model
         'image',
         'description',
         'status',
+        'total_quantity',
+        'available_quantity',
         'max_slots',
         'reserved_today',
         'last_reset_date',

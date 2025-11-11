@@ -21,11 +21,11 @@ class EquipmentReservationController extends Controller
                 'equipment_id' => $equipmentReservation->equipment_id,
                 'user' => $equipmentReservation->user->name,
                 'user_id' => $equipmentReservation->user_id,
-                'start_time' => $equipmentReservation->start_time->format('d/m/Y H:i:s'),
-                'end_time' => $equipmentReservation->end_time->format('d/m/Y H:i:s'),
+                'start_time' => $equipmentReservation->start_time->format('d/m/Y h:i:s A'),
+                'end_time' => $equipmentReservation->end_time->format('d/m/Y h:i:s A'),
                 'status' => $equipmentReservation->status,
-                'created_at' => $equipmentReservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $equipmentReservation->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $equipmentReservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $equipmentReservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
         return Inertia::render('modules/equipment-reservation', [

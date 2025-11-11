@@ -96,6 +96,8 @@ class EquipmentSeeder extends Seeder
                 'max_slots' => 25,
                 'reserved_today' => 0,
                 'last_reset_date' => now()->toDateString(),
+                'total_quantity' => 25,
+                'available_quantity' => 25,
             ]));
         }
     }

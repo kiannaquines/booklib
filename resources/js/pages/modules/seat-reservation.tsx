@@ -17,6 +17,8 @@ export type SeatReservation = {
     id: string
     seat: string
     user: string
+    start_time: string
+    end_time: string
     created_at: string
     updated_at: string
 }

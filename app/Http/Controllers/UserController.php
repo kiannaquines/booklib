@@ -17,8 +17,8 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'number' => $user->number,
-                'created_at' => $user->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $user->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $user->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $user->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
 

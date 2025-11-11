@@ -21,8 +21,10 @@ class SeatReservationController extends Controller
                 'id' => $reservation->id,
                 'seat' => $reservation->space->seat_number,
                 'user' => $reservation->user->name,
-                'created_at' => $reservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $reservation->updated_at->format('d/m/Y H:i:s'),
+                'start_time' => $reservation->start_time ? $reservation->start_time->format('d/m/Y h:i:s A') : 'N/A',
+                'end_time' => $reservation->end_time ? $reservation->end_time->format('d/m/Y h:i:s A') : 'N/A',
+                'created_at' => $reservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $reservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
 
@@ -73,15 +75,20 @@ class SeatReservationController extends Controller
             return back()->withErrors(['seat' => 'This space is not available for reservation']);
         }
 
+        $startTime = now();
+        $endTime = now()->addHours(2); // 2-hour maximum stay
+
         SeatReservation::create([
             'reserved_seat' => $request->seat,
             'user_id' => $request->user_id,
-            'reason' => $request->reason
+            'reason' => $request->reason,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
         ]);
 
         StudySpace::findOrFail($request->seat)->update(['status' => 'In Use']);
 
-        return redirect()->route('seat-reservations.index')->with('success', 'Seat reservation created successfully');
+        return redirect()->route('seat-reservations.index')->with('success', 'Seat reservation created successfully for 2 hours');
     }
 
     /**
@@ -143,10 +150,16 @@ class SeatReservationController extends Controller
             return back()->withErrors(['seat' => 'This space is not available for reservation']);
         }
 
+        // Recalculate time if updating
+        $startTime = $reservation->start_time ?? now();
+        $endTime = $startTime->copy()->addHours(2);
+
         $reservation->update([
             'reserved_seat' => $request->seat,
             'user_id' => $request->user_id,
-            'reason' => $request->reason
+            'reason' => $request->reason,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
         ]);
 
         $space->update(['status' => 'In Use']);

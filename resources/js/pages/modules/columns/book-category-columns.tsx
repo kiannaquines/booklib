@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { ArrowUpDown, MoreHorizontal, Eye, Edit, Trash2, Link } from "lucide-react";
+import { ArrowUpDown, MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -21,10 +21,10 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
-import { router, Link as InertiaLink } from "@inertiajs/react";
+import { router } from "@inertiajs/react";
 import { useCallback, useState } from "react";
 import { toast } from "sonner";
-import { Book } from "../books";
+import { BookCategory } from "../book-categories";
 
 type DialogIsOpenProps = {
   isOpen: boolean
@@ -33,14 +33,14 @@ type DialogIsOpenProps = {
   isDeleting?: boolean
 }
 
-function DeleteBookAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: DialogIsOpenProps) {
+function DeleteCategoryAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: DialogIsOpenProps) {
   return (
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm Deletion</AlertDialogTitle>
           <AlertDialogDescription>
-            Are you sure you want to delete this book? This action cannot be undone.
+            Are you sure you want to delete this book category? Books in this category will not be deleted, but their category will be set to null.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -49,7 +49,7 @@ function DeleteBookAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: 
             className="bg-red-600 hover:bg-red-700"
             onClick={handleAction}
           >
-            {isDeleting ? "Deleting..." : "Delete Book"}
+            {isDeleting ? "Deleting..." : "Delete Category"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
@@ -57,25 +57,25 @@ function DeleteBookAlertDialog({ isOpen, setIsOpen, handleAction, isDeleting }: 
   );
 }
 
-interface BookActionsCellProps {
-  book: Book
+interface CategoryActionsCellProps {
+  category: BookCategory
 }
 
-function BookActionsCell({ book }: BookActionsCellProps) {
+function CategoryActionsCell({ category }: CategoryActionsCellProps) {
   const [isDeleting, setIsDeleting] = useState(false);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const handleDelete = useCallback(() => {
     setIsDeleting(true);
-    router.delete(route('books.destroy', { id: book.id }), {
+    router.delete(route('book-categories.destroy', { id: category.id }), {
       preserveScroll: true,
       onSuccess: () => {
-        toast.success("Book deleted successfully");
+        toast.success("Book category deleted successfully");
       },
       onError: (e) => {
         for (const [field, message] of Object.entries(e)) {
-          toast.error("Failed to delete book", {
+          toast.error("Failed to delete category", {
             description: `${message}`,
           });
         }
@@ -85,7 +85,7 @@ function BookActionsCell({ book }: BookActionsCellProps) {
         setIsDeleteDialogOpen(false);
       }
     });
-  }, [book?.id]);
+  }, [category?.id]);
 
   const openDeleteDialog = useCallback((e: React.MouseEvent) => {
     e.preventDefault();
@@ -106,7 +106,7 @@ function BookActionsCell({ book }: BookActionsCellProps) {
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() =>
-            router.visit(route('books.edit', { id: String(book.id) }))
+            router.visit(route('book-categories.edit', { id: String(category.id) }))
           }>
             <Edit className="mr-2 h-4 w-4" />
             Edit
@@ -121,18 +121,14 @@ function BookActionsCell({ book }: BookActionsCellProps) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <DeleteBookAlertDialog isOpen={isDeleteDialogOpen} setIsOpen={setIsDeleteDialogOpen} handleAction={handleDelete} isDeleting={isDeleting} />
+      <DeleteCategoryAlertDialog isOpen={isDeleteDialogOpen} setIsOpen={setIsDeleteDialogOpen} handleAction={handleDelete} isDeleting={isDeleting} />
 
     </div>
   );
 
 }
 
-type BookColumnProps = {
-  books: Book[]
-}
-
-export function getBooksColumns(books: Book[]): ColumnDef<Book>[] {
+export function getBookCategoryColumns(): ColumnDef<BookCategory>[] {
   return [
     {
       id: "select",
@@ -154,45 +150,45 @@ export function getBooksColumns(books: Book[]): ColumnDef<Book>[] {
       enableHiding: true,
     },
     {
-      accessorKey: "title",
+      accessorKey: "name",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Title
+          Category Name
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
         <Badge variant="outline" className="capitalize">
-          {row.getValue("title")}
+          {row.getValue("name")}
         </Badge>
       ),
     },
     {
-      accessorKey: "author",
-      header: "Author",
+      accessorKey: "description",
+      header: "Description",
       cell: ({ row }) => (
-        <div className="font-medium">
-          {row.getValue("author")}
+        <div className="max-w-md truncate">
+          {row.getValue("description") || "N/A"}
         </div>
       ),
     },
     {
-      accessorKey: "category",
+      accessorKey: "books_count",
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Category
+          Books Count
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       ),
       cell: ({ row }) => (
-        <Badge variant="secondary" className="capitalize">
-          {row.getValue("category")}
+        <Badge variant="secondary">
+          {row.getValue("books_count")} books
         </Badge>
       ),
     },
@@ -208,7 +204,7 @@ export function getBooksColumns(books: Book[]): ColumnDef<Book>[] {
         </Button>
       ),
       cell: ({ row }) => {
-        return <div> {row.getValue("updated_at")}</div>;
+        return <div> {row.getValue("created_at")}</div>;
       },
     },
     {
@@ -231,7 +227,7 @@ export function getBooksColumns(books: Book[]): ColumnDef<Book>[] {
       enableHiding: false,
       cell: ({ row }) => {
         return (
-          <BookActionsCell book={row.original} />
+          <CategoryActionsCell category={row.original} />
         )
       },
     },

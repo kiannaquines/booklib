@@ -28,8 +28,8 @@ export default function MySeatReservation({ mySeatReservations }: MySeatReservat
                         columns={getSeatReservation()}
                         filterColumn={"user"}
                         filterPlaceholder='Search something'
-                        tableTitle='My Book Reservations'
-                        tableDescription='List of my book reservations'
+                        tableTitle='My Seat Reservations'
+                        tableDescription='List of my seat reservations'
                         displayAddButton={false}
                     />
                 </div>

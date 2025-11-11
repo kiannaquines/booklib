@@ -21,11 +21,11 @@ class BookReservationController extends Controller
                 'book_id' => $bookReservation->book_id,
                 'user' => $bookReservation->user->name,
                 'user_id' => $bookReservation->user_id,
-                'start_time' => $bookReservation->start_time->format('d/m/Y H:i:s'),
-                'end_time' => $bookReservation->end_time->format('d/m/Y H:i:s'),
+                'start_time' => $bookReservation->start_time->format('d/m/Y h:i:s A'),
+                'end_time' => $bookReservation->end_time->format('d/m/Y h:i:s A'),
                 'status' => $bookReservation->status,
-                'created_at' => $bookReservation->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $bookReservation->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $bookReservation->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $bookReservation->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
 

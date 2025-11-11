@@ -180,6 +180,36 @@ export function getSeatReservation(): ColumnDef<SeatReservation>[] {
             ),
         },
         {
+            accessorKey: "start_time",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    Start Time
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => {
+                return <div> {row.getValue("start_time")}</div>;
+            },
+        },
+        {
+            accessorKey: "end_time",
+            header: ({ column }) => (
+                <Button
+                    variant="ghost"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                    End Time (2h max)
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => {
+                return <div> {row.getValue("end_time")}</div>;
+            },
+        },
+        {
             accessorKey: "created_at",
             header: ({ column }) => (
                 <Button
