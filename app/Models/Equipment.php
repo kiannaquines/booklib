@@ -10,11 +10,17 @@ class Equipment extends Model
 
     protected $fillable = [
         'name',
+        'image',
+        'description',
         'status',
+        'max_slots',
+        'reserved_today',
+        'last_reset_date',
     ];
 
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'last_reset_date' => 'date',
     ];
 }

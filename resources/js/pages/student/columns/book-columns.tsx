@@ -170,17 +170,8 @@ export function getBookReservationColumns(bookReservations: BookReservation[]): 
             ),
         },
         {
-            accessorKey: "user",
-            header: "User",
-            cell: ({ row }) => (
-                <Badge variant="outline" className="capitalize">
-                    {row.getValue("user")}
-                </Badge>
-            ),
-        },
-        {
             accessorKey: "start_time",
-            header: "Start Time",
+            header: "Start Date",
             cell: ({ row }) => (
                 <div>
                     {row.getValue("start_time")}
@@ -189,7 +180,7 @@ export function getBookReservationColumns(bookReservations: BookReservation[]): 
         },
         {
             accessorKey: "end_time",
-            header: "End Time",
+            header: "Expected Return",
             cell: ({ row }) => (
                 <div>
                     {row.getValue("end_time")}

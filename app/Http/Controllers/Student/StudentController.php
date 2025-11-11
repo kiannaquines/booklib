@@ -11,14 +11,49 @@ use App\Models\Equipment;
 use App\Models\StudySpace;
 use App\Models\Books;
 use App\Models\SeatReservation;
+use Illuminate\Support\Facades\Cache;
 
 use App\Http\Controllers\Controller;
 
 class StudentController extends Controller
 {
+    const MAX_DAILY_RESERVATIONS = 25;
+
     protected function userId(): int
     {
         return request()->user()->id;
+    }
+
+    protected function canMakeReservation(string $type): bool
+    {
+        $userId = $this->userId();
+        $today = now()->toDateString();
+        $cacheKey = "reservations_{$type}_{$userId}_{$today}";
+        
+        $count = Cache::get($cacheKey, 0);
+        
+        return $count < self::MAX_DAILY_RESERVATIONS;
+    }
+
+    protected function incrementReservationCount(string $type): void
+    {
+        $userId = $this->userId();
+        $today = now()->toDateString();
+        $cacheKey = "reservations_{$type}_{$userId}_{$today}";
+        
+        $count = Cache::get($cacheKey, 0);
+        Cache::put($cacheKey, $count + 1, now()->endOfDay());
+    }
+
+    protected function getRemainingReservations(string $type): int
+    {
+        $userId = $this->userId();
+        $today = now()->toDateString();
+        $cacheKey = "reservations_{$type}_{$userId}_{$today}";
+        
+        $count = Cache::get($cacheKey, 0);
+        
+        return max(0, self::MAX_DAILY_RESERVATIONS - $count);
     }
 
     public function myBookReservation()
@@ -84,29 +119,57 @@ class StudentController extends Controller
     public function bookReservation()
     {
         $books = Books::all()->map(function ($book) {
+            // Reset if last reset was not today
+            if ($book->last_reset_date != now()->toDateString()) {
+                $book->update([
+                    'reserved_today' => 0,
+                    'last_reset_date' => now()->toDateString(),
+                ]);
+            }
+            
             return [
                 'id' => $book->id,
                 'title' => $book->title,
                 'status' => $book->status,
                 'author' => $book->author,
+                'image' => $book->image ? asset('storage/' . $book->image) : null,
+                'description' => $book->description,
+                'max_slots' => $book->max_slots,
+                'reserved_today' => $book->reserved_today,
+                'available_slots' => $book->max_slots - $book->reserved_today,
             ];
         });
         return Inertia::render('student/book-reservation', [
             'books' => $books,
+            'remainingReservations' => $this->getRemainingReservations('book'),
         ]);
     }
 
     public function equipmentReservation()
     {
         $equipments = Equipment::all()->map(function ($equipment) {
+            // Reset if last reset was not today
+            if ($equipment->last_reset_date != now()->toDateString()) {
+                $equipment->update([
+                    'reserved_today' => 0,
+                    'last_reset_date' => now()->toDateString(),
+                ]);
+            }
+            
             return [
                 'id' => $equipment->id,
                 'name' => $equipment->name,
                 'status' => $equipment->status,
+                'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
+                'description' => $equipment->description,
+                'max_slots' => $equipment->max_slots,
+                'reserved_today' => $equipment->reserved_today,
+                'available_slots' => $equipment->max_slots - $equipment->reserved_today,
             ];
         });
         return Inertia::render('student/equipment-reservation', [
             'equipments' => $equipments,
+            'remainingReservations' => $this->getRemainingReservations('equipment'),
         ]);
     }
 
@@ -121,14 +184,39 @@ class StudentController extends Controller
         });
         return Inertia::render('student/seat-reservation', [
             'spaces' => $spaces,
+            'remainingReservations' => $this->getRemainingReservations('seat'),
         ]);
     }
 
     public function bookReservationCreate(Request $request)
     {
+        if (!$this->canMakeReservation('book')) {
+            return back()->withErrors([
+                'limit' => 'You have reached the maximum limit of ' . self::MAX_DAILY_RESERVATIONS . ' book reservations per day. Please try again tomorrow.'
+            ]);
+        }
+
         $request->validate([
             'book_id' => 'required|exists:books,id',
         ]);
+
+        $book = Books::findOrFail($request->book_id);
+        
+        // Reset if last reset was not today
+        if ($book->last_reset_date != now()->toDateString()) {
+            $book->update([
+                'reserved_today' => 0,
+                'last_reset_date' => now()->toDateString(),
+            ]);
+            $book->refresh();
+        }
+        
+        // Check if book has available slots
+        if ($book->reserved_today >= $book->max_slots) {
+            return back()->withErrors([
+                'slots' => 'This book has reached its maximum reservation limit for today. Please try again tomorrow.'
+            ]);
+        }
 
         BookReservation::create([
             'user_id' => $this->userId(),
@@ -137,13 +225,27 @@ class StudentController extends Controller
             'end_time' => now()->addDays(3),
         ]);
 
-        Books::where('id', $request->book_id)->update(['status' => 'Unavailable']);
+        // Increment reserved_today counter
+        $book->increment('reserved_today');
+        
+        // Update status to Unavailable if all slots are taken
+        if ($book->reserved_today >= $book->max_slots) {
+            $book->update(['status' => 'Unavailable']);
+        }
+
+        $this->incrementReservationCount('book');
 
         return redirect()->route('student.myBookReservation')->with(['success' => 'You have successfully reserved the book.']);
     }
 
     public function seatReservationCreate(Request $request)
     {
+        if (!$this->canMakeReservation('seat')) {
+            return back()->withErrors([
+                'limit' => 'You have reached the maximum limit of ' . self::MAX_DAILY_RESERVATIONS . ' seat reservations per day. Please try again tomorrow.'
+            ]);
+        }
+
         $request->validate([
             'seat' => 'required|exists:study_space,id',
             'reason' => 'nullable|string|max:255',
@@ -157,14 +259,40 @@ class StudentController extends Controller
 
         StudySpace::where('id', $request->seat)->update(['status' => 'In Use']);
 
+        $this->incrementReservationCount('seat');
+
         return redirect()->route('student.mySeatReservation')->with(['success' => 'You have successfully reserved the seat.']);
     }
 
     public function equipmentReservationCreate(Request $request)
     {
+        if (!$this->canMakeReservation('equipment')) {
+            return back()->withErrors([
+                'limit' => 'You have reached the maximum limit of ' . self::MAX_DAILY_RESERVATIONS . ' equipment reservations per day. Please try again tomorrow.'
+            ]);
+        }
+
         $request->validate([
             'equipment' => 'required|exists:equipments,id',
         ]);
+
+        $equipment = Equipment::findOrFail($request->equipment);
+        
+        // Reset if last reset was not today
+        if ($equipment->last_reset_date != now()->toDateString()) {
+            $equipment->update([
+                'reserved_today' => 0,
+                'last_reset_date' => now()->toDateString(),
+            ]);
+            $equipment->refresh();
+        }
+        
+        // Check if equipment has available slots
+        if ($equipment->reserved_today >= $equipment->max_slots) {
+            return back()->withErrors([
+                'slots' => 'This equipment has reached its maximum reservation limit for today. Please try again tomorrow.'
+            ]);
+        }
 
         EquipmentReservation::create([
             'user_id' => $this->userId(),
@@ -173,7 +301,15 @@ class StudentController extends Controller
             'end_time' => now()->addDays(3),
         ]);
 
-        Equipment::where('id', $request->equipment)->update(['status' => 'In Use']);
+        // Increment reserved_today counter
+        $equipment->increment('reserved_today');
+        
+        // Update status to In Use if all slots are taken
+        if ($equipment->reserved_today >= $equipment->max_slots) {
+            $equipment->update(['status' => 'In Use']);
+        }
+
+        $this->incrementReservationCount('equipment');
 
         return redirect()->route('student.myEquipmentReservation')->with(['success' => 'You have successfully reserved the equipment.']);
     }
@@ -191,6 +327,9 @@ class StudentController extends Controller
                     'id' => $book->id,
                     'title' => $book->title,
                     'status' => $book->status,
+                    'author' => $book->author,
+                    'image' => $book->image ? asset('storage/' . $book->image) : null,
+                    'description' => $book->description,
                 ];
             }),
         ]);
@@ -227,6 +366,8 @@ class StudentController extends Controller
                     'id' => $equipment->id,
                     'name' => $equipment->name,
                     'status' => $equipment->status,
+                    'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
+                    'description' => $equipment->description,
                 ];
             }),
         ]);

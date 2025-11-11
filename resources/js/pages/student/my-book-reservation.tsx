@@ -26,8 +26,8 @@ export default function MyBookReservation({ myBookReservations }: MyBookReservat
                     <DataTable
                         data={myBookReservations}
                         columns={getBookReservationColumns(myBookReservations)}
-                        filterColumn={"user"}
-                        filterPlaceholder='Search something'
+                        filterColumn={"book"}
+                        filterPlaceholder='Search book name'
                         tableTitle='My Book Reservations'
                         tableDescription='List of my book reservations'
                         displayAddButton={false}

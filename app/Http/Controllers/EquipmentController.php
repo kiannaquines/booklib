@@ -14,6 +14,8 @@ class EquipmentController extends Controller
             return [
                 'id' => $equipment->id,
                 'name' => $equipment->name,
+                'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
+                'description' => $equipment->description,
                 'status' => $equipment->status,
                 'created_at' => $equipment->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $equipment->updated_at->format('d/m/Y H:i:s'),
@@ -33,10 +35,19 @@ class EquipmentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
         ]);
 
-        Equipment::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('equipments', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Equipment::create($data);
 
         return redirect()->route('equipments.index')->with('success', 'Equipment created successfully');
     }
@@ -54,7 +65,13 @@ class EquipmentController extends Controller
         }
 
         return Inertia::render('modules/update/update-equipment', [
-            'equipment' => $equipment,
+            'equipment' => [
+                'id' => $equipment->id,
+                'name' => $equipment->name,
+                'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
+                'description' => $equipment->description,
+                'status' => $equipment->status,
+            ],
         ]);
     }
 
@@ -62,12 +79,24 @@ class EquipmentController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
         ]);
 
         $equipment = Equipment::findOrFail($id);
+        $data = $request->all();
 
-        $equipment->update($request->all());
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($equipment->image && \Storage::disk('public')->exists($equipment->image)) {
+                \Storage::disk('public')->delete($equipment->image);
+            }
+            $imagePath = $request->file('image')->store('equipments', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $equipment->update($data);
 
         return redirect()->route('equipments.index')->with('success', 'Equipment updated successfully');
     }
@@ -83,6 +112,12 @@ class EquipmentController extends Controller
         if (!$equipment) {
             return back()->with('error', 'Equipment not found');
         }
+
+        // Delete image if exists
+        if ($equipment->image && \Storage::disk('public')->exists($equipment->image)) {
+            \Storage::disk('public')->delete($equipment->image);
+        }
+
         $equipment->delete();
 
         return redirect()->route('equipments.index')->with('success', 'Equipment deleted successfully');

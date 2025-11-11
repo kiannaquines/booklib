@@ -25,8 +25,8 @@ export default function MyEquipmentReservation({myEquipmentReservations}: MyEqui
                     <DataTable
                         data={myEquipmentReservations}
                         columns={getEquipmentReservationColumns(myEquipmentReservations)}
-                        filterColumn={"user"}
-                        filterPlaceholder='Search something'
+                        filterColumn={"equipment"}
+                        filterPlaceholder='Search equipment name'
                         tableTitle='My Equipment Reservations'
                         tableDescription='List of my equipment reservations'
                         displayAddButton={false}

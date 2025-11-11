@@ -16,6 +16,8 @@ class BookController extends Controller
                 'id' => $book->id,
                 'title' => $book->title,
                 'author' => $book->author,
+                'image' => $book->image ? asset('storage/' . $book->image) : null,
+                'description' => $book->description,
                 'status' => $book->status,
                 'created_at' => $book->created_at->format('d/m/Y H:i:s'),
                 'updated_at' => $book->updated_at->format('d/m/Y H:i:s'),
@@ -38,10 +40,19 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
         ]);
 
-        Books::create($request->all());
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('books', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        Books::create($data);
 
         return redirect()->route('books.index')->with('success', 'Book created successfully');
     }
@@ -60,7 +71,14 @@ class BookController extends Controller
         }
 
         return Inertia::render('modules/update/update-book', [
-            'book' => $book,
+            'book' => [
+                'id' => $book->id,
+                'title' => $book->title,
+                'author' => $book->author,
+                'image' => $book->image ? asset('storage/' . $book->image) : null,
+                'description' => $book->description,
+                'status' => $book->status,
+            ],
         ]);
     }
 
@@ -69,10 +87,24 @@ class BookController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'author' => 'required|string|max:255',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
         ]);
 
-        Books::where('id', $id)->update($request->all());
+        $book = Books::findOrFail($id);
+        $data = $request->all();
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($book->image && \Storage::disk('public')->exists($book->image)) {
+                \Storage::disk('public')->delete($book->image);
+            }
+            $imagePath = $request->file('image')->store('books', 'public');
+            $data['image'] = $imagePath;
+        }
+
+        $book->update($data);
 
         return redirect()->route('books.index')->with('success', 'Book updated successfully');
     }
@@ -88,6 +120,12 @@ class BookController extends Controller
         if (!$book) {
             return back()->with('error', 'Book not found');
         }
+
+        // Delete image if exists
+        if ($book->image && \Storage::disk('public')->exists($book->image)) {
+            \Storage::disk('public')->delete($book->image);
+        }
+
         $book->delete();
 
         return redirect()->route('books.index')->with('success', 'Book deleted successfully');
