@@ -17,8 +17,8 @@ class EquipmentController extends Controller
                 'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
                 'description' => $equipment->description,
                 'status' => $equipment->status,
-                'created_at' => $equipment->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $equipment->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $equipment->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $equipment->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
         return Inertia::render('modules/equipment', [
@@ -38,6 +38,7 @@ class EquipmentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
+            'total_quantity' => 'required|integer|min:1',
         ]);
 
         $data = $request->all();
@@ -46,6 +47,9 @@ class EquipmentController extends Controller
             $imagePath = $request->file('image')->store('equipments', 'public');
             $data['image'] = $imagePath;
         }
+
+        // Set available_quantity equal to total_quantity on creation
+        $data['available_quantity'] = $request->total_quantity;
 
         Equipment::create($data);
 
@@ -71,6 +75,7 @@ class EquipmentController extends Controller
                 'image' => $equipment->image ? asset('storage/' . $equipment->image) : null,
                 'description' => $equipment->description,
                 'status' => $equipment->status,
+                'total_quantity' => $equipment->total_quantity,
             ],
         ]);
     }
@@ -82,6 +87,7 @@ class EquipmentController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'description' => 'nullable|string',
             'status' => 'required|string|in:Available,Unavailable',
+            'total_quantity' => 'required|integer|min:1',
         ]);
 
         $equipment = Equipment::findOrFail($id);
@@ -94,6 +100,12 @@ class EquipmentController extends Controller
             }
             $imagePath = $request->file('image')->store('equipments', 'public');
             $data['image'] = $imagePath;
+        }
+
+        // Update available_quantity if total_quantity changed
+        if ($request->total_quantity != $equipment->total_quantity) {
+            $difference = $request->total_quantity - $equipment->total_quantity;
+            $data['available_quantity'] = max(0, $equipment->available_quantity + $difference);
         }
 
         $equipment->update($data);

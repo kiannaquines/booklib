@@ -26,21 +26,34 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
+type Category = {
+    id: number;
+    name: string;
+};
+
 type BookFormData = {
     title: string;
     author: string;
+    category_id: string;
     image: File | null;
     description: string;
     status: string;
+    total_quantity: string;
 };
 
-const CreateBook = () => {
+type CreateBookProps = {
+    categories: Category[];
+};
+
+const CreateBook = ({ categories }: CreateBookProps) => {
     const { data, setData, reset, clearErrors } = useForm<BookFormData>({
         title: "",
         author: "",
+        category_id: "",
         image: null,
         description: "",
         status: "",
+        total_quantity: "1",
     });
 
     const [processing, setProcessing] = useState(false);
@@ -136,6 +149,24 @@ const CreateBook = () => {
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="category">Category</Label>
+                                <Select value={data.category_id} onValueChange={(value) => setData("category_id", value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select category (optional)" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category.id} value={category.id.toString()}>
+                                                {category.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="description">Description</Label>
                                 <Textarea
                                     id="description"
@@ -144,6 +175,23 @@ const CreateBook = () => {
                                     placeholder="Book description (optional)"
                                     rows={4}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="total_quantity">Quantity</Label>
+                                <Input
+                                    id="total_quantity"
+                                    type="number"
+                                    min="1"
+                                    value={data.total_quantity}
+                                    onChange={(e) => setData("total_quantity", e.target.value)}
+                                    placeholder="Number of books available"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Total number of copies available for reservation
+                                </p>
                             </div>
                         </div>
 

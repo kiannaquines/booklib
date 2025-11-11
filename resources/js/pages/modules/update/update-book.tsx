@@ -16,28 +16,46 @@ import { useForm, router, Head } from "@inertiajs/react";
 import { toast } from "sonner";
 import { useState } from "react";
 
+type Category = {
+    id: number;
+    name: string;
+};
 
 type BookFormData = {
     id: string;
     title: string;
     author: string;
+    category_id: string;
     image: File | null;
     description: string;
     status: string;
+    total_quantity: string;
 };
 
 type CreateBookProps = {
-    book: BookFormData & { image?: string | null };
+    book: {
+        id: string;
+        title: string;
+        author: string;
+        category_id: string;
+        image?: string | null;
+        description: string;
+        status: string;
+        total_quantity?: number;
+    };
+    categories: Category[];
 }
 
-const CreateBook = ({ book }: CreateBookProps) => {
+const CreateBook = ({ book, categories }: CreateBookProps) => {
     const { data, setData, reset, clearErrors } = useForm<BookFormData>({
         id: book.id,
         title: book.title,
         author: book.author,
+        category_id: book.category_id || "",
         image: null,
         description: book.description || "",
         status: book.status,
+        total_quantity: book.total_quantity?.toString() || "1",
     });
 
     const breadcrumbs: BreadcrumbItem[] = [
@@ -144,6 +162,24 @@ const CreateBook = ({ book }: CreateBookProps) => {
 
                         <div className="grid w-full items-center gap-4 mt-4">
                             <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="category">Category</Label>
+                                <Select value={data.category_id} onValueChange={(value) => setData("category_id", value)}>
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Select category (optional)" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {categories.map((category) => (
+                                            <SelectItem key={category.id} value={category.id.toString()}>
+                                                {category.name}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
                                 <Label htmlFor="description">Description</Label>
                                 <Textarea
                                     id="description"
@@ -152,6 +188,23 @@ const CreateBook = ({ book }: CreateBookProps) => {
                                     placeholder="Book description (optional)"
                                     rows={4}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="total_quantity">Quantity</Label>
+                                <Input
+                                    id="total_quantity"
+                                    type="number"
+                                    min="1"
+                                    value={data.total_quantity}
+                                    onChange={(e) => setData("total_quantity", e.target.value)}
+                                    placeholder="Number of books available"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Total number of copies available for reservation
+                                </p>
                             </div>
                         </div>
 

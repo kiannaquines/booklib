@@ -10,11 +10,13 @@ class SeatReservation extends Model
     use HasFactory;
     protected $table = "seat_reservation";
 
-    protected $fillable = ['reserved_seat', 'user_id', 'reason'];
+    protected $fillable = ['reserved_seat', 'user_id', 'reason', 'start_time', 'end_time'];
 
     protected $casts = [
         'created_at' => 'datetime',
-        'updated_at' => 'datetime'
+        'updated_at' => 'datetime',
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
     ];
 
     /**

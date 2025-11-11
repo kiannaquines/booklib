@@ -29,6 +29,8 @@ type BookReservationProps = {
         max_slots: number;
         reserved_today: number;
         available_slots: number;
+        available_quantity: number;
+        total_quantity: number;
     }[];
     remainingReservations: number;
 }
@@ -96,15 +98,6 @@ export default function BookReservation({ books, remainingReservations }: BookRe
                     </Alert>
                 )}
 
-                {remainingReservations > 5 && (
-                    <Alert className="border-blue-500 bg-blue-50 dark:bg-blue-950">
-                        <Info className="h-4 w-4 text-blue-600" />
-                        <AlertDescription className="text-blue-800 dark:text-blue-200">
-                            You can make {remainingReservations} more reservations today (max 25 per day).
-                        </AlertDescription>
-                    </Alert>
-                )}
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {books.map((book) => (
                         <Card key={book.id} className="flex flex-col overflow-hidden">
@@ -140,8 +133,8 @@ export default function BookReservation({ books, remainingReservations }: BookRe
                                 <CardTitle className="line-clamp-1">{book.title}</CardTitle>
                                 <CardDescription className="line-clamp-1">by {book.author}</CardDescription>
                                 <div className="mt-2">
-                                    <Badge variant="outline" className="text-xs">
-                                        {book.available_slots}/{book.max_slots} slots available
+                                    <Badge variant="secondary" className="text-xs">
+                                        {book.available_quantity}/{book.total_quantity} available
                                     </Badge>
                                 </div>
                             </CardHeader>
@@ -159,13 +152,18 @@ export default function BookReservation({ books, remainingReservations }: BookRe
                             <CardFooter>
                                 <Button
                                     className="w-full"
-                                    disabled={book.status === 'Unavailable' || processing === book.id || remainingReservations === 0 || book.available_slots === 0}
+                                    disabled={book.available_quantity === 0 || processing === book.id || remainingReservations === 0 || book.available_slots === 0}
                                     onClick={() => handleReserveBook(book.id)}
                                 >
                                     {processing === book.id ? (
                                         <>
                                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                                             Reserving...
+                                        </>
+                                    ) : book.available_quantity === 0 ? (
+                                        <>
+                                            <XCircle className="w-4 h-4 mr-2" />
+                                            Out of Stock
                                         </>
                                     ) : book.available_slots === 0 ? (
                                         <>

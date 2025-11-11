@@ -10,6 +10,21 @@ use App\Models\StudySpace;
  */
 class SeatReservationFactory extends Factory
 {
+    private static $reasons = [
+        'Individual study session',
+        'Group project meeting',
+        'Exam preparation',
+        'Research work',
+        'Reading assignment',
+        'Thesis writing',
+        'Online class attendance',
+        'Assignment completion',
+        'Study group discussion',
+        'Quiet reading time',
+    ];
+    
+    private static $reasonIndex = 0;
+    
     /**
      * Define the model's default state.
      *
@@ -19,11 +34,19 @@ class SeatReservationFactory extends Factory
     {
         $user = User::where('name', '!=', 'James Napone')->inRandomOrder()->first();
         $seat = StudySpace::inRandomOrder()->first();
+        
+        $reason = self::$reasons[self::$reasonIndex % count(self::$reasons)];
+        self::$reasonIndex++;
+        
+        $startTime = $this->faker->dateTimeBetween('-30 days', 'now');
+        $endTime = (clone $startTime)->modify('+2 hours'); // 2 hour max stay
 
         return [
             'user_id' => $user->id,
             'reserved_seat' => $seat->id,
-            'reason' => $this->faker->sentence(4)
+            'reason' => $reason,
+            'start_time' => $startTime,
+            'end_time' => $endTime,
         ];
     }
 }

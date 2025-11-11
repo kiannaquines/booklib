@@ -24,10 +24,18 @@ type EquipmentFormData = {
     image: File | null;
     description: string;
     status: string;
+    total_quantity: string;
 }
 
 type UpdateEquipmentProps = {
-    equipment: EquipmentFormData & { image?: string | null };
+    equipment: {
+        id: string;
+        name: string;
+        image?: string | null;
+        description: string;
+        status: string;
+        total_quantity?: number;
+    };
 }
 
 const UpdateEquipment = ({ equipment }: UpdateEquipmentProps) => {
@@ -38,6 +46,7 @@ const UpdateEquipment = ({ equipment }: UpdateEquipmentProps) => {
         image: null,
         description: equipment.description || "",
         status: equipment.status,
+        total_quantity: equipment.total_quantity?.toString() || "1",
     })
 
 
@@ -134,6 +143,23 @@ const UpdateEquipment = ({ equipment }: UpdateEquipmentProps) => {
                                     placeholder="Equipment description (optional)"
                                     rows={4}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="total_quantity">Quantity</Label>
+                                <Input
+                                    id="total_quantity"
+                                    type="number"
+                                    min="1"
+                                    value={data.total_quantity}
+                                    onChange={(e) => setData("total_quantity", e.target.value)}
+                                    placeholder="Number of equipment available"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Total number of units available for reservation
+                                </p>
                             </div>
                         </div>
 

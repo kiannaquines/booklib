@@ -15,8 +15,8 @@ class StudySpaceController extends Controller
                 'id' => $studySpace->id,
                 'seat_number' => $studySpace->seat_number,
                 'status' => $studySpace->status,
-                'created_at' => $studySpace->created_at->format('d/m/Y H:i:s'),
-                'updated_at' => $studySpace->updated_at->format('d/m/Y H:i:s'),
+                'created_at' => $studySpace->created_at->format('d/m/Y h:i:s A'),
+                'updated_at' => $studySpace->updated_at->format('d/m/Y h:i:s A'),
             ];
         });
         return Inertia::render('modules/study-space', [

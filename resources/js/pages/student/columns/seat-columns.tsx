@@ -171,12 +171,21 @@ export function getSeatReservation(): ColumnDef<SeatReservation>[] {
             ),
         },
         {
-            accessorKey: "user",
-            header: "Reserved by",
+            accessorKey: "start_time",
+            header: "Start Time",
             cell: ({ row }) => (
-                <Badge variant="outline" className="capitalize">
-                    {row.getValue("user")}
-                </Badge>
+                <div>
+                    {row.getValue("start_time") || 'N/A'}
+                </div>
+            ),
+        },
+        {
+            accessorKey: "end_time",
+            header: "End Time (2h max)",
+            cell: ({ row }) => (
+                <div>
+                    {row.getValue("end_time") || 'N/A'}
+                </div>
             ),
         },
         {

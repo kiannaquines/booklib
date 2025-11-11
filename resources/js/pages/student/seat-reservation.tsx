@@ -95,7 +95,7 @@ const SeatReservation = ({ spaces, remainingReservations }: CreateSeatReservatio
                 <div className="flex justify-between items-center mb-4">
                     <div>
                         <h2 className="text-2xl font-bold">Seat Reservation</h2>
-                        <p className="text-sm text-muted-foreground">Select an available seat for your study session</p>
+                        <p className="text-sm text-muted-foreground">Select an available seat for your study session (Max 2 hours)</p>
                     </div>
                     <Button variant="outline" onClick={() => router.visit(route('student.mySeatReservation'))}>
                         <ArrowLeft className="w-4 h-4 mr-2" />
@@ -117,15 +117,6 @@ const SeatReservation = ({ spaces, remainingReservations }: CreateSeatReservatio
                         <XCircle className="h-4 w-4" />
                         <AlertDescription>
                             You have reached the maximum limit of 25 seat reservations per day. Please try again tomorrow.
-                        </AlertDescription>
-                    </Alert>
-                )}
-
-                {remainingReservations > 5 && (
-                    <Alert className="border-blue-500 bg-blue-50 dark:bg-blue-950">
-                        <Info className="h-4 w-4 text-blue-600" />
-                        <AlertDescription className="text-blue-800 dark:text-blue-200">
-                            You can make {remainingReservations} more reservations today (max 25 per day).
                         </AlertDescription>
                     </Alert>
                 )}
@@ -224,6 +215,13 @@ const SeatReservation = ({ spaces, remainingReservations }: CreateSeatReservatio
                                             <p className="text-2xl font-bold text-blue-600 dark:text-blue-400">
                                                 {spaces.find(s => s.id === selectedSeat)?.seat}
                                             </p>
+                                        </div>
+
+                                        <div className="p-3 bg-amber-50 dark:bg-amber-950 rounded-lg border border-amber-200 dark:border-amber-800">
+                                            <div className="flex items-center gap-2">
+                                                <Info className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                                                <span className="text-sm font-medium text-amber-900 dark:text-amber-100">Maximum stay: 2 hours</span>
+                                            </div>
                                         </div>
 
                                         <div className="space-y-2">

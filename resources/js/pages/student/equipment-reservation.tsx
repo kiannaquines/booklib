@@ -27,6 +27,8 @@ type EquipmentReservationProps = {
         max_slots: number;
         reserved_today: number;
         available_slots: number;
+        available_quantity: number;
+        total_quantity: number;
     }[];
     remainingReservations: number;
 }
@@ -94,15 +96,6 @@ export default function EquipmentReservation({ equipments, remainingReservations
                     </Alert>
                 )}
 
-                {remainingReservations > 5 && (
-                    <Alert className="border-blue-500 bg-blue-50 dark:bg-blue-950">
-                        <Info className="h-4 w-4 text-blue-600" />
-                        <AlertDescription className="text-blue-800 dark:text-blue-200">
-                            You can make {remainingReservations} more reservations today (max 25 per day).
-                        </AlertDescription>
-                    </Alert>
-                )}
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {equipments.map((equipment) => (
                         <Card key={equipment.id} className="flex flex-col overflow-hidden">
@@ -138,8 +131,8 @@ export default function EquipmentReservation({ equipments, remainingReservations
                                 <CardTitle className="line-clamp-1">{equipment.name}</CardTitle>
                                 <CardDescription className="line-clamp-1">Equipment</CardDescription>
                                 <div className="mt-2">
-                                    <Badge variant="outline" className="text-xs">
-                                        {equipment.available_slots}/{equipment.max_slots} slots available
+                                    <Badge variant="secondary" className="text-xs">
+                                        {equipment.available_quantity}/{equipment.total_quantity} available
                                     </Badge>
                                 </div>
                             </CardHeader>
@@ -157,13 +150,18 @@ export default function EquipmentReservation({ equipments, remainingReservations
                             <CardFooter>
                                 <Button
                                     className="w-full"
-                                    disabled={equipment.status === 'Unavailable' || processing === equipment.id || remainingReservations === 0 || equipment.available_slots === 0}
+                                    disabled={equipment.available_quantity === 0 || processing === equipment.id || remainingReservations === 0 || equipment.available_slots === 0}
                                     onClick={() => handleReserveEquipment(equipment.id)}
                                 >
                                     {processing === equipment.id ? (
                                         <>
                                             <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                                             Reserving...
+                                        </>
+                                    ) : equipment.available_quantity === 0 ? (
+                                        <>
+                                            <XCircle className="w-4 h-4 mr-2" />
+                                            Out of Stock
                                         </>
                                     ) : equipment.available_slots === 0 ? (
                                         <>

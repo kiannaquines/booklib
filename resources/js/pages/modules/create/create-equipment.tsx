@@ -33,6 +33,7 @@ type EquipmentFormData = {
     image: File | null;
     description: string;
     status: string;
+    total_quantity: string;
 }
 
 const CreateEquipment = () => {
@@ -42,6 +43,7 @@ const CreateEquipment = () => {
         image: null,
         description: '',
         status: '',
+        total_quantity: '1',
     })
 
     const [processing, setProcessing] = useState(false);
@@ -126,6 +128,23 @@ const CreateEquipment = () => {
                                     placeholder="Equipment description (optional)"
                                     rows={4}
                                 />
+                            </div>
+                        </div>
+
+                        <div className="grid w-full items-center gap-4 mt-4">
+                            <div className="flex flex-col space-y-1.5">
+                                <Label htmlFor="total_quantity">Quantity</Label>
+                                <Input
+                                    id="total_quantity"
+                                    type="number"
+                                    min="1"
+                                    value={data.total_quantity}
+                                    onChange={(e) => setData("total_quantity", e.target.value)}
+                                    placeholder="Number of equipment available"
+                                />
+                                <p className="text-xs text-muted-foreground">
+                                    Total number of units available for reservation
+                                </p>
                             </div>
                         </div>
 
