@@ -44,11 +44,11 @@ const UpdateUser = ({ user, role }: UpdateUserProps) => {
     const breadcrumbs: BreadcrumbItem[] = [
         {
             title: 'Users',
-            href: route('users'),
+            href: route('users.index'),
         },
         {
             title: 'Edit User',
-            href: route('edit-user', { id: data.id }),
+            href: route('users.edit', { id: data.id }),
         },
     ];
 
